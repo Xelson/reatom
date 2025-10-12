@@ -1,5 +1,28 @@
 # Changelog
 
+## [3.5.0](https://github.com/Xelson/reatom/compare/persist-web-storage-v3.4.6...persist-web-storage-v3.5.0) (2025-10-12)
+
+
+### Features
+
+* **persist-web-storage:** add withCookie ([#830](https://github.com/Xelson/reatom/issues/830)) ([25a865e](https://github.com/Xelson/reatom/commit/25a865e58ca67ea230a5001a973132d3f76fc207))
+
+
+### Bug Fixes
+
+* **async:** republish package ([557e544](https://github.com/Xelson/reatom/commit/557e544713710dc5a57351d00fd65be7a076e8af))
+* **core:** republish package ([f8d5358](https://github.com/Xelson/reatom/commit/f8d535878d702becf31eb227f540d6056a9e3dc3))
+* **devtools:** build with vite ([#1062](https://github.com/Xelson/reatom/issues/1062)) ([cc3a99d](https://github.com/Xelson/reatom/commit/cc3a99ded95499b731fd497aae3a2c8dc8701a14))
+* esm module export ([1011671](https://github.com/Xelson/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **form:** republish package ([6f2aa4f](https://github.com/Xelson/reatom/commit/6f2aa4f94e00d571b10619e6b9c1a7bbfb3d4f25))
+* **new-package-template:** use mjs in module export ([1011671](https://github.com/Xelson/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **npm-svelte:** republish without tag ([93c7f7f](https://github.com/Xelson/reatom/commit/93c7f7f5ec58247b1b3aec854cd83b0a0ecd6a6c))
+* **persist-web-storage:** availability of BroadcastChannel ([199d69a](https://github.com/Xelson/reatom/commit/199d69a13a3b2b0eabc22bb5ffaaa8e025f40041))
+* **persist-web-storage:** fix cookie availability check ([#836](https://github.com/Xelson/reatom/issues/836)) ([8da6fe3](https://github.com/Xelson/reatom/commit/8da6fe364ff61403f4e6dd6239eb7923520d5143))
+* **persist-web-storage:** missing export reatomPersistIndexedDb ([#876](https://github.com/Xelson/reatom/issues/876)) ([e007b7f](https://github.com/Xelson/reatom/commit/e007b7f11136b358e3f6452ecd9b3f7ffb73d48d))
+* **persist-web-storage:** types bundling ([971aed4](https://github.com/Xelson/reatom/commit/971aed424c778e9fe82da8dbd71e5a6bf779ec1c))
+* **persist:** republish package ([8bf9b6d](https://github.com/Xelson/reatom/commit/8bf9b6d5d5e7c4bb51a5161e9c7cf7036f5938f5))
+
 ## [3.4.6](https://github.com/artalar/reatom/compare/persist-web-storage-v3.4.5...persist-web-storage-v3.4.6) (2025-04-02)
 
 ### Bug Fixes
