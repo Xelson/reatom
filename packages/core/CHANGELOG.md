@@ -1,5 +1,33 @@
 # Changelog
 
+## [3.11.0](https://github.com/Xelson/reatom/compare/core-v3.10.2...core-v3.11.0) (2025-10-12)
+
+
+### Features
+
+* **core:** add batch method ([2e082b6](https://github.com/Xelson/reatom/commit/2e082b6296d933ca24046f60ad31b11098027af2))
+* **core:** add restrictMultipleContexts option and warning ([99e0e3c](https://github.com/Xelson/reatom/commit/99e0e3c723a529effc43f0e2a4908806064d30af))
+* **core:** extra log for init update ([d26d615](https://github.com/Xelson/reatom/commit/d26d615cc12df427162b23ada77ccff92f58f93b))
+
+
+### Bug Fixes
+
+* **async:** republish package ([557e544](https://github.com/Xelson/reatom/commit/557e544713710dc5a57351d00fd65be7a076e8af))
+* **core:** complex connection logic ([f8f3e25](https://github.com/Xelson/reatom/commit/f8f3e25324f55fdc01a214d7d3b783ce77f6f68e))
+* **core:** disconnect of the last version of pubs [#996](https://github.com/Xelson/reatom/issues/996) ([52b6593](https://github.com/Xelson/reatom/commit/52b6593d0485f825110524dcbeeb401d3f9309d4))
+* **core:** isBrowser test ([60c7e8f](https://github.com/Xelson/reatom/commit/60c7e8fc2fe346960cc2b5d71db1f7cb0d3312c1))
+* **core:** mem leak for recursion ([e84e7f6](https://github.com/Xelson/reatom/commit/e84e7f634f37e93ac88d8eea0a13f0e727e5fd72))
+* **core:** more accurate pubs handling ([b94dc8f](https://github.com/Xelson/reatom/commit/b94dc8f6e16b1105560bda2572f87cdd1da5c36b))
+* **core:** remove extra computation ([6e3d86d](https://github.com/Xelson/reatom/commit/6e3d86dc9d8de9dd78a9c10ce4cb3a899e407093))
+* **core:** rename initState to computed in atom overload ([#822](https://github.com/Xelson/reatom/issues/822)) ([b96bf36](https://github.com/Xelson/reatom/commit/b96bf364bbb2c851513d20e70bbb60d29267a2ef))
+* **core:** republish package ([f8d5358](https://github.com/Xelson/reatom/commit/f8d535878d702becf31eb227f540d6056a9e3dc3))
+* **docs:** fixed links to Reatom handbook ([#855](https://github.com/Xelson/reatom/issues/855)) ([c9e6a56](https://github.com/Xelson/reatom/commit/c9e6a56201c9a496664cd9409fe0fa5dff67606e))
+* esm module export ([1011671](https://github.com/Xelson/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **form:** republish package ([6f2aa4f](https://github.com/Xelson/reatom/commit/6f2aa4f94e00d571b10619e6b9c1a7bbfb3d4f25))
+* **new-package-template:** use mjs in module export ([1011671](https://github.com/Xelson/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **npm-svelte:** republish without tag ([93c7f7f](https://github.com/Xelson/reatom/commit/93c7f7f5ec58247b1b3aec854cd83b0a0ecd6a6c))
+* **persist:** republish package ([8bf9b6d](https://github.com/Xelson/reatom/commit/8bf9b6d5d5e7c4bb51a5161e9c7cf7036f5938f5))
+
 ## [3.10.2](https://github.com/reatom/reatom/compare/core-v3.10.1...core-v3.10.2) (2025-10-08)
 
 ### Bug Fixes

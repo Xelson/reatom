@@ -1,5 +1,27 @@
 # Changelog
 
+## [3.9.0](https://github.com/Xelson/reatom/compare/eslint-plugin-v3.8.0...eslint-plugin-v3.9.0) (2025-10-12)
+
+
+### Features
+
+* **eslint-plugin:** complete unit-naming-rule ([#523](https://github.com/Xelson/reatom/issues/523)) ([#920](https://github.com/Xelson/reatom/issues/920)) ([590ebbf](https://github.com/Xelson/reatom/commit/590ebbf4fe14c649304b77b7815766779c19a078))
+* **eslint-plugin:** schedule-import-rule ([#930](https://github.com/Xelson/reatom/issues/930)) ([89d63d0](https://github.com/Xelson/reatom/commit/89d63d06dd4018ef6aeed8db6daf6928f3ffd24a))
+
+
+### Bug Fixes
+
+* **async:** republish package ([557e544](https://github.com/Xelson/reatom/commit/557e544713710dc5a57351d00fd65be7a076e8af))
+* **core:** republish package ([f8d5358](https://github.com/Xelson/reatom/commit/f8d535878d702becf31eb227f540d6056a9e3dc3))
+* **eslint-plugin:** false-negative for `name` as prop and invalid derivation for objects inside a named factory ([#1021](https://github.com/Xelson/reatom/issues/1021)) ([6b15f13](https://github.com/Xelson/reatom/commit/6b15f131682d88373e6a0f9f1bb75af60a989d8a))
+* **eslint-plugin:** fix eslint build [#1027](https://github.com/Xelson/reatom/issues/1027) ([#1030](https://github.com/Xelson/reatom/issues/1030)) ([8dd2669](https://github.com/Xelson/reatom/commit/8dd266971ed1c81938eda91fe4f7b8bf5cc10762))
+* **eslint-plugin:** typeError in reatom/unit-naming-rule ([#968](https://github.com/Xelson/reatom/issues/968)) ([8392593](https://github.com/Xelson/reatom/commit/8392593d6caab3136acbe1e77cb28129630d41e4))
+* esm module export ([1011671](https://github.com/Xelson/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **form:** republish package ([6f2aa4f](https://github.com/Xelson/reatom/commit/6f2aa4f94e00d571b10619e6b9c1a7bbfb3d4f25))
+* **new-package-template:** use mjs in module export ([1011671](https://github.com/Xelson/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **npm-svelte:** republish without tag ([93c7f7f](https://github.com/Xelson/reatom/commit/93c7f7f5ec58247b1b3aec854cd83b0a0ecd6a6c))
+* **persist:** republish package ([8bf9b6d](https://github.com/Xelson/reatom/commit/8bf9b6d5d5e7c4bb51a5161e9c7cf7036f5938f5))
+
 ## [3.8.0](https://github.com/artalar/reatom/compare/eslint-plugin-v3.7.1...eslint-plugin-v3.8.0) (2025-02-05)
 
 ### Features

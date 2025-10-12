@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.4.10](https://github.com/Xelson/reatom/compare/testing-v3.4.9...testing-v3.4.10) (2025-10-12)
+
+
+### Bug Fixes
+
+* **async:** republish package ([557e544](https://github.com/Xelson/reatom/commit/557e544713710dc5a57351d00fd65be7a076e8af))
+* **core:** republish package ([f8d5358](https://github.com/Xelson/reatom/commit/f8d535878d702becf31eb227f540d6056a9e3dc3))
+* esm module export ([1011671](https://github.com/Xelson/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **form:** republish package ([6f2aa4f](https://github.com/Xelson/reatom/commit/6f2aa4f94e00d571b10619e6b9c1a7bbfb3d4f25))
+* **new-package-template:** use mjs in module export ([1011671](https://github.com/Xelson/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **npm-svelte:** republish without tag ([93c7f7f](https://github.com/Xelson/reatom/commit/93c7f7f5ec58247b1b3aec854cd83b0a0ecd6a6c))
+* **persist:** republish package ([8bf9b6d](https://github.com/Xelson/reatom/commit/8bf9b6d5d5e7c4bb51a5161e9c7cf7036f5938f5))
+* **testing:** callSafelySilent ([d80f013](https://github.com/Xelson/reatom/commit/d80f0132542b5dad732228e0c49bf807dfc916ae))
+* **testing:** prevent first computed reading of mocked atom [#995](https://github.com/Xelson/reatom/issues/995) ([5231d20](https://github.com/Xelson/reatom/commit/5231d20cbbbc2ffeefb52e574f9f281273e0e8e1))
+* **testing:** restrictMultipleContexts ([7abb8db](https://github.com/Xelson/reatom/commit/7abb8dbf470b57c2a7ffc4333add6fab9a0d193a))
+
 ## [3.4.9](https://github.com/artalar/reatom/compare/testing-v3.4.8...testing-v3.4.9) (2025-03-14)
 
 ### Bug Fixes

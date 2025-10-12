@@ -1,5 +1,31 @@
 # Changelog
 
+## [3.10.0](https://github.com/Xelson/reatom/compare/url-v3.9.0...url-v3.10.0) (2025-10-12)
+
+
+### Features
+
+* **url:** add subpath parameter ([#945](https://github.com/Xelson/reatom/issues/945)) ([e9d882d](https://github.com/Xelson/reatom/commit/e9d882d0749b5aa82a4732d3d02fbd8d65254883))
+* **url:** path instead of path ([526f9a7](https://github.com/Xelson/reatom/commit/526f9a73d4f5a4b738a6cb049f616ca4ce79fc03))
+* **url:** remove umd build ([2516fd4](https://github.com/Xelson/reatom/commit/2516fd4bb932837ebadd4ae88789b8df25eca287))
+
+
+### Bug Fixes
+
+* **async:** republish package ([557e544](https://github.com/Xelson/reatom/commit/557e544713710dc5a57351d00fd65be7a076e8af))
+* **core:** republish package ([f8d5358](https://github.com/Xelson/reatom/commit/f8d535878d702becf31eb227f540d6056a9e3dc3))
+* esm module export ([1011671](https://github.com/Xelson/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **form:** republish package ([6f2aa4f](https://github.com/Xelson/reatom/commit/6f2aa4f94e00d571b10619e6b9c1a7bbfb3d4f25))
+* **new-package-template:** use mjs in module export ([1011671](https://github.com/Xelson/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **npm-svelte:** republish without tag ([93c7f7f](https://github.com/Xelson/reatom/commit/93c7f7f5ec58247b1b3aec854cd83b0a0ecd6a6c))
+* **persist:** republish package ([8bf9b6d](https://github.com/Xelson/reatom/commit/8bf9b6d5d5e7c4bb51a5161e9c7cf7036f5938f5))
+* **url:** computed handling ([80bb777](https://github.com/Xelson/reatom/commit/80bb777215842684cefbf0cc5bbbd5bd2ab791e0))
+* **url:** searchParamsAtom memoization ([ea1c575](https://github.com/Xelson/reatom/commit/ea1c5750971067786bd046723da7a3b7a657a955))
+* **url:** setting reinitialization ([742b303](https://github.com/Xelson/reatom/commit/742b30370ba86bed048ecbd9fddf4c02242cd2fe))
+* **url:** some bug ([c824199](https://github.com/Xelson/reatom/commit/c8241998cc36cf60b7786efbca0fd5b4b53a4ae3))
+* **url:** subpath ([fcb62d0](https://github.com/Xelson/reatom/commit/fcb62d0fb31adadd8f1d6043d40f5394049048cf))
+* **url:** subpath handling ([6f4ad7d](https://github.com/Xelson/reatom/commit/6f4ad7d247fbc788c17c8711a9ddf97c92c87767))
+
 ## [3.9.0](https://github.com/artalar/reatom/compare/url-v3.8.1...url-v3.9.0) (2025-02-16)
 
 ### Features

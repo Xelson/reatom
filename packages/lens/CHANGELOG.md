@@ -1,5 +1,33 @@
 # Changelog
 
+## [3.13.0](https://github.com/Xelson/reatom/compare/lens-v3.12.0...lens-v3.13.0) (2025-10-12)
+
+
+### Features
+
+* **form:** add centralized fields initialization, add support for array fields, add `withField` ([#1038](https://github.com/Xelson/reatom/issues/1038)) ([3da17df](https://github.com/Xelson/reatom/commit/3da17df7c91c5ab8a5b17bd5a2cadd4792df340a))
+* **lens:** allow to call select multiple times ([6ea0223](https://github.com/Xelson/reatom/commit/6ea022382ace846f5bb15abdf41bc35783764555))
+* **lens:** support linked list in parseAtoms ([534d745](https://github.com/Xelson/reatom/commit/534d74583af3890fe9ac18baf08b11c25dd1f957))
+
+
+### Bug Fixes
+
+* **async:** republish package ([557e544](https://github.com/Xelson/reatom/commit/557e544713710dc5a57351d00fd65be7a076e8af))
+* **core:** republish package ([f8d5358](https://github.com/Xelson/reatom/commit/f8d535878d702becf31eb227f540d6056a9e3dc3))
+* esm module export ([1011671](https://github.com/Xelson/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **form:** republish package ([6f2aa4f](https://github.com/Xelson/reatom/commit/6f2aa4f94e00d571b10619e6b9c1a7bbfb3d4f25))
+* **lens:** better matched expression type ([#914](https://github.com/Xelson/reatom/issues/914)) ([2ea51cd](https://github.com/Xelson/reatom/commit/2ea51cd509760fa8ecb6530dc51c602a93e08a13))
+* **lens:** do not perform actions in parseAtoms ([cff48d0](https://github.com/Xelson/reatom/commit/cff48d060ae2a6a0afab4612353bac1926f39c21))
+* **lens:** match ctx instead of cause in select ([3f1fd8e](https://github.com/Xelson/reatom/commit/3f1fd8e21d457cc9f78d2a71ef9f8caa585fcf99))
+* **lens:** migrate to vitest, fix parseAtom type ([#1048](https://github.com/Xelson/reatom/issues/1048)) ([b00054a](https://github.com/Xelson/reatom/commit/b00054a54906c94c032b70e717f7e572a4b62bb7))
+* **lens:** parseAtoms types ([50bbb2c](https://github.com/Xelson/reatom/commit/50bbb2cdfff0867105135f0810b46959bc000dd4))
+* **lens:** parseAtoms types ([e284d32](https://github.com/Xelson/reatom/commit/e284d32158caf7233ca36670c345ed4626fec1d9))
+* **lens:** reactive match ([#973](https://github.com/Xelson/reatom/issues/973)) ([659b78d](https://github.com/Xelson/reatom/commit/659b78dbe650a2e6747e8f1918210054cf369940))
+* **lens:** select equal callback ([ce87fbf](https://github.com/Xelson/reatom/commit/ce87fbfd0e7ef953e6c5156645c0aac77b20a952))
+* **new-package-template:** use mjs in module export ([1011671](https://github.com/Xelson/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **npm-svelte:** republish without tag ([93c7f7f](https://github.com/Xelson/reatom/commit/93c7f7f5ec58247b1b3aec854cd83b0a0ecd6a6c))
+* **persist:** republish package ([8bf9b6d](https://github.com/Xelson/reatom/commit/8bf9b6d5d5e7c4bb51a5161e9c7cf7036f5938f5))
+
 ## [3.12.0](https://github.com/reatom/reatom/compare/lens-v3.11.8...lens-v3.12.0) (2025-05-19)
 
 ### Features

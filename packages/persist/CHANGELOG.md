@@ -1,5 +1,29 @@
 # Changelog
 
+## [3.5.0](https://github.com/Xelson/reatom/compare/persist-v3.4.2...persist-v3.5.0) (2025-10-12)
+
+
+### Features
+
+* **persist:** add __persistRecordAtom ([89d6e6f](https://github.com/Xelson/reatom/commit/89d6e6f98587c45bc5c77f241298ffd16f340489))
+
+
+### Bug Fixes
+
+* **async:** republish package ([557e544](https://github.com/Xelson/reatom/commit/557e544713710dc5a57351d00fd65be7a076e8af))
+* **core:** republish package ([f8d5358](https://github.com/Xelson/reatom/commit/f8d535878d702becf31eb227f540d6056a9e3dc3))
+* esm module export ([1011671](https://github.com/Xelson/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **form:** republish package ([6f2aa4f](https://github.com/Xelson/reatom/commit/6f2aa4f94e00d571b10619e6b9c1a7bbfb3d4f25))
+* **new-package-template:** use mjs in module export ([1011671](https://github.com/Xelson/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **npm-svelte:** republish without tag ([93c7f7f](https://github.com/Xelson/reatom/commit/93c7f7f5ec58247b1b3aec854cd83b0a0ecd6a6c))
+* **persist:** computed handling ([6d747cb](https://github.com/Xelson/reatom/commit/6d747cb07a3f857876abdb39afa91e8d9a36f4f0))
+* **persist:** createMemStorage reactivity ([96c2e46](https://github.com/Xelson/reatom/commit/96c2e461487349a0ee63450af7cdaaf11289b690))
+* **persist:** do not accept an action ([f6b3028](https://github.com/Xelson/reatom/commit/f6b3028982bec514158ce85474f116627ada3ab2))
+* **persist:** prevent extra computed calls ([65de325](https://github.com/Xelson/reatom/commit/65de32501fa22841747069f6056f0d37c43b4ec4))
+* **persist:** republish package ([8bf9b6d](https://github.com/Xelson/reatom/commit/8bf9b6d5d5e7c4bb51a5161e9c7cf7036f5938f5))
+* **persist:** rm extra cache for transactions ([5efcd57](https://github.com/Xelson/reatom/commit/5efcd5746e9e208e46b0b6b6692b823d950bc1b6))
+* **persist:** snapshotAtom init state [#885](https://github.com/Xelson/reatom/issues/885) ([209613f](https://github.com/Xelson/reatom/commit/209613f425ee06e5cd81ebddb84b25accb1c5861))
+
 ## [3.4.2](https://github.com/reatom/reatom/compare/persist-v3.4.1...persist-v3.4.2) (2025-10-08)
 
 ### Bug Fixes
