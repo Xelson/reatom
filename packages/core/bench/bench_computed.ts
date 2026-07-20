@@ -406,15 +406,15 @@ const testComputers = setupComputersTest({
 
     startCreation()
 
-    const entry = atom(0, 'entry')
-    const a = computed(() => entry(), 'a')
-    const b = computed(() => a() + 1, 'b')
-    const c = computed(() => a() + 1, 'c')
-    const d = computed(() => b() + c(), 'd')
-    const e = computed(() => d() + 1, 'e')
-    const f = computed(() => d() + e(), 'f')
-    const g = computed(() => d() + e(), 'g')
-    const h = computed(() => f() + g(), 'h')
+    const entry = atom(0, '')
+    const a = computed(() => entry(), '')
+    const b = computed(() => a() + 1, '')
+    const c = computed(() => a() + 1, '')
+    const d = computed(() => b() + c(), '')
+    const e = computed(() => d() + 1, '')
+    const f = computed(() => d() + e(), '')
+    const g = computed(() => d() + e(), '')
+    const h = computed(() => f() + g(), '')
 
     h.subscribe(listener)
 

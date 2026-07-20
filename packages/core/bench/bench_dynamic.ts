@@ -27,7 +27,7 @@ async function testAggregateGrowing(
 
   const molAtoms = [new $mol_wire_atom(`0`, (next: number = 0) => next)]
 
-  const ReatomAtoms = [Reatom.atom(0, `${0}`)]
+  const ReatomAtoms = [Reatom.atom(0, '')]
   const mobxAtoms = [observable.box(0, { name: `${0}` })]
   const actAtoms = [act(0)]
   const alienAtoms = [signal(0)]
@@ -40,7 +40,7 @@ async function testAggregateGrowing(
 
   const ReatomAtom = Reatom.computed(
     () => ReatomAtoms.reduce((sum, atom) => sum + atom(), 0),
-    `sum`,
+    '',
   )
   const mobxAtom = computed(
     () => mobxAtoms.reduce((sum, atom) => sum + atom.get(), 0),
@@ -93,7 +93,7 @@ async function testAggregateGrowing(
 
     const startReatom = performance.now()
     for (let j = i; j < batchEnd; j++) {
-      ReatomAtoms[method](Reatom.atom(j))
+      ReatomAtoms[method](Reatom.atom(j, ''))
       growingWriteTarget(ReatomAtoms).set(j)
     }
     Reatom.notify()
@@ -196,7 +196,7 @@ async function testAggregateShrinking(
   )
 
   const ReatomAtoms = Array.from({ length: count }, (_, i) =>
-    Reatom.atom(1, `${i}`),
+    Reatom.atom(1, ''),
   )
   const mobxAtoms = Array.from({ length: count }, (_, i) =>
     observable.box(1, { name: `${i}` }),
@@ -212,7 +212,7 @@ async function testAggregateShrinking(
 
   const ReatomAtom = Reatom.computed(
     () => ReatomAtoms.reduce((sum, atom) => sum + atom(), 0),
-    `sum`,
+    '',
   )
   const mobxAtom = computed(
     () => mobxAtoms.reduce((sum, atom) => sum + atom.get(), 0),
@@ -354,7 +354,7 @@ async function testParent(count: number, batchSize: number = 1) {
 
   const molAtom = new $mol_wire_atom(`0`, (next: number = 0) => next)
   const molAtoms = []
-  const ReatomAtom = Reatom.atom(0, `${0}`)
+  const ReatomAtom = Reatom.atom(0, '')
   const mobxAtom = observable.box(0, { name: `${0}` })
   const actAtom = act(0)
   const actAtoms = []
@@ -371,7 +371,7 @@ async function testParent(count: number, batchSize: number = 1) {
       molPubAtom.sync()
       molAtoms.push(molPubAtom)
 
-      const ReatomDepAtom = Reatom.computed(() => ReatomAtom())
+      const ReatomDepAtom = Reatom.computed(() => ReatomAtom(), '')
       ReatomDepAtom.subscribe()
 
       const mobxDepAtom = computed(() => mobxAtom.get())
@@ -514,7 +514,7 @@ async function testAggregateShuffle(count: number, batchSize: number = 1) {
   )
 
   const ReatomAtoms = Array.from({ length: count }, (_, i) =>
-    Reatom.atom(1, `${i}`),
+    Reatom.atom(1, ''),
   )
   const mobxAtoms = Array.from({ length: count }, (_, i) =>
     observable.box(1, { name: `${i}` }),
@@ -530,7 +530,7 @@ async function testAggregateShuffle(count: number, batchSize: number = 1) {
 
   const ReatomAtom = Reatom.computed(
     () => ReatomAtoms.reduce((sum, atom) => sum + atom(), 0),
-    `sum`,
+    '',
   )
   const mobxAtom = computed(
     () => mobxAtoms.reduce((sum, atom) => sum + atom.get(), 0),
@@ -694,7 +694,7 @@ async function testAggregateMiddle(count: number, batchSize: number = 1) {
   )
 
   const ReatomAtoms = Array.from({ length: count }, (_, i) =>
-    Reatom.atom(1, `${i}`),
+    Reatom.atom(1, ''),
   )
   const mobxAtoms = Array.from({ length: count }, (_, i) =>
     observable.box(1, { name: `${i}` }),
@@ -710,7 +710,7 @@ async function testAggregateMiddle(count: number, batchSize: number = 1) {
 
   const ReatomAtom = Reatom.computed(
     () => ReatomAtoms.reduce((sum, atom) => sum + atom(), 0),
-    `sum`,
+    '',
   )
   const mobxAtom = computed(
     () => mobxAtoms.reduce((sum, atom) => sum + atom.get(), 0),
