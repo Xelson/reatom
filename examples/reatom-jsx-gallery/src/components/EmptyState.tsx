@@ -10,6 +10,7 @@ export const EmptyState = () => {
 
   return (
     <div
+      class="gallery-empty"
       css={`
         display: flex;
         flex-direction: column;
@@ -99,7 +100,18 @@ export const EmptyState = () => {
           }
         `}
       >
+        <div class="bauhaus-art" attr:aria-hidden="true" css="display: none;">
+          <span class="bauhaus-circle" />
+          <span class="bauhaus-triangle" />
+          <span class="bauhaus-square" />
+          <span class="bauhaus-lines" />
+          <span class="bauhaus-art-caption">FORM / COLOR / LIGHT</span>
+        </div>
+        <span class="bauhaus-eyebrow" css="display: none;">
+          A space for seeing.
+        </span>
         <div
+          class="empty-gallery-mark"
           attr:aria-hidden="true"
           css={`
             width: 88px;

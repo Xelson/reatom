@@ -464,3 +464,28 @@ export const SortDescIcon = () => (
     <svg:path d="M15 18h5" />
   </svg:svg>
 )
+
+export const InstantCameraIcon = () => (
+  <svg:svg
+    viewBox="0 0 40 40"
+    width="40"
+    height="40"
+    fill="none"
+    attr:aria-hidden="true"
+  >
+    <svg:path d="M8 6h24l4 22H4L8 6Z" fill="#f5eedb" stroke="#b9ad93" />
+    <svg:rect x="9" y="9" width="22" height="15" rx="2" fill="#30332f" />
+    <svg:rect x="11" y="11" width="5" height="3" rx="0.5" fill="#c6d5ce" />
+    <svg:circle cx="23" cy="17" r="6" fill="#171d1d" stroke="#929a90" />
+    <svg:circle cx="23" cy="17" r="3.2" fill="#426269" />
+    <svg:circle cx="22" cy="16" r="1" fill="#c6ded6" />
+    <svg:circle cx="12" cy="20" r="2" fill="#d95445" />
+    <svg:path d="M17 24v5" stroke="#df654b" attr:stroke-width="2" />
+    <svg:path d="M19 24v5" stroke="#e8b546" attr:stroke-width="2" />
+    <svg:path d="M21 24v5" stroke="#77a089" attr:stroke-width="2" />
+    <svg:path d="M23 24v5" stroke="#6598b5" attr:stroke-width="2" />
+    <svg:rect x="4" y="28" width="32" height="5" rx="1.5" fill="#30332f" />
+    <svg:path d="M12 30h16l2 8H10l2-8Z" fill="#fff9ed" stroke="#b9ad93" />
+    <svg:path d="M14 31h12l1 4H13l1-4Z" fill="#88a49a" />
+  </svg:svg>
+)

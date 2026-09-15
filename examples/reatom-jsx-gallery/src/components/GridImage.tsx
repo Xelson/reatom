@@ -12,11 +12,7 @@ import {
 } from '../model'
 import { CheckIcon, HeartIcon } from './Icons'
 
-export const GridImage = ({
-  image,
-}: {
-  image: ImageModel
-}) => {
+export const GridImage = ({ image }: { image: ImageModel }) => {
   const isSelected = () => image.selected()
   const isFavorite = () => image.favorite()
   const imageName = () => image.source.name
@@ -91,6 +87,7 @@ export const GridImage = ({
       on:click={() => openLightbox(image)}
     >
       <div
+        class="grid-image-preview"
         css:image-fit={imageFit}
         css={`
           position: absolute;
@@ -111,6 +108,11 @@ export const GridImage = ({
 
       <div
         class="grid-image-overlay"
+        on:keydown={(event: KeyboardEvent) => {
+          // Native buttons activate themselves; do not also activate the card
+          // or gallery-wide Space shortcut.
+          if (event.key === 'Enter' || event.key === ' ') event.stopPropagation()
+        }}
         css={`
           position: absolute;
           inset: 0;
@@ -155,8 +157,10 @@ export const GridImage = ({
               border-color: var(--accent);
               color: var(--accent-contrast);
             }
-            &:hover {
-              transform: scale(1.1);
+            @media (hover: hover) and (pointer: fine) {
+              &:hover {
+                transform: scale(1.1);
+              }
             }
           `}
         >
@@ -199,10 +203,12 @@ export const GridImage = ({
               background: var(--overlay-control-hover);
             }
 
-            &:hover {
-              transform: scale(1.15);
-              box-shadow: var(--glow);
-              background: var(--overlay-control-hover);
+            @media (hover: hover) and (pointer: fine) {
+              &:hover {
+                transform: scale(1.15);
+                box-shadow: var(--glow);
+                background: var(--overlay-control-hover);
+              }
             }
           `}
         >
@@ -216,6 +222,7 @@ export const GridImage = ({
         if (!showName && !showSize) return null
         return (
           <div
+            class="grid-image-caption"
             css={`
               position: absolute;
               right: 0;

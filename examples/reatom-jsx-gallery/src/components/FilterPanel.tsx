@@ -161,7 +161,7 @@ export const FilterPanel = () => (
     >
       File Types
     </h3>
-    <div css="margin-bottom: 16px;">
+    <div class="filter-type-options" css="margin-bottom: 16px;">
       {IMAGE_TYPE_OPTIONS.map((option) => (
         <TypeCheckbox ext={option.ext} label={option.label} />
       ))}
@@ -183,6 +183,7 @@ export const FilterPanel = () => (
       <input
         type="number"
         placeholder="Min"
+        aria-label="Minimum file size in KB"
         value={filterSizeMinKb}
         on:input={(event: Event & { currentTarget: HTMLInputElement }) =>
           setFilterSizeMinKb(Number(event.currentTarget.value))
@@ -210,6 +211,7 @@ export const FilterPanel = () => (
       <input
         type="number"
         placeholder="Max"
+        aria-label="Maximum file size in KB"
         value={filterSizeMaxKb}
         on:input={(event: Event & { currentTarget: HTMLInputElement }) => {
           const value = event.currentTarget.value
@@ -254,10 +256,17 @@ export const FilterPanel = () => (
       `}
     >
       <span>Include Subfolders</span>
-      <div
+      <button
+        type="button"
+        role="switch"
+        aria-label="Include Subfolders"
+        aria-checked={includeSubfolders}
+        data-glass-toggle="true"
         on:click={includeSubfolders.toggle}
         attr:data-on={includeSubfolders}
         css={`
+          padding: 0;
+          flex-shrink: 0;
           width: 40px;
           height: 22px;
           border-radius: var(--radius-round);
@@ -275,8 +284,8 @@ export const FilterPanel = () => (
             border-radius: var(--radius-round);
             background: var(--accent-contrast);
             box-shadow: 0 2px 6px var(--shadow);
-            top: 2px;
-            left: 2px;
+            top: 1px;
+            left: 1px;
             transition: transform 0.2s;
           }
 

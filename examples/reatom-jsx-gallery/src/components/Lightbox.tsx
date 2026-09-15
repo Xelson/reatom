@@ -10,6 +10,7 @@ import {
   copyLightboxImageAsJpeg,
   downloadLightboxImage,
   endLightboxPan,
+  type GalleryImageModel,
   handleLightboxKeyDown,
   ignoreExifOrientation,
   lightboxControlsVisible,
@@ -118,6 +119,165 @@ const lightboxImageFrameCss = `
   }
 `
 
+const prepareFullImageElement = (
+  model: GalleryImageModel,
+  image: HTMLImageElement,
+) => {
+  image.alt = model.source.name
+  image.draggable = false
+  const orientationStyle = resolveImageOrientationStyle(
+    model.meta.data()?.exif,
+    ignoreExifOrientation(),
+  )
+  if (orientationStyle) {
+    image.style.imageOrientation = orientationStyle
+  } else {
+    image.style.removeProperty('image-orientation')
+  }
+  return image
+}
+
+const prepareRawImageElement = (image: HTMLImageElement, name: string) => {
+  image.alt = name
+  image.draggable = false
+  const orientationStyle = lightboxDisplayOrientationStyle()
+  if (orientationStyle) {
+    image.style.imageOrientation = orientationStyle
+  } else {
+    image.style.removeProperty('image-orientation')
+  }
+  return image
+}
+
+const LightboxThumbnailPreview = ({
+  model,
+  thumbnailUrl,
+  onImageElement,
+}: {
+  model: GalleryImageModel
+  thumbnailUrl: string
+  onImageElement: (element: HTMLElement) => void
+}) => (
+  <img
+    src={thumbnailUrl}
+    alt={model.source.name}
+    draggable={false}
+    tabindex={-1}
+    ref={onImageElement}
+    style:image-orientation={lightboxDisplayOrientationStyle}
+  />
+)
+
+const LightboxImageFrame = ({
+  onImageElement,
+}: {
+  onImageElement: (element: HTMLElement) => void
+}) => (
+  <>
+    {() => {
+      const model = lightboxImage()
+      if (!model) {
+        return (
+          <div css="color: #fff; font-size: 18px;">No image selected</div>
+        )
+      }
+
+      return (
+        <div
+          class="lightbox-photo-print"
+          attr:data-caption={() => model.source.name}
+          style:width={() => lightboxImageFrameSize().width}
+          style:height={() => lightboxImageFrameSize().height}
+          style:transform={lightboxImageTransform}
+          css={lightboxImageFrameCss}
+        >
+          {() => {
+            const thumbnailUrl = model.thumbnail.data()?.url
+
+            // Subscribe to async data to keep the decode pipeline alive, but paint
+            // from the artifact: disconnect wipes the canvas in place while
+            // `.data()` can still hold that blank node until the next fulfill.
+            model.sizedImage.data()
+            const sizedCanvas = model.sizedImageArtifact()
+            if (
+              sizedCanvas &&
+              sizedCanvas.width > 0 &&
+              sizedCanvas.height > 0
+            ) {
+              sizedCanvas.setAttribute('role', 'img')
+              sizedCanvas.setAttribute('aria-label', model.source.name)
+              sizedCanvas.style.pointerEvents = 'auto'
+              onImageElement(sizedCanvas)
+              return sizedCanvas
+            }
+
+            // While sized decode is in flight, keep the loaded preview on screen.
+            // Skip fullImage here — a preloaded undecoded <img> would blank the
+            // frame until paint-size decode finishes.
+            if (model.sizedImage.pending() > 0) {
+              const rawDevelopedImage = model.rawDevelopedImage.data()
+              if (rawDevelopedImage) {
+                onImageElement(
+                  prepareRawImageElement(rawDevelopedImage, model.source.name),
+                )
+                return rawDevelopedImage
+              }
+
+              const rawEmbeddedPreview = model.rawEmbeddedPreviewImage.data()
+              if (rawEmbeddedPreview) {
+                onImageElement(
+                  prepareRawImageElement(rawEmbeddedPreview, model.source.name),
+                )
+                return rawEmbeddedPreview
+              }
+
+              if (!thumbnailUrl) return null
+              return (
+                <LightboxThumbnailPreview
+                  model={model}
+                  thumbnailUrl={thumbnailUrl}
+                  onImageElement={onImageElement}
+                />
+              )
+            }
+
+            const fullImage = model.fullImage.data()
+            if (fullImage) {
+              onImageElement(prepareFullImageElement(model, fullImage))
+              return fullImage
+            }
+
+            const rawDevelopedImage = model.rawDevelopedImage.data()
+            if (rawDevelopedImage) {
+              onImageElement(
+                prepareRawImageElement(rawDevelopedImage, model.source.name),
+              )
+              return rawDevelopedImage
+            }
+
+            const rawEmbeddedPreview = model.rawEmbeddedPreviewImage.data()
+            if (rawEmbeddedPreview) {
+              onImageElement(
+                prepareRawImageElement(rawEmbeddedPreview, model.source.name),
+              )
+              return rawEmbeddedPreview
+            }
+
+            if (!thumbnailUrl) return null
+            return (
+              <LightboxThumbnailPreview
+                model={model}
+                thumbnailUrl={thumbnailUrl}
+                onImageElement={onImageElement}
+              />
+            )
+          }}
+        </div>
+      )
+    }}
+  </>
+)
+
 const LightboxContent = () => {
   let lightboxElement: HTMLDivElement | null = null
   let lightboxImageElement: HTMLElement | null = null
@@ -137,83 +297,6 @@ const LightboxContent = () => {
     lightboxImageElement = element
     element.tabIndex = -1
     focusLightboxImage()
-  }
-
-  const displayImage = () => {
-    const model = lightboxImage()
-    if (!model) return null
-
-    // Subscribe to async data to keep the decode pipeline alive, but paint from
-    // the artifact: disconnect wipes the canvas in place while `.data()` can
-    // still hold that blank node until the next fulfill.
-    model.sizedImage.data()
-    const sizedCanvas = model.sizedImageArtifact()
-    if (sizedCanvas && sizedCanvas.width > 0 && sizedCanvas.height > 0) {
-      sizedCanvas.setAttribute('role', 'img')
-      sizedCanvas.setAttribute('aria-label', model.source.name)
-      sizedCanvas.style.pointerEvents = 'auto'
-      setLightboxImageElement(sizedCanvas)
-      return sizedCanvas
-    }
-
-    const fullImage = model.fullImage.data()
-    if (fullImage) {
-      fullImage.alt = model.source.name
-      fullImage.draggable = false
-      const orientationStyle = resolveImageOrientationStyle(
-        model.meta.data()?.exif,
-        ignoreExifOrientation(),
-      )
-      if (orientationStyle) {
-        fullImage.style.imageOrientation = orientationStyle
-      } else {
-        fullImage.style.removeProperty('image-orientation')
-      }
-      setLightboxImageElement(fullImage)
-      return fullImage
-    }
-
-    const rawDevelopedImage = model.rawDevelopedImage.data()
-    if (rawDevelopedImage) {
-      rawDevelopedImage.alt = model.source.name
-      rawDevelopedImage.draggable = false
-      const orientationStyle = lightboxDisplayOrientationStyle()
-      if (orientationStyle) {
-        rawDevelopedImage.style.imageOrientation = orientationStyle
-      } else {
-        rawDevelopedImage.style.removeProperty('image-orientation')
-      }
-      setLightboxImageElement(rawDevelopedImage)
-      return rawDevelopedImage
-    }
-
-    const rawEmbeddedPreview = model.rawEmbeddedPreviewImage.data()
-    if (rawEmbeddedPreview) {
-      rawEmbeddedPreview.alt = model.source.name
-      rawEmbeddedPreview.draggable = false
-      const orientationStyle = lightboxDisplayOrientationStyle()
-      if (orientationStyle) {
-        rawEmbeddedPreview.style.imageOrientation = orientationStyle
-      } else {
-        rawEmbeddedPreview.style.removeProperty('image-orientation')
-      }
-      setLightboxImageElement(rawEmbeddedPreview)
-      return rawEmbeddedPreview
-    }
-
-    const thumbnailUrl = model.thumbnail.data()?.url
-    if (!thumbnailUrl) return null
-
-    return (
-      <img
-        src={thumbnailUrl}
-        alt={model.source.name}
-        draggable={false}
-        tabindex={-1}
-        ref={setLightboxImageElement}
-        style:image-orientation={lightboxDisplayOrientationStyle}
-      />
-    )
   }
 
   const pressLightboxControl = (action: () => void) => {
@@ -261,6 +344,7 @@ const LightboxContent = () => {
 
   return (
     <div
+      class="gallery-lightbox"
       role="dialog"
       aria-modal="true"
       aria-label={lightboxDialogLabel}
@@ -350,7 +434,7 @@ const LightboxContent = () => {
       `}
     >
       <div
-        class="lightbox-control-layer"
+        class="lightbox-control-layer lightbox-toolbar"
         css={`
           position: absolute;
           top: 0;
@@ -470,6 +554,7 @@ const LightboxContent = () => {
       </div>
 
       <div
+        class="lightbox-photo-stage"
         style:cursor={lightboxImageCursor}
         css={`
           flex: 1;
@@ -482,24 +567,7 @@ const LightboxContent = () => {
           pointer-events: none;
         `}
       >
-        {() => {
-          const img = lightboxImage()
-          if (!img)
-            return (
-              <div css="color: #fff; font-size: 18px;">No image selected</div>
-            )
-
-          return (
-            <div
-              style:width={() => lightboxImageFrameSize().width}
-              style:height={() => lightboxImageFrameSize().height}
-              style:transform={lightboxImageTransform}
-              css={lightboxImageFrameCss}
-            >
-              {displayImage}
-            </div>
-          )
-        }}
+        <LightboxImageFrame onImageElement={setLightboxImageElement} />
       </div>
 
       {() => {
@@ -595,7 +663,7 @@ const LightboxContent = () => {
       }}
 
       <div
-        class="lightbox-control-layer"
+        class="lightbox-control-layer lightbox-filmstrip"
         css={`
           position: absolute;
           bottom: 0;

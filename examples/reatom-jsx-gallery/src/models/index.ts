@@ -153,6 +153,7 @@ export {
 } from './panels'
 export {
   developRawFullSize,
+  glassBackgroundAnimation,
   ignoreExifOrientation,
   resolvedThemeMode,
   showFileSizes,

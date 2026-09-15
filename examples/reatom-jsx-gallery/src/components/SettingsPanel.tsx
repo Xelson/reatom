@@ -1,5 +1,6 @@
 import {
   developRawFullSize,
+  glassBackgroundAnimation,
   gridColumns,
   gridColumnsLabel,
   gridGap,
@@ -67,9 +68,11 @@ const OptionButton = ({
       white-space: nowrap;
       text-transform: var(--control-transform);
 
-      &:hover {
-        border-color: var(--accent);
-        color: var(--accent);
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          border-color: var(--accent);
+          color: var(--accent);
+        }
       }
 
       &[data-active='true'] {
@@ -104,11 +107,17 @@ const ToggleSwitch = ({
     `}
   >
     <span>{label}</span>
-    <div
+    <button
+      type="button"
+      role="switch"
+      aria-label={label}
+      aria-checked={checked}
       data-glass-toggle="true"
       on:click={onToggle}
       attr:data-on={checked}
       css={`
+        padding: 0;
+        flex-shrink: 0;
         --toggle-width: 40px;
         --toggle-height: 22px;
         --toggle-knob-size: 18px;
@@ -196,9 +205,11 @@ const ThemePackButton = ({
       color: var(--text-primary);
       transition: all 0.15s ease;
 
-      &:hover {
-        border-color: var(--accent);
-        background: var(--hover-bg);
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          border-color: var(--accent);
+          background: var(--hover-bg);
+        }
       }
 
       &[data-active='true'] {
@@ -260,9 +271,11 @@ const ThemeModeButton = ({
       transition: all 0.15s ease;
       text-transform: var(--control-transform);
 
-      &:hover {
-        border-color: var(--accent);
-        background: var(--hover-bg);
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          border-color: var(--accent);
+          background: var(--hover-bg);
+        }
       }
 
       &[aria-pressed='true'] {
@@ -361,9 +374,11 @@ export const SettingsPanel = () => (
           justify-content: center;
           transition: background 0.15s;
 
-          &:hover {
-            background: var(--accent);
-            color: var(--accent-contrast);
+          @media (hover: hover) and (pointer: fine) {
+            &:hover {
+              background: var(--accent);
+              color: var(--accent-contrast);
+            }
           }
         `}
       >
@@ -432,7 +447,7 @@ export const SettingsPanel = () => (
         <OptionButton
           label={fit}
           isActive={() => imageFit() === fit}
-          onClick={() => imageFit.set(fit)}
+          onClick={() => imageFit.change(fit)}
         />
       ))}
     </div>
@@ -477,6 +492,22 @@ export const SettingsPanel = () => (
     />
 
     <SectionTitle text="Theme" />
+    {() =>
+      themePack() === 'glass' && (
+        <div>
+          <ToggleSwitch
+            label="Animate Glass Background"
+            checked={() => glassBackgroundAnimation()}
+            onToggle={glassBackgroundAnimation.toggle}
+          />
+          <p css="font-size: 12px; color: var(--text-secondary); margin: 0 0 12px;">
+            Uses more power. Pauses when the tab is hidden and respects reduced
+            motion.
+          </p>
+        </div>
+      )
+    }
+
     <div css="display: grid; gap: calc(8px + var(--shadow-clearance, 0px));">
       {THEME_PACKS.map((pack) => (
         <ThemePackButton

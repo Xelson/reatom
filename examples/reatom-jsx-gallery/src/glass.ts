@@ -95,13 +95,18 @@ const lensDisplacementAt = (
   const normalY = gradientY / gradientLength
 
   const edgeDistance = -signedDistance
-  const edgeCap = Math.min(lens.width, lens.height) * 0.5
-  const edgeWeight = Math.pow(
-    Math.min(edgeDistance / (edgeCap * 0.55), 1),
-    lens.curvature / 40,
+  const rimWidth = Math.min(
+    14,
+    Math.max(4, Math.min(lens.width, lens.height) * 0.18),
   )
+  if (edgeDistance >= rimWidth) return null
 
-  const bendStrength = lens.depth * edgeWeight * 0.012
+  const rimPosition = edgeDistance / rimWidth
+  const bell = Math.sin(Math.PI * rimPosition) ** 2
+  const curvaturePower = 40 / lens.curvature
+  const edgeWeight = Math.pow(bell, curvaturePower)
+
+  const bendStrength = lens.depth * edgeWeight * 0.03
   return {
     dx: normalX * bendStrength * lens.splay,
     dy: normalY * bendStrength,
@@ -196,14 +201,42 @@ const mirrorDisplacementIntoQuadrants = (
 }
 
 export const GLASS_LENS_PRESETS = {
+  circleSmall: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    depth: 14,
+    curvature: 40,
+    splay: 1,
+    scale: 16,
+    chroma: 0.08,
+    blur: 0,
+    glow: 0,
+    edgeHighlight: 0.15,
+    specularAngle: 45,
+  },
+  circleLarge: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    depth: 14,
+    curvature: 40,
+    splay: 1,
+    scale: 20,
+    chroma: 0.08,
+    blur: 0,
+    glow: 0,
+    edgeHighlight: 0.15,
+    specularAngle: 45,
+  },
   pill: {
     width: 96,
     height: 44,
     borderRadius: 22,
-    depth: 10,
+    depth: 18,
     curvature: 40,
     splay: 1,
-    scale: 12,
+    scale: 28,
     chroma: 0.2,
     blur: 0,
     glow: 0.1,
@@ -329,6 +362,7 @@ export const generateGlassDisplacementMap = (
     key: cacheKey,
   }
 
+  if (mapCache.size >= 24) mapCache.delete(mapCache.keys().next().value!)
   mapCache.set(cacheKey, displacementMap)
   return displacementMap
 }

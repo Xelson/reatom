@@ -5,6 +5,7 @@ import {
   folderTreeIsAllSelected,
   folderTreeSidebarVisible,
   reatomFolderTreeNodeUi,
+  themePack,
 } from '../model'
 import type { FolderNode } from '../types'
 import {
@@ -65,6 +66,7 @@ const FolderTreeNode = ({
 
   return (
     <div
+      class="gallery-folder-node"
       css={`
         padding-left: ${depth * 12}px;
       `}
@@ -148,6 +150,7 @@ const FolderTreeNode = ({
 export const FolderTree = () => (
   <div css="display: flex; height: 100%; position: relative;">
     <div
+      class="gallery-folder-sidebar"
       data-open={folderTreeSidebarVisible}
       css={`
         width: ${folderSidebarWidth}px;
@@ -199,7 +202,13 @@ export const FolderTree = () => (
           <span css="font-size: 15px;">
             <FolderRootIcon />
           </span>
-          <span>All folders</span>
+          <span>
+            {() =>
+              themePack() === 'polaroid'
+                ? (folderTree()?.name ?? 'All folders')
+                : 'All folders'
+            }
+          </span>
         </div>
 
         <div css="height: 1px; background: var(--border); margin: 6px 0 10px;" />
@@ -215,10 +224,28 @@ export const FolderTree = () => (
           return <FolderTreeNode node={tree} depth={0} />
         }}
       </div>
+      <div
+        class="bauhaus-sidebar-print"
+        attr:aria-hidden="true"
+        css="display: none;"
+      >
+        <div class="bauhaus-print-shapes">
+          <span />
+          <span />
+          <span />
+        </div>
+        <span class="bauhaus-print-title">
+          Look
+          <br />
+          closer.
+        </span>
+        <span class="bauhaus-print-note">THERE’S MORE TO SEE.</span>
+      </div>
     </div>
 
     <button
       type="button"
+      class="gallery-folder-toggle"
       aria-expanded={folderTreeSidebarVisible}
       aria-label={() =>
         folderTreeSidebarVisible() ? 'Hide folder tree' : 'Show folder tree'
@@ -263,7 +290,7 @@ export const FolderTree = () => (
           background: var(--bg-elevated);
           border-color: var(--accent);
           color: var(--accent-hover);
-          transform: translateX(-50%) var(--card-hover-transform);
+          transform: translateX(-50%);
           box-shadow: var(--card-hover-shadow);
         }
         &:focus-visible {

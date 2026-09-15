@@ -131,6 +131,43 @@ export const FullResolutionAcrossNavigation: Story = {
 }
 
 /**
+ * Navigation must keep a paint-ready preview on screen while the next image's
+ * sized/full decode is still in flight. A blank frame until full resolution
+ * lands is the regression this story guards against.
+ */
+export const PreviewRemainsVisibleAcrossNavigation: Story = {
+  parameters: largePhotoStoryParameters,
+  loaders: [loadPersonalTree],
+  render: () => renderLightboxAtIndex(0),
+  play: async () => {
+    await I.seeLightboxOpen()
+    await I.seeFullResolutionImage('DSC08224.jpg')
+
+    await I.goToNextImage()
+
+    await waitFor(
+      async () => {
+        const preview = await I.resolveLocator((canvas) =>
+          canvas.findByRole('img', { name: 'DSC08225.jpg' }),
+        )
+        if (preview instanceof HTMLImageElement) {
+          await expect(preview.naturalWidth).toBeGreaterThan(0)
+          return
+        }
+        if (preview instanceof HTMLCanvasElement) {
+          await expect(preview.width).toBeGreaterThan(0)
+          return
+        }
+        throw new Error('Expected a paint-ready lightbox preview')
+      },
+      { timeout: 5_000 },
+    )
+
+    await I.seeFullResolutionImage('DSC08225.jpg')
+  },
+}
+
+/**
  * Same regression from the "open the second image first" angle.
  */
 export const FullResolutionFromMiddleImage: Story = {

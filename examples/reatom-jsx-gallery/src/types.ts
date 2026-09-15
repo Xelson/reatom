@@ -34,15 +34,13 @@ export type ResolvedThemeMode = 'light' | 'dark'
 export type ThemeMode = ResolvedThemeMode | 'system'
 export type ThemePack =
   | 'blueprint'
-  | 'neon'
   | 'terminal'
   | 'paper'
   | 'polaroid'
   | 'obsidian'
   | 'bauhaus'
-  | 'aurora'
   | 'glass'
-  | 'monochrome'
+  | 'minimal'
   | 'retroOs'
 
 export const IMAGE_EXTENSIONS = [

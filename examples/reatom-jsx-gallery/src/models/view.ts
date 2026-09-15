@@ -4,12 +4,14 @@ import {
   computed,
   reatomEnum,
   withLocalStorage,
+  withActions,
 } from '@reatom/core'
 
 import { quantizeThumbnailBucket } from '../image-engine/decodePolicy'
 import { type GridGap, VIEW_MODES, type ViewMode } from '../types'
 import { imageGrid } from './gridLayout'
 import { devicePixelRatio } from './viewport'
+import { themePack } from './preferences'
 
 const normalizeViewMode = (snapshot: unknown): ViewMode => {
   switch (snapshot) {
@@ -93,10 +95,30 @@ export const tablePreviewHeight = computed(
   'tablePreviewHeight',
 )
 
-export const imageFit = reatomEnum(['contain', 'cover', 'fill', 'none'], {
-  name: 'imageFit',
+const imageFits = ['contain', 'cover', 'fill', 'none'] as const
+const defaultImageFit = reatomEnum(imageFits, {
+  name: 'defaultImageFit',
   initState: 'cover',
 }).extend(withLocalStorage('gallery.imageFit'))
+const minimalImageFit = reatomEnum(imageFits, {
+  name: 'minimalImageFit',
+  initState: 'contain',
+}).extend(withLocalStorage('gallery.minimal.imageFit'))
+const activeImageFit = () =>
+  themePack() === 'minimal' ? minimalImageFit : defaultImageFit
+
+export const imageFit = computed(() => activeImageFit()(), 'imageFit').extend(
+  withActions(() => ({
+    change: (...params: Parameters<typeof defaultImageFit.set>) =>
+      activeImageFit().set(...params),
+    setContain: () => activeImageFit().setContain(),
+    setCover: () => activeImageFit().setCover(),
+    setFill: () => activeImageFit().setFill(),
+    setNone: () => activeImageFit().setNone(),
+    reset: () => activeImageFit().reset(),
+  })),
+  () => ({ enum: defaultImageFit.enum }),
+)
 
 export const gridGap = reatomEnum(['none', 'small', 'medium', 'large', 'xl'], {
   name: 'gridGap',

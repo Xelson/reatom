@@ -24,6 +24,7 @@ const GridImageEntry = ({
   folder: GalleryFolderModel
 }) => (
   <div
+    class="grid-image-entry"
     style:display={() => (image.visible() ? 'contents' : 'none')}
     ref={() => bindGalleryImagePreview(image, folder)}
   >

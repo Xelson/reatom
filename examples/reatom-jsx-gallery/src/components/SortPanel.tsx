@@ -32,9 +32,11 @@ const SortFieldButton = ({
       white-space: nowrap;
       text-transform: var(--control-transform);
 
-      &:hover {
-        border-color: var(--accent);
-        color: var(--accent);
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          border-color: var(--accent);
+          color: var(--accent);
+        }
       }
 
       &[data-active='true'] {

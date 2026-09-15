@@ -5,6 +5,7 @@ import {
   reatomEnum,
   reatomMediaQuery,
   withLocalStorage,
+  withActions,
 } from '@reatom/core'
 
 import type { ResolvedThemeMode } from '../types'
@@ -12,20 +13,18 @@ import type { ResolvedThemeMode } from '../types'
 export const themePack = reatomEnum(
   [
     'blueprint',
-    'neon',
     'terminal',
     'paper',
     'polaroid',
     'obsidian',
     'bauhaus',
-    'aurora',
     'glass',
-    'monochrome',
+    'minimal',
     'retroOs',
   ],
   {
     name: 'themePack',
-    initState: 'polaroid',
+    initState: 'paper',
   },
 )
 
@@ -33,10 +32,12 @@ themePack.extend(
   withLocalStorage({
     key: 'gallery.themePack',
     fromSnapshot: (snapshot) => {
+      if (snapshot === 'monochrome') return themePack.enum.minimal
+      if (snapshot === 'neon' || snapshot === 'aurora') return themePack.enum.paper
       for (const pack of Object.values(themePack.enum)) {
         if (pack === snapshot) return pack
       }
-      return themePack.enum.polaroid
+      return themePack.enum.paper
     },
   }),
 )
@@ -45,7 +46,7 @@ const prefersDarkTheme = reatomMediaQuery('(prefers-color-scheme: dark)')
 
 export const themeMode = reatomEnum(['light', 'dark', 'system'], {
   name: 'themeMode',
-  initState: 'system',
+  initState: 'dark',
 })
 
 themeMode.extend(
@@ -55,7 +56,7 @@ themeMode.extend(
       for (const mode of Object.values(themeMode.enum)) {
         if (mode === snapshot) return mode
       }
-      return themeMode.enum.system
+      return themeMode.enum.dark
     },
   }),
 )
@@ -70,8 +71,29 @@ export const toggleResolvedThemeMode = action(() => {
   themeMode.set(resolvedThemeMode() === 'light' ? 'dark' : 'light')
 }, 'themeMode.toggleResolved')
 
-export const showImageNames = reatomBoolean(true, 'showImageNames').extend(
-  withLocalStorage('gallery.showImageNames'),
+const defaultShowImageNames = reatomBoolean(
+  true,
+  'defaultShowImageNames',
+).extend(withLocalStorage('gallery.showImageNames'))
+const minimalShowImageNames = reatomBoolean(
+  false,
+  'minimalShowImageNames',
+).extend(withLocalStorage('gallery.minimal.showImageNames'))
+const activeShowImageNames = () =>
+  themePack() === 'minimal' ? minimalShowImageNames : defaultShowImageNames
+
+export const showImageNames = computed(
+  () => activeShowImageNames()(),
+  'showImageNames',
+).extend(
+  withActions(() => ({
+    change: (...params: Parameters<typeof defaultShowImageNames.set>) =>
+      activeShowImageNames().set(...params),
+    toggle: () => activeShowImageNames().toggle(),
+    setTrue: () => activeShowImageNames().setTrue(),
+    setFalse: () => activeShowImageNames().setFalse(),
+    reset: () => activeShowImageNames().reset(),
+  })),
 )
 
 export const showFileSizes = reatomBoolean(false, 'showFileSizes').extend(
@@ -87,3 +109,8 @@ export const developRawFullSize = reatomBoolean(
   true,
   'developRawFullSize',
 ).extend(withLocalStorage('gallery.developRawFullSize'))
+
+export const glassBackgroundAnimation = reatomBoolean(
+  false,
+  'glassBackgroundAnimation',
+).extend(withLocalStorage('gallery.glassBackgroundAnimation'))

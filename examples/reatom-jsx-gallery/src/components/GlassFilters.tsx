@@ -12,15 +12,19 @@ const GLASS_FILTER_PRESETS = Object.keys(
 const GlassFilter = ({ preset }: { preset: GlassLensPreset }) => {
   const displacementMap = getPresetDisplacementMap(preset)
   const filterId = getGlassFilterId(preset)
-  const chromaScale = displacementMap.scale * displacementMap.chroma * 0.35
+  const chromaSpread = displacementMap.scale * displacementMap.chroma * 0.35
+  const redScale = displacementMap.scale + chromaSpread
+  const greenScale = displacementMap.scale
+  const blueScale = displacementMap.scale - chromaSpread
 
   return (
     <svg:filter
       id={filterId}
-      x={-0.12}
-      y={-0.12}
-      width={1.24}
-      height={1.24}
+      x={0}
+      y={0}
+      width={1}
+      height={1}
+      filterUnits="objectBoundingBox"
       attr:color-interpolation-filters="sRGB"
     >
       <svg:feImage
@@ -31,20 +35,62 @@ const GlassFilter = ({ preset }: { preset: GlassLensPreset }) => {
       <svg:feDisplacementMap
         in="SourceGraphic"
         in2="displacementMap"
-        scale={displacementMap.scale}
+        scale={redScale}
         xChannelSelector="R"
         yChannelSelector="G"
-        result="refracted"
+        result="redDisplaced"
+      />
+      <svg:feColorMatrix
+        in="redDisplaced"
+        type="matrix"
+        values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0 1"
+        result="redChannel"
       />
       <svg:feDisplacementMap
-        in="refracted"
+        in="SourceGraphic"
         in2="displacementMap"
-        scale={chromaScale}
+        scale={greenScale}
         xChannelSelector="R"
         yChannelSelector="G"
-        result="chromaShift"
+        result="greenDisplaced"
       />
-      <svg:feBlend in="refracted" in2="chromaShift" mode="screen" />
+      <svg:feColorMatrix
+        in="greenDisplaced"
+        type="matrix"
+        values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 0 1"
+        result="greenChannel"
+      />
+      <svg:feDisplacementMap
+        in="SourceGraphic"
+        in2="displacementMap"
+        scale={blueScale}
+        xChannelSelector="R"
+        yChannelSelector="G"
+        result="blueDisplaced"
+      />
+      <svg:feColorMatrix
+        in="blueDisplaced"
+        type="matrix"
+        values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 0 1"
+        result="blueChannel"
+      />
+      <svg:feComposite
+        in="redChannel"
+        in2="greenChannel"
+        operator="arithmetic"
+        k2={1}
+        k3={1}
+        result="redGreen"
+      />
+      <svg:feComposite
+        in="redGreen"
+        in2="blueChannel"
+        operator="arithmetic"
+        k2={1}
+        k3={1}
+        result="rgbDisplaced"
+      />
+      <svg:feComposite in="rgbDisplaced" in2="SourceAlpha" operator="in" />
     </svg:filter>
   )
 }

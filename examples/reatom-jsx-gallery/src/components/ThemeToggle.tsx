@@ -19,12 +19,14 @@ export const ThemeToggle = () => (
       position: relative;
       overflow: hidden;
 
-      &:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-        transform: scale(1.05);
-        background: var(--hover-bg);
-        box-shadow: var(--glow);
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          border-color: var(--accent);
+          color: var(--accent);
+          transform: scale(1.05);
+          background: var(--hover-bg);
+          box-shadow: var(--glow);
+        }
       }
 
       &:active {

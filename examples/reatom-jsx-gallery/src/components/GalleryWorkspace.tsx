@@ -11,7 +11,10 @@ import { ProgressBar } from './ProgressBar'
 import { SortPanel } from './SortPanel'
 
 export const GalleryWorkspace = () => (
-  <div css="flex: 1; overflow: hidden; display: flex;">
+  <div
+    class="gallery-workspace"
+    css="flex: 1; overflow: hidden; display: flex;"
+  >
     {() => {
       if (galleryContentMode() !== 'gallery') return null
 
@@ -31,6 +34,7 @@ export const GalleryWorkspace = () => (
 
         return (
           <div
+            class="gallery-pathbar"
             css={`
               padding: 4px 16px;
               display: flex;

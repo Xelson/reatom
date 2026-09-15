@@ -9,6 +9,7 @@ import {
   selectedCount,
   setViewMode,
   toggleResolvedThemeMode,
+  themePack,
   viewMode,
   visibleIndexMap,
 } from '../model'
@@ -16,6 +17,7 @@ import type { ViewMode } from '../types'
 import {
   FilterIcon,
   GalleryMarkIcon,
+  InstantCameraIcon,
   GridIcon,
   ListIcon,
   MoonIcon,
@@ -68,17 +70,19 @@ const ToolbarButton = ({
       box-shadow: ${variant === 'accent' ? 'var(--glow)' : 'none'};
       text-transform: var(--control-transform);
 
-      &:hover {
-        background: ${variant === 'accent'
-          ? 'var(--accent-hover)'
-          : 'var(--hover-bg)'};
-        border-color: ${variant === 'accent'
-          ? 'var(--accent-hover)'
-          : 'var(--text-muted)'};
-        transform: var(--card-hover-transform);
-        box-shadow: ${variant === 'accent'
-          ? 'var(--card-hover-shadow)'
-          : 'none'};
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          background: ${variant === 'accent'
+            ? 'var(--accent-hover)'
+            : 'var(--hover-bg)'};
+          border-color: ${variant === 'accent'
+            ? 'var(--accent-hover)'
+            : 'var(--text-muted)'};
+          transform: var(--card-hover-transform);
+          box-shadow: ${variant === 'accent'
+            ? 'var(--card-hover-shadow)'
+            : 'none'};
+        }
       }
       &:disabled {
         cursor: not-allowed;
@@ -137,9 +141,11 @@ const ViewModeButton = ({
         border-color: var(--accent);
         box-shadow: var(--glow);
       }
-      &:not([aria-pressed='true']):hover {
-        background: var(--hover-bg);
-        color: var(--text-primary);
+      @media (hover: hover) and (pointer: fine) {
+        &:not([aria-pressed='true']):hover {
+          background: var(--hover-bg);
+          color: var(--text-primary);
+        }
       }
     `}
   >
@@ -149,6 +155,7 @@ const ViewModeButton = ({
 
 export const Toolbar = () => (
   <header
+    class="gallery-toolbar"
     css={`
       display: flex;
       align-items: center;
@@ -179,6 +186,7 @@ export const Toolbar = () => (
       `}
     >
       <span
+        class="gallery-brand"
         css={`
           font-size: 18px;
           font-weight: 700;
@@ -211,9 +219,15 @@ export const Toolbar = () => (
               0 10px 24px var(--shadow);
           `}
         >
-          <GalleryMarkIcon />
+          {() =>
+            themePack() === 'polaroid' ? (
+              <InstantCameraIcon />
+            ) : (
+              <GalleryMarkIcon />
+            )
+          }
         </span>
-        Gallery
+        {() => (themePack() === 'polaroid' ? 'Instant' : themePack() === 'blueprint' ? 'Blueprint' : themePack() === 'obsidian' ? 'Obsidian' : themePack() === 'minimal' ? 'Minimal' : 'Gallery')}
       </span>
 
       <ToolbarButton
@@ -425,9 +439,11 @@ export const Toolbar = () => (
           transition: all 0.15s ease;
           position: relative;
 
-          &:hover {
-            background: var(--hover-bg);
-            color: var(--text-primary);
+          @media (hover: hover) and (pointer: fine) {
+            &:hover {
+              background: var(--hover-bg);
+              color: var(--text-primary);
+            }
           }
         `}
       >
@@ -479,9 +495,11 @@ export const Toolbar = () => (
           color: var(--text-secondary);
           transition: all 0.15s ease;
 
-          &:hover {
-            background: var(--hover-bg);
-            color: var(--text-primary);
+          @media (hover: hover) and (pointer: fine) {
+            &:hover {
+              background: var(--hover-bg);
+              color: var(--text-primary);
+            }
           }
         `}
       >
@@ -511,9 +529,11 @@ export const Toolbar = () => (
           color: var(--text-secondary);
           transition: all 0.15s ease;
 
-          &:hover {
-            background: var(--hover-bg);
-            color: var(--text-primary);
+          @media (hover: hover) and (pointer: fine) {
+            &:hover {
+              background: var(--hover-bg);
+              color: var(--text-primary);
+            }
           }
         `}
       >
