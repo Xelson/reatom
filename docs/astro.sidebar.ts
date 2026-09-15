@@ -155,6 +155,7 @@ export const sidebar = [
         label: '@reatom/zod',
         link: '/reference/zod',
       },
+      'examples',
     ],
   }),
 ]

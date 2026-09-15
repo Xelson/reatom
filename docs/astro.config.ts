@@ -6,6 +6,7 @@ import starlightLlmsTxt from 'starlight-llms-txt'
 import { sidebar } from './astro.sidebar'
 import { devServerFileWatcher } from './config/integrations/dev-server-file-watcher'
 import { markdownBaseLinks } from './config/integrations/markdown-links-base'
+import { publishExamples } from './config/integrations/publish-examples'
 
 // https://astro.build/config
 export default defineConfig({
@@ -92,6 +93,7 @@ Use **Abridged documentation** (\`llms-small.txt\`) when context window is limit
       },
     }),
     markdownBaseLinks(),
+    publishExamples(),
   ],
   // Process images with sharp: https://docs.astro.build/en/guides/assets/#using-sharp
   image: {
