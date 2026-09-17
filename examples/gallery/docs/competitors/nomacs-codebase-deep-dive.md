@@ -1,6 +1,6 @@
 ## Nomacs Codebase
 
-Research target: `/Users/artalar/code/nomacs` (nomacs / Image Lounge 3.x, Qt6, optional LibRaw, OpenCV, Exiv2, Quazip, KImageFormats). Comparison baseline: `/Users/artalar/code/reatom/examples/reatom-jsx-gallery` plus `/Users/artalar/code/reatom/nomacs-exif-reference.md`.
+Research target: `/Users/artalar/code/nomacs` (nomacs / Image Lounge 3.x, Qt6, optional LibRaw, OpenCV, Exiv2, Quazip, KImageFormats). Comparison baseline: `/Users/artalar/code/reatom/examples/gallery` plus `/Users/artalar/code/reatom/nomacs-exif-reference.md`.
 
 ---
 
@@ -42,7 +42,7 @@ flowchart TB
 
 Build-time feature flags (from root `README.md`): `ENABLE_RAW` (LibRaw + OpenCV), `ENABLE_TIFF`, `ENABLE_QUAZIP`, `ENABLE_OPENCV`, `ENABLE_PLUGINS`, `ENABLE_TESTING`. Runtime adds Qt/KImageFormats for HEIC, AVIF, JXL, WebP, etc.
 
-**reatom-jsx-gallery** mirrors a subset in TypeScript:
+**gallery** mirrors a subset in TypeScript:
 
 | nomacs                           | Gallery                                               |
 | -------------------------------- | ----------------------------------------------------- |
@@ -369,7 +369,7 @@ Gallery has no plugin host; features would be npm modules or built-in TS functio
 
 ### Summary comparison
 
-reatom-jsx-gallery already implements a **faithful subset** of nomacs metadata semantics (documented in `nomacs-exif-reference.md`): orientation states, IFD0 vs Photo precedence, flash/compression maps, large-tag cap, embedded JPEG thumbnails, and CSS-first orientation for full display. The RAW path mirrors nomacs’s **preview-first** strategy (Exiv2/largest embed, LibRaw thumb, no full develop) but with a **custom TIFF walker** instead of Exiv2 and **worker-based** scanning for large files.
+gallery already implements a **faithful subset** of nomacs metadata semantics (documented in `nomacs-exif-reference.md`): orientation states, IFD0 vs Photo precedence, flash/compression maps, large-tag cap, embedded JPEG thumbnails, and CSS-first orientation for full display. The RAW path mirrors nomacs’s **preview-first** strategy (Exiv2/largest embed, LibRaw thumb, no full develop) but with a **custom TIFF walker** instead of Exiv2 and **worker-based** scanning for large files.
 
 The largest functional gaps for a web gallery aiming at nomacs parity are: **duplicate extension filtering**, **persistent thumbnail cache**, **broader RAW container support**, **embedded-thumb black-border crop**, and **explicit baked-orientation detection per modern codec**. Full **LibRaw develop**, **TCP sync**, and **plugins** remain desktop-only unless the project scope expands to WASM or backend services.
 

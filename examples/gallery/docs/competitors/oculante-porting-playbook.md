@@ -1,8 +1,8 @@
-# Oculante → Reatom JSX Gallery: Porting Playbook
+# Oculante → Gallery: Porting Playbook
 
 **Version:** 1.0 (June 2026)  
 **Audience:** Engineers extending the gallery toward fast, format-rich, analysis-friendly viewing while staying web-native.  
-**Sources:** Live codebase at `examples/reatom-jsx-gallery`, Oculante tree at `~/code/oculante` (v0.9.2), and cross-reference to [nomacs-porting-playbook.md](./nomacs-porting-playbook.md).
+**Sources:** Live codebase at `examples/gallery`, Oculante tree at `~/code/oculante` (v0.9.2), and cross-reference to [nomacs-porting-playbook.md](./nomacs-porting-playbook.md).
 
 > **README snapshot:** [oculante-readme-snapshot.md](./oculante-readme-snapshot.md) (scraped upstream README). Merge rewrite (`oculante-next`, [#746](https://github.com/woelper/oculante/issues/746)) notes into §6 and §9 when tracking the rewrite branch.
 
@@ -23,13 +23,13 @@
 
 ## 1. Executive Summary
 
-Three viewers anchor this research: **Oculante** (Rust/egui, MIT), **nomacs** (Qt/Exiv2, GPLv3), and the **Reatom JSX Gallery** (TypeScript PWA, MIT example). They share a product shape—open a folder, browse thumbnails, inspect metadata, fullscreen view—but diverge on runtime, format stack, and editing scope.
+Three viewers anchor this research: **Oculante** (Rust/egui, MIT), **nomacs** (Qt/Exiv2, GPLv3), and the **Gallery** (TypeScript PWA, MIT example). They share a product shape—open a folder, browse thumbnails, inspect metadata, fullscreen view—but diverge on runtime, format stack, and editing scope.
 
 **Oculante** is a hardware-accelerated (wgpu/notan) image lounge in **maintenance mode** until a rewrite ([issue #746](https://github.com/woelper/oculante/issues/746)). It optimizes for **fast startup**, **wide format coverage** (40+ extensions via dedicated Rust crates), **in-memory LRU cache** plus **disk thumbnail cache**, **pixel inspection** (histograms, channel isolation, unpremultiplied alpha), **non-destructive edit stacks** (`.oculante` metafiles), **lossless JPEG transforms** (turbojpeg), and **flipbook-style** folder scrubbing. EXIF is read with `kamadak-exif` and preserved on save via `img-parts`; RAW uses `quickraw` thumbnail export, not full demosaic.
 
 **nomacs** remains the deeper **metadata policy** reference (Exiv2 IPTC/XMP, orientation precedence, thumb option flags, TCP multi-instance sync). The gallery already aligns with nomacs on EXIF orientation, flash maps, and RAW **preview-only** policy.
 
-**Reatom JSX Gallery** is browser-first: File System Access API, per-file `reatomImage` models, custom `image-engine` (TypeScript TIFF/EXIF/RAW preview), 10 theme packs, Storybook/a11y CI. It does **not** ship GPU textures, lossless JPEG ops, edit operator stacks, or Oculante-scale format breadth.
+**Gallery** is browser-first: File System Access API, per-file `reatomImage` models, custom `image-engine` (TypeScript TIFF/EXIF/RAW preview), 10 theme packs, Storybook/a11y CI. It does **not** ship GPU textures, lossless JPEG ops, edit operator stacks, or Oculante-scale format breadth.
 
 **Strategic thesis:** Treat Oculante as a **performance and analysis specification**—cache tiers, flipbook navigation, histogram/channel UX, compare-at-zoom, metafile non-destructive workflow—while treating nomacs as **metadata fidelity** specification. The gallery should **emulate** Oculante’s inspection tools and cache discipline in web-safe form; **avoid** desktop-only decode sprawl without WASM budget; **differentiate** with reactive granularity, PWA install, and theme packs.
 
@@ -58,9 +58,9 @@ Three viewers anchor this research: **Oculante** (Rust/egui, MIT), **nomacs** (Q
 
 ---
 
-## 2. Reatom JSX Gallery — Current Architecture (Brief)
+## 2. Gallery — Current Architecture (Brief)
 
-Full detail lives in [nomacs-porting-playbook.md §2](./nomacs-porting-playbook.md#2-reatom-jsx-gallery--current-architecture). Summary for Oculante porters:
+Full detail lives in [nomacs-porting-playbook.md §2](./nomacs-porting-playbook.md#2-gallery--current-architecture). Summary for Oculante porters:
 
 ```mermaid
 flowchart TB
@@ -542,7 +542,7 @@ Features Oculante **cannot** match without becoming a different product—and wh
 - Oculante README (formats, shortcuts, privacy): `~/code/oculante/README.md`
 - Maintenance / rewrite: https://github.com/woelper/oculante/issues/746
 - nomacs porting guide: [nomacs-porting-playbook.md](./nomacs-porting-playbook.md)
-- Gallery plan: `examples/reatom-jsx-gallery/plan.md`
+- Gallery plan: `examples/gallery/plan.md`
 
 ### Oculante source anchors
 
@@ -660,7 +660,7 @@ When multiple research agents contribute:
 - **Oculante agent** owns cache/scrubber/compare/histogram → this document.
 - **Gallery agent** updates §8 matrix and `image-engine/` comments.
 
-Do not duplicate nomacs §2 architecture here—link [nomacs-porting-playbook.md §2](./nomacs-porting-playbook.md#2-reatom-jsx-gallery--current-architecture).
+Do not duplicate nomacs §2 architecture here—link [nomacs-porting-playbook.md §2](./nomacs-porting-playbook.md#2-gallery--current-architecture).
 
 ---
 
@@ -786,4 +786,4 @@ Volatile: `favourite_images` → `favorite`; `recent_images` → optional recent
 
 ---
 
-_This playbook is the canonical Oculante-inspired porting guide for the Reatom JSX Gallery. Update it when `image-engine/` or Oculante upstream behavior changes._
+_This playbook is the canonical Oculante-inspired porting guide for the Gallery. Update it when `image-engine/` or Oculante upstream behavior changes._

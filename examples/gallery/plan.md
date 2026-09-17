@@ -1,4 +1,4 @@
-# Reatom JSX Gallery PWA - Implementation Plan
+# Gallery PWA - Implementation Plan
 
 **Status**: `ready`
 
@@ -238,7 +238,7 @@ Should be included in the context of worked agent!
 
 ## Implementation Steps
 
-- [ ] **Step 1**: Initialize project structure → `reatom-jsx-gallery/`
+- [ ] **Step 1**: Initialize project structure → `gallery/`
   - Depends on: none
   - Acceptance: Project directory created with package.json, tsconfig.json, vite.config.js matching reatom-jsx-xo pattern
 

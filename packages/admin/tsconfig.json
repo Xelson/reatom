@@ -10,5 +10,5 @@
     "paths": { "test": ["./src/test.ts"] }
   },
   "include": ["src", ".storybook/**/*"],
-  "exclude": ["src/stories/reatom-jsx-gallery/src/**"]
+  "exclude": ["src/stories/gallery/src/**"]
 }

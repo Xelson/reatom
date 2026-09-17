@@ -30,7 +30,7 @@ import {
 
 const meta = {
   ...galleryMeta,
-  title: 'Integration/Reatom JSX Gallery/Filter Studio',
+  title: 'Integration/Gallery/Filter Studio',
 } satisfies Meta
 
 export default meta
@@ -82,6 +82,7 @@ export const FilterStudioCurationJourney: Story = {
     })
 
     await clickAdminButton(/^Reset$/)
+    await clickAdminButton(/^Actions$/)
     await waitFor(() => {
       expect(getVisibleLogs().length).toBeGreaterThan(0)
       expect(getAdminFilterBarText()).toMatch(/0 active rule/)

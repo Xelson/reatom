@@ -137,12 +137,12 @@ tasks:
       - Visual baseline gallery-lightbox-graph-reference committed
       - Journeys mix app interaction with Activity/Timeline/Graph/Filters inspection
     files:
-      - packages/admin/src/stories/reatom-jsx-gallery/boot.tsx
-      - packages/admin/src/stories/reatom-jsx-gallery/testing.ts
-      - packages/admin/src/stories/reatom-jsx-gallery/journeys-shared.ts
-      - packages/admin/src/stories/reatom-jsx-gallery/gallery-curation.stories.ts
-      - packages/admin/src/stories/reatom-jsx-gallery/gallery-journeys.stories.ts
-      - packages/admin/src/stories/reatom-jsx-gallery/gallery-filter-studio.stories.ts
+      - packages/admin/src/stories/gallery/boot.tsx
+      - packages/admin/src/stories/gallery/testing.ts
+      - packages/admin/src/stories/gallery/journeys-shared.ts
+      - packages/admin/src/stories/gallery/gallery-curation.stories.ts
+      - packages/admin/src/stories/gallery/gallery-journeys.stories.ts
+      - packages/admin/src/stories/gallery/gallery-filter-studio.stories.ts
 
   - id: story-replay-journey
     title: Export session and re-import as replay

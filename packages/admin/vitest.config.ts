@@ -13,7 +13,7 @@ export default defineConfig({
       name: 'reatom-admin-gallery-harness',
       transform(code, id) {
         if (
-          id.includes('reatom-jsx-gallery') &&
+          id.includes('examples/gallery') &&
           id.includes('GalleryWorkspace')
         ) {
           return code.replace(
@@ -30,7 +30,7 @@ export default defineConfig({
       '@reatom/core': resolve(dir, '../core/src'),
       '@reatom/jsx': resolve(dir, '../jsx/src'),
       test: resolve(dir, './src/test.ts'),
-      'gallery-app': resolve(dir, '../../examples/reatom-jsx-gallery/src'),
+      'gallery-app': resolve(dir, '../../examples/gallery/src'),
     },
   },
   oxc: {

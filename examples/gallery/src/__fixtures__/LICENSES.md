@@ -1,6 +1,6 @@
 # Image fixture licenses
 
-Vendored test images for `reatom-jsx-gallery`. Machine-readable metadata lives in [`manifest.json`](./manifest.json). Re-download with `pnpm fixtures:fetch`.
+Vendored test images for `gallery`. Machine-readable metadata lives in [`manifest.json`](./manifest.json). Re-download with `pnpm fixtures:fetch`.
 
 ## Tier A (default CI, ~4 MB)
 

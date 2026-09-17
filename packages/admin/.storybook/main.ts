@@ -8,10 +8,11 @@ const dir = dirname(fileURLToPath(import.meta.url))
 
 const config: StorybookConfig = {
   stories: [
+    '../src/stories/design-system/**/*.stories.@(ts|tsx)',
     '../src/stories/admin-shell/**/*.stories.@(ts|tsx)',
     '../src/stories/reatom-jsx-xo/**/*.stories.@(ts|tsx)',
     // Only the admin harness stories — not the example app's own suites under src/
-    '../src/stories/reatom-jsx-gallery/*.stories.@(ts|tsx)',
+    '../src/stories/gallery/*.stories.@(ts|tsx)',
   ],
   staticDirs: ['../public'],
   addons: ['@storybook/addon-vitest', '@storybook/addon-a11y'],
@@ -26,7 +27,7 @@ const config: StorybookConfig = {
             // Empty mock blobs + background thumbnail scanning create deep
             // abort chains under Vitest. Disable the loader in the harness.
             if (
-              id.includes('reatom-jsx-gallery') &&
+              id.includes('examples/gallery') &&
               id.includes('GalleryWorkspace')
             ) {
               return code.replace(
@@ -45,7 +46,7 @@ const config: StorybookConfig = {
           test: resolve(dir, '../src/test.ts'),
           'gallery-app': resolve(
             dir,
-            '../../../examples/reatom-jsx-gallery/src',
+            '../../../examples/gallery/src',
           ),
         },
       },

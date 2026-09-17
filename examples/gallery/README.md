@@ -1,4 +1,4 @@
-# Reatom JSX Gallery PWA
+# Gallery PWA
 
 A modern, feature-rich Progressive Web App (PWA) image gallery built with **Reatom** and **JSX** (not React). Leverages the **File System Access API** to browse and display images from local folders with deep recursive parsing and extensive customization options.
 
@@ -51,7 +51,7 @@ A modern, feature-rich Progressive Web App (PWA) image gallery built with **Reat
 
 ```bash
 # Navigate to the project directory
-cd examples/reatom-jsx-gallery
+cd examples/gallery
 
 # Install dependencies from the workspace root
 pnpm install

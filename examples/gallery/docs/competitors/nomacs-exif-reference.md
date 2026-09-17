@@ -1,4 +1,4 @@
-# nomacs EXIF reference (for reatom-jsx-gallery)
+# nomacs EXIF reference (for gallery)
 
 Behavior distilled from [nomacs](https://github.com/nomacs/nomacs) (`ImageLounge/src/DkCore/DkMetaData.cpp`, `DkBasicLoader.cpp`). nomacs delegates parsing to Exiv2; this document captures constants and quirks we mirror in the gallery’s TypeScript parser.
 

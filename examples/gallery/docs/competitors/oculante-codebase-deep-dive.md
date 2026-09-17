@@ -4,12 +4,12 @@ Research target: `/Users/artalar/code/oculante` (Oculante **0.9.2**, Rust 2021, 
 
 Comparison baseline:
 
-- Gallery: `/Users/artalar/code/reatom/examples/reatom-jsx-gallery`
-- Prior nomacs research: `examples/reatom-jsx-gallery/docs/nomacs-*.md`, `nomacs-exif-reference.md`
+- Gallery: `/Users/artalar/code/reatom/examples/gallery`
+- Prior nomacs research: `examples/gallery/docs/nomacs-*.md`, `nomacs-exif-reference.md`
 
 Oculante is a **native GPU-accelerated** viewer/editor (notan + egui), not Qt. It competes with nomacs on metadata and folder navigation, but emphasizes **non-destructive operator stacks**, **lossless JPEG transforms**, **channel inspection**, and a **very wide codec table** in one static binary.
 
-| Area             | Oculante (Rust)                           | reatom-jsx-gallery (TS)                     |
+| Area             | Oculante (Rust)                           | gallery (TS)                     |
 | ---------------- | ----------------------------------------- | ------------------------------------------- |
 | UI               | egui panels on notan/wgpu                 | Reatom JSX, CSS themes                      |
 | Decode           | `image_loader.rs` + crates                | `image-engine/header.ts` + `formats/*`      |
@@ -391,7 +391,7 @@ No disk/IDB cache; `revokeThumbnail` for blob URLs. **Port:** IndexedDB keyed by
 
 ### Summary comparison
 
-Oculante and reatom-jsx-gallery both target **fast folder browsing** and **preview-first RAW**, but diverge on product shape: Oculante is a **desktop editor** with GPU preview, operator stacks, and lossless JPEG; the gallery is a **read-only PWA showcase** for Reatom with a **custom EXIF/RAW engine** tuned to nomacs semantics.
+Oculante and gallery both target **fast folder browsing** and **preview-first RAW**, but diverge on product shape: Oculante is a **desktop editor** with GPU preview, operator stacks, and lossless JPEG; the gallery is a **read-only PWA showcase** for Reatom with a **custom EXIF/RAW engine** tuned to nomacs semantics.
 
 **Already aligned with Oculante/nomacs:** embedded preview preference, EXIF display helpers, orientation handling split (display vs thumb bake), adaptive EXIF read size, RAW worker for large files.
 

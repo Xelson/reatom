@@ -422,7 +422,7 @@ importers:
         specifier: ^8.0.14
         version: 8.0.14(@types/node@25.5.0)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.44.1)(tsx@4.22.3)(yaml@2.9.0)
 
-  examples/reatom-jsx-gallery:
+  examples/gallery:
     dependencies:
       '@reatom/core':
         specifier: 1001.*.*

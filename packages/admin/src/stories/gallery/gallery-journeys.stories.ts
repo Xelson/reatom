@@ -30,7 +30,7 @@ import {
 
 const meta = {
   ...galleryMeta,
-  title: 'Integration/Reatom JSX Gallery/Lightbox',
+  title: 'Integration/Gallery/Lightbox',
 } satisfies Meta
 
 export default meta

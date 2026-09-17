@@ -1,8 +1,8 @@
-# nomacs → Reatom JSX Gallery: Porting Playbook
+# nomacs → Gallery: Porting Playbook
 
 **Version:** 1.0 (June 2026)  
 **Audience:** Engineers extending the gallery toward desktop-grade viewing while staying web-native.  
-**Sources:** Live codebase at `examples/reatom-jsx-gallery`, nomacs tree at `~/code/nomacs`, and the [research pack](./nomacs-exif-reference.md) in `docs/`.
+**Sources:** Live codebase at `examples/gallery`, nomacs tree at `~/code/nomacs`, and the [research pack](./nomacs-exif-reference.md) in `docs/`.
 
 ### See also (research pack)
 
@@ -22,7 +22,7 @@
 
 ## 1. Executive Summary
 
-The **Reatom JSX Gallery** is a browser-first Progressive Web App that demonstrates Reatom v1001 reactive state, JSX UI without React, and a custom **image-engine** written in TypeScript. It opens local folders via the **File System Access API**, walks directories recursively, and renders thousands of images with per-file reactive models (`reatomImage`), linked-list ordering, and a multi-path thumbnail pipeline (EXIF embed → RAW preview → `createImageBitmap` fallback).
+The **Gallery** is a browser-first Progressive Web App that demonstrates Reatom v1001 reactive state, JSX UI without React, and a custom **image-engine** written in TypeScript. It opens local folders via the **File System Access API**, walks directories recursively, and renders thousands of images with per-file reactive models (`reatomImage`), linked-list ordering, and a multi-path thumbnail pipeline (EXIF embed → RAW preview → `createImageBitmap` fallback).
 
 **nomacs** (Image Lounge) is a mature GPLv3 desktop viewer (Qt6, Exiv2, optional LibRaw/OpenCV/kimageformats) with deep format support, metadata editing, batch plugins, multi-instance TCP sync, disk thumbnail caches, and a large translation surface. The gallery deliberately **does not** port nomacs wholesale: there is no pixel editor, no Exiv2 write path, and no native RAW demosaic—only embedded JPEG previews inside DNG/ARW and browser decode where possible.
 
@@ -39,7 +39,7 @@ The **Reatom JSX Gallery** is a browser-first Progressive Web App that demonstra
 
 ---
 
-## 2. Reatom JSX Gallery — Current Architecture
+## 2. Gallery — Current Architecture
 
 ### 2.1 System context
 
@@ -603,9 +603,9 @@ Features nomacs **cannot** match without becoming a different product:
 
 - nomacs repository: https://github.com/nomacs/nomacs
 - nomacs README (build, kimageformats, LibRaw): `~/code/nomacs/README.md`
-- EXIF behavior digest: `/Users/artalar/code/reatom/nomacs-exif-reference.md` (also `examples/reatom-jsx-gallery/docs/` when copied)
+- EXIF behavior digest: `/Users/artalar/code/reatom/nomacs-exif-reference.md` (also `examples/gallery/docs/` when copied)
 - Exiv2 issue **#995** (save buffer shrink): cited in `DkMetaData.cpp` ~279
-- Gallery implementation plan: `examples/reatom-jsx-gallery/plan.md`
+- Gallery implementation plan: `examples/gallery/plan.md`
 - Reatom JSX: `packages/jsx/README.md`
 
 ### nomacs source anchors (line ranges approximate)
@@ -1398,4 +1398,4 @@ The gallery already implements the hardest **policy** pieces (orientation preced
 
 ---
 
-_This playbook is the canonical porting guide for nomacs-inspired work on the Reatom JSX Gallery. Update it when `image-engine/` or nomacs upstream behavior changes._
+_This playbook is the canonical porting guide for nomacs-inspired work on the Gallery. Update it when `image-engine/` or nomacs upstream behavior changes._

@@ -174,7 +174,7 @@ documented in [`.storybook/README.md`](.storybook/README.md).
   - captured action and atom activity
   - replayable inspection flows
   - user-visible debugging workflows
-- long-form gallery integration journeys (`Integration/Reatom JSX Gallery`) that
+- long-form gallery integration journeys (`Integration/Gallery`) that
   mix app curation (view modes, search, selection, favorites, lightbox) with
   admin Activity / Timeline / Graph / Filter studio inspection across 25–50
   sequential steps per story

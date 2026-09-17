@@ -24,7 +24,7 @@ import {
 
 const meta = {
   ...galleryMeta,
-  title: 'Integration/Reatom JSX Gallery/Curation',
+  title: 'Integration/Gallery/Curation',
 } satisfies Meta
 
 export default meta

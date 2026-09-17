@@ -647,7 +647,7 @@ const TodoList = () => (
 )
 ```
 
-Examples: [drag-and-drop](https://github.com/reatom/reatom/tree/v1001/examples/reatom-jsx-dnd), [gallery](https://github.com/reatom/reatom/tree/v1001/examples/reatom-jsx-gallery), [`reatomFieldArray`](https://v1001.reatom.dev/handbook/forms/concepts/field-array/) for dynamic form rows.
+Examples: [drag-and-drop](https://github.com/reatom/reatom/tree/v1001/examples/reatom-jsx-dnd), [gallery](https://github.com/reatom/reatom/tree/v1001/examples/gallery), [`reatomFieldArray`](https://v1001.reatom.dev/handbook/forms/concepts/field-array/) for dynamic form rows.
 
 #### API and when to use
 
@@ -784,6 +784,7 @@ const App = () => (
 ```
 
 - Prefer lazy children `{() => <Child />}` (or an atom) so construction-time throws are caught. Eager element children are created before the boundary runs.
+- Fragments are fine too: `<>{() => <Child />}</>` re-runs the fragment recipe on each attempt (including after `pending` / `retry`), same as a lazy function child.
 - `fallback(error, retry)` renders after a failure; call `retry()` to clear and re-render children.
 - Thrown promises use `pending` while unsettled; rejection goes to `fallback`.
 - Ownership follows the node's current DOM ancestors — moving a node under another boundary adopts it. The wrapper is a `display: contents` `<span>`.

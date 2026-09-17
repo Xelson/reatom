@@ -239,7 +239,7 @@ Entry: `open_image()` in `image_loader.rs` — extension + `file-format` sniffin
 
 ## Full stack comparison table
 
-| Layer             | Oculante                       | reatom-jsx-gallery `image-engine`                       | Gap severity                 |
+| Layer             | Oculante                       | gallery `image-engine`                       | Gap severity                 |
 | ----------------- | ------------------------------ | ------------------------------------------------------- | ---------------------------- |
 | License           | MIT                            | MIT (in-tree)                                           | —                            |
 | UI                | notan + egui                   | Reatom JSX + DOM                                        | N/A                          |
@@ -324,4 +324,4 @@ Oculante sits between nomacs (heavy C++/Qt) and the gallery (browser-limited): *
 
 ---
 
-_Generated for reatom-jsx-gallery porting research. Oculante repo: `/Users/artalar/code/oculante`._
+_Generated for gallery porting research. Oculante repo: `/Users/artalar/code/oculante`._

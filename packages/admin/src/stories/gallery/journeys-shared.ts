@@ -8,7 +8,7 @@ import { getAdminText, searchAdminLogs, getVisibleLogs } from './testing'
 export const I = createActor()
 
 export const galleryMeta = {
-  title: 'Integration/Reatom JSX Gallery',
+  title: 'Integration/Gallery',
   tags: ['integration'],
   render: () => renderGalleryHarness(),
   parameters: {
