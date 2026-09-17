@@ -1,5 +1,6 @@
-import { effect, isAbort, sleep, wrap } from '@reatom/core'
+import { abortVar, effect, isAbort, take, throwAbort, wrap } from '@reatom/core'
 
+import { yieldToBrowser } from '../yieldToBrowser'
 import {
   collectAllGalleryImages,
   folderModelTree,
@@ -76,48 +77,62 @@ export function bindGalleryImagePreview(
   )
 }
 
-function isHighPriorityPreviewBusy(images: GalleryImageModel[]): boolean {
-  return images.some(
-    (image) =>
-      image.previewLoadPriority() === 'high' && image.thumbnail.pending(),
-  )
-}
-
-function findBackgroundPreviewCandidate(
-  images: GalleryImageModel[],
-): GalleryImageModel | null {
-  for (const image of images) {
-    if (image.previewLoadPriority() !== 'off') continue
-    if (image.thumbnail.data() !== undefined) continue
-    if (image.thumbnail.pending() > 0) continue
-    if (image.thumbnail.error() != null) continue
-    return image
-  }
-  return null
-}
-
 export const bindBackgroundPreviewLoader = () => {
+  const failed = new WeakSet<GalleryImageModel>()
+  let tree: GalleryFolderModel | null = null
+  let images: GalleryImageModel[] = []
+  let cursor = 0
+
   const loader = effect(async () => {
     while (true) {
-      // Aborting the effect (unmount) rejects this wrapped sleep and exits.
-      await wrap(sleep(250))
+      abortVar.throwIfAborted()
+      // Even immediately settled jobs must let input and rendering run.
+      await wrap(yieldToBrowser())
+      const { candidate } = await wrap(
+        take(
+          () => {
+            const nextTree = folderModelTree()
+            if (nextTree !== tree) {
+              tree = nextTree
+              images = tree ? collectAllGalleryImages(tree) : []
+              cursor = 0
+            }
+            if (
+              images.some(
+                (image) =>
+                  image.previewLoadPriority() === 'high' &&
+                  image.thumbnail.pending() > 0,
+              )
+            )
+              return null
 
-      const tree = folderModelTree()
-      if (!tree) continue
-
-      const images = collectAllGalleryImages(tree)
-      if (isHighPriorityPreviewBusy(images)) continue
-
-      const candidate = findBackgroundPreviewCandidate(images)
-      if (!candidate) continue
+            while (cursor < images.length) {
+              const image = images[cursor]!
+              // Never activate off-priority jobs just to inspect their state.
+              if (
+                image.thumbnailLongEdge() > 0 ||
+                failed.has(image) ||
+                image.previewLoadPriority() === 'high'
+              ) {
+                cursor += 1
+                continue
+              }
+              if (image.previewLoadPriority() !== 'off') return null
+              return { candidate: image }
+            }
+            return null
+          },
+          (next) => next ?? throwAbort(),
+          'nextPreview',
+        ),
+      )
 
       candidate.previewLoadPriority.set('background')
       try {
         await wrap(candidate.thumbnail())
       } catch (error) {
-        // A single broken file must not stop the loop; the errored thumbnail
-        // is skipped by the candidate check on the next pass.
         if (!isAbort(error)) {
+          failed.add(candidate)
           console.error('Background preview load failed:', error)
         }
       } finally {

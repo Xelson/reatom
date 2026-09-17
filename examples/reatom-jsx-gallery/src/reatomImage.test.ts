@@ -1,8 +1,8 @@
 import { atom, clearStack, context, peek, wrap } from '@reatom/core'
 import { expect, test, vi } from 'vitest'
 
-import * as imageEngine from './image-engine'
 import type { ThumbnailResult } from './image-engine'
+import * as imageEngine from './image-engine'
 import { reatomImage } from './reatomImage'
 
 class DecodeRejectingImage {
@@ -401,10 +401,76 @@ test('sizedImage upgrades monotonically and clears on deactivation', async () =>
     expect(upgradedCanvas).toBeTruthy()
     expect(peek(image.sizedImageLongEdge)).toBeGreaterThanOrEqual(firstLongEdge)
 
+    let finishOriginal!: () => void
+    let originalStarted!: () => void
+    const started = new Promise<void>((resolve) => {
+      originalStarted = resolve
+    })
+    vi.stubGlobal(
+      'Image',
+      class {
+        src = ''
+        decoding = 'auto'
+        style = {}
+        decode() {
+          originalStarted()
+          return new Promise<void>((resolve) => {
+            finishOriginal = resolve
+          })
+        }
+      },
+    )
+    target.set({ width: 6000, height: 4000, zoom: 5 })
+    const originalRequest = image.sizedImage()
+    await wrap(started)
+    expect(peek(image.sizedImageArtifact)).toBe(upgradedCanvas)
+    expect(upgradedCanvas!.width).toBeGreaterThan(0)
+    finishOriginal()
+    expect(await wrap(originalRequest)).toBeNull()
+    expect(peek(image.sizedImageArtifact)).toBeNull()
+    expect(image.fullImage.data()).toBeTruthy()
+
     active.set(false)
     await expect(wrap(image.sizedImage())).resolves.toBeNull()
     // clearSizedImage zeroes the previous canvas in place; lightbox must not
     // paint that wiped node from stale `.data()` (use artifact / size checks).
     expect(firstCanvas.width).toBe(0)
+  })
+})
+
+test('aborted full image keeps its decode slot until the browser settles', async () => {
+  let finishFirst!: () => void
+  let startedFirst!: () => void
+  const started = new Promise<void>((resolve) => {
+    startedFirst = resolve
+  })
+  let calls = 0
+  class DelayedImage {
+    src = ''
+    decoding = 'auto'
+    style = {}
+    decode() {
+      calls += 1
+      if (calls > 1) return Promise.resolve()
+      startedFirst()
+      return new Promise<void>((resolve) => {
+        finishFirst = resolve
+      })
+    }
+  }
+  vi.stubGlobal('Image', DelayedImage)
+  await context.start(async () => {
+    const first = reatomImage(makeJpegBlob(), 'cancelled-decode')
+    const second = reatomImage(makeJpegBlob(), 'next-decode')
+    const cancelled = first.fullImage().catch(() => null)
+    await wrap(started)
+    first.fullImage.abort('navigation')
+    const next = second.fullImage()
+    await wrap(new Promise((resolve) => setTimeout(resolve, 10)))
+    const callsBeforeSettlement = calls
+    finishFirst()
+    await wrap(Promise.all([cancelled, next]))
+    expect(callsBeforeSettlement).toBe(1)
+    expect(calls).toBe(2)
   })
 })
