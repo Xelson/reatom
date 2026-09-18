@@ -73,15 +73,31 @@ function matchesPattern(filePath: string, pattern: string): boolean {
   return patternIdx >= patternParts.length - 1
 }
 
+function getPackageDirectoryScope(filePath: string): string | null {
+  const packageDirectoryMatch = /^packages\/([^/]+)\//.exec(filePath)
+  return packageDirectoryMatch?.[1] ?? null
+}
+
 function getScopesFromFiles(files: string[]): string[] {
   const matchedScopes = new Set<string>()
 
   for (const file of files) {
+    let matchedSpecificScope = false
     for (const [scope, pattern] of Object.entries(SCOPE_MAP)) {
       if (matchesPattern(file, pattern)) {
         matchedScopes.add(scope)
+        matchedSpecificScope = true
         break
       }
+    }
+
+    if (matchedSpecificScope) {
+      continue
+    }
+
+    const packageDirectoryScope = getPackageDirectoryScope(file)
+    if (packageDirectoryScope) {
+      matchedScopes.add(packageDirectoryScope)
     }
   }
 
@@ -154,8 +170,14 @@ function buildCommitMessage(
   return `${type}${scopePart}${breakingPart}: ${description}`
 }
 
+function getRepoRoot(): string {
+  return execSync('git rev-parse --show-toplevel', { encoding: 'utf-8' }).trim()
+}
+
 function main() {
   try {
+    process.chdir(getRepoRoot())
+
     const commitMsgFile = process.argv[2]
     const commitSource = process.argv[3]
 
