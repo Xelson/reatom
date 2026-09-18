@@ -4,8 +4,8 @@ import {
   reatomBoolean,
   reatomEnum,
   reatomMediaQuery,
-  withLocalStorage,
   withActions,
+  withLocalStorage,
 } from '@reatom/core'
 
 import type { ResolvedThemeMode } from '../types'
@@ -21,6 +21,7 @@ export const themePack = reatomEnum(
     'glass',
     'minimal',
     'retroOs',
+    'cartoon',
   ],
   {
     name: 'themePack',
@@ -33,7 +34,8 @@ themePack.extend(
     key: 'gallery.themePack',
     fromSnapshot: (snapshot) => {
       if (snapshot === 'monochrome') return themePack.enum.minimal
-      if (snapshot === 'neon' || snapshot === 'aurora') return themePack.enum.paper
+      if (snapshot === 'neon' || snapshot === 'aurora')
+        return themePack.enum.paper
       for (const pack of Object.values(themePack.enum)) {
         if (pack === snapshot) return pack
       }

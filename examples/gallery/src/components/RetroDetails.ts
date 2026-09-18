@@ -310,7 +310,7 @@ export const retroDetailsCss = `
         box-shadow: var(--retro-raised);
         backdrop-filter: none;
       }
-      aside[role='dialog'] > div:first-child {
+      aside[role='dialog'] > .gallery-panel-scroll > div:first-child {
         background: var(--retro-title);
         padding: 3px;
         margin: -15px -15px 20px;

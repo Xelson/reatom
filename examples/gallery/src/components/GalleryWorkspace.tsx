@@ -71,6 +71,7 @@ export const GalleryWorkspace = () => (
           overflow-y: auto;
           overflow-x: hidden;
           min-width: 0;
+          outline: none;
           padding: 20px 24px;
           background-color: var(--bg-primary);
           background-image:

@@ -1,24 +1,25 @@
 import type { JSX } from '@reatom/jsx'
 
 import { srOnlyCss } from '../a11y'
+import { bindGlassSurfaces } from '../glassSurfaces'
 import {
   glassBackgroundAnimation,
   resolvedThemeMode,
   themePack,
 } from '../model'
 import { activeThemeVariables, GlobalStyles } from '../theme'
-import { BlueprintFooter, blueprintDetailsCss } from './BlueprintDetails'
-import { obsidianCss, ObsidianFooter } from './ObsidianDetails'
 import { bauhausCss } from './BauhausTheme'
+import { blueprintDetailsCss,BlueprintFooter } from './BlueprintDetails'
+import { cartoonDetailsCss, cartoonFontCss } from './CartoonTheme'
+import { GlassBackground } from './GlassBackground'
 import { glassDetailsCss } from './GlassDetails'
+import { GlassFilters } from './GlassFilters'
+import { minimalDetailsCss } from './MinimalDetails'
+import { obsidianCss, ObsidianFooter } from './ObsidianDetails'
+import { paperDetailsCss } from './PaperDetails'
 import { polaroidDetailsCss } from './PolaroidDetails'
 import { retroDetailsCss } from './RetroDetails'
-import { paperDetailsCss } from './PaperDetails'
-import { minimalDetailsCss } from './MinimalDetails'
 import { themeViewerCss } from './ThemeViewerDetails'
-import { bindGlassSurfaces } from '../glassSurfaces'
-import { GlassBackground } from './GlassBackground'
-import { GlassFilters } from './GlassFilters'
 
 export const AppShell = ({ children }: { children: JSX.ElementChildren }) => (
   <div
@@ -30,6 +31,7 @@ export const AppShell = ({ children }: { children: JSX.ElementChildren }) => (
     style={() => activeThemeVariables()}
     css={`
       ${bauhausCss}
+      ${cartoonDetailsCss}
       ${glassDetailsCss}
       ${polaroidDetailsCss}
       ${retroDetailsCss}
@@ -137,6 +139,7 @@ export const AppShell = ({ children }: { children: JSX.ElementChildren }) => (
     <GlobalStyles />
     <style>
       {`
+        ${cartoonFontCss}
         body {
           margin: 0;
           background-color: var(--bg-primary);

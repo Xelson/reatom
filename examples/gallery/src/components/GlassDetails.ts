@@ -206,11 +206,24 @@ export const glassDetailsCss = `
     .glass-card .glass-overlay-control:active:not(:disabled) { transform: scale(0.94); }
     .glass-card:focus-within .grid-image-overlay { opacity: 1; }
     aside[role='dialog'] {
+      --glass-panel-radius: 34px;
       position: fixed;
       top: 12px; right: 12px; bottom: 12px; height: auto;
-      border-radius: 34px;
-      padding: 24px;
+      border-radius: var(--glass-panel-radius);
+      clip-path: none;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
       background: color-mix(in srgb, var(--liquid-solid) 78%, transparent);
+    }
+    /* Scroll independently of the stationary glass backdrop and its rounded edge. */
+    aside[role='dialog'] > .gallery-panel-scroll {
+      display: block;
+      min-height: 0;
+      overflow: auto;
+      padding: 12px;
+      transform: translateZ(0);
     }
     aside[role='dialog']:not([data-open='true']) { box-shadow: none; right: -24px; }
     aside[role='dialog'] .glass-lens {
@@ -254,10 +267,10 @@ export const glassDetailsCss = `
       box-shadow: 0 0 0 2px #fff;
     }
     aside[aria-label='Filters'] {
+      --glass-panel-radius: 26px;
       top: 92px; bottom: auto;
       width: min(340px, calc(100vw - 24px));
       max-height: calc(100dvh - 104px);
-      border-radius: 26px;
     }
     aside[aria-label='Filters'] .filter-type-options {
       display: grid;

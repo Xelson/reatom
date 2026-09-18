@@ -42,6 +42,7 @@ export type ThemePack =
   | 'glass'
   | 'minimal'
   | 'retroOs'
+  | 'cartoon'
 
 export const IMAGE_EXTENSIONS = [
   '.jpg',

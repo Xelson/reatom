@@ -340,195 +340,197 @@ export const SettingsPanel = () => (
       }
     `}
   >
-    <div
-      css={`
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 16px;
-      `}
-    >
-      <h2
+    <div class="gallery-panel-scroll" css="display: contents;">
+      <div
         css={`
-          font-size: 16px;
-          font-weight: 600;
-          color: var(--text-primary);
-        `}
-      >
-        Settings
-      </h2>
-      <button
-        type="button"
-        on:click={() => settingsPanelOpen.set(false)}
-        aria-label="Close settings"
-        css={`
-          width: 28px;
-          height: 28px;
-          border: var(--border-width) var(--control-border-style) transparent;
-          border-radius: var(--radius-sm);
-          background: var(--bg-tertiary);
-          color: var(--text-primary);
-          font-size: 16px;
           display: flex;
           align-items: center;
-          justify-content: center;
-          transition: background 0.15s;
+          justify-content: space-between;
+          margin-bottom: 16px;
+        `}
+      >
+        <h2
+          css={`
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+          `}
+        >
+          Settings
+        </h2>
+        <button
+          type="button"
+          on:click={() => settingsPanelOpen.set(false)}
+          aria-label="Close settings"
+          css={`
+            width: 28px;
+            height: 28px;
+            border: var(--border-width) var(--control-border-style) transparent;
+            border-radius: var(--radius-sm);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s;
 
-          @media (hover: hover) and (pointer: fine) {
-            &:hover {
-              background: var(--accent);
-              color: var(--accent-contrast);
+            @media (hover: hover) and (pointer: fine) {
+              &:hover {
+                background: var(--accent);
+                color: var(--accent-contrast);
+              }
             }
-          }
+          `}
+        >
+          <CloseIcon />
+        </button>
+      </div>
+
+      <SectionTitle text="Grid Columns" />
+      <div
+        css={`
+          display: flex;
+          align-items: center;
+          gap: 12px;
         `}
       >
-        <CloseIcon />
-      </button>
-    </div>
+        <input
+          type="range"
+          min="0"
+          max="12"
+          step="1"
+          aria-label="Grid columns"
+          model:valueAsNumber={gridColumns}
+          css={`
+            flex: 1;
+            accent-color: var(--accent);
+          `}
+        />
+        <span
+          css={`
+            font-size: 13px;
+            color: var(--text-secondary);
+            min-width: 32px;
+            text-align: center;
+          `}
+        >
+          {gridColumnsLabel}
+        </span>
+      </div>
 
-    <SectionTitle text="Grid Columns" />
-    <div
-      css={`
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      `}
-    >
-      <input
-        type="range"
-        min="0"
-        max="12"
-        step="1"
-        aria-label="Grid columns"
-        model:valueAsNumber={gridColumns}
+      <SectionTitle text="Grid Gap" />
+      <div
         css={`
-          flex: 1;
-          accent-color: var(--accent);
-        `}
-      />
-      <span
-        css={`
-          font-size: 13px;
-          color: var(--text-secondary);
-          min-width: 32px;
-          text-align: center;
+          display: flex;
+          flex-wrap: wrap;
+          gap: calc(6px + var(--shadow-clearance, 0px));
         `}
       >
-        {gridColumnsLabel}
-      </span>
-    </div>
-
-    <SectionTitle text="Grid Gap" />
-    <div
-      css={`
-        display: flex;
-        flex-wrap: wrap;
-        gap: calc(6px + var(--shadow-clearance, 0px));
-      `}
-    >
-      {GAP_OPTIONS.map((gap) => (
-        <OptionButton
-          label={gap}
-          isActive={() => gridGap() === gap}
-          onClick={() => setGridGap(gap)}
-        />
-      ))}
-    </div>
-
-    <SectionTitle text="Image Fit" />
-    <div
-      css={`
-        display: flex;
-        flex-wrap: wrap;
-        gap: calc(6px + var(--shadow-clearance, 0px));
-      `}
-    >
-      {FIT_OPTIONS.map((fit) => (
-        <OptionButton
-          label={fit}
-          isActive={() => imageFit() === fit}
-          onClick={() => imageFit.change(fit)}
-        />
-      ))}
-    </div>
-
-    <SectionTitle text="UI Options" />
-    <ToggleSwitch
-      label="Show Image Names"
-      checked={() => showImageNames()}
-      onToggle={showImageNames.toggle}
-    />
-    <ToggleSwitch
-      label="Show File Sizes"
-      checked={() => showFileSizes()}
-      onToggle={showFileSizes.toggle}
-    />
-    <ToggleSwitch
-      label="Ignore EXIF Orientation"
-      checked={() => ignoreExifOrientation()}
-      onToggle={ignoreExifOrientation.toggle}
-    />
-    <ToggleSwitch
-      label="Develop RAW at Full Size"
-      checked={() => developRawFullSize()}
-      onToggle={developRawFullSize.toggle}
-    />
-
-    <SectionTitle text="Lightbox Navigation" />
-    <ToggleSwitch
-      label="Wrap at Folder Ends"
-      checked={() => wrapFolderNavigation()}
-      onToggle={wrapFolderNavigation.toggle}
-    />
-    <ToggleSwitch
-      label="Keep Zoom While Navigating"
-      checked={() => keepLightboxView()}
-      onToggle={keepLightboxView.toggle}
-    />
-    <ToggleSwitch
-      label="Show Folder Scrubber"
-      checked={() => showLightboxScrubber()}
-      onToggle={showLightboxScrubber.toggle}
-    />
-
-    <SectionTitle text="Theme" />
-    {() =>
-      themePack() === 'glass' && (
-        <div>
-          <ToggleSwitch
-            label="Animate Glass Background"
-            checked={() => glassBackgroundAnimation()}
-            onToggle={glassBackgroundAnimation.toggle}
+        {GAP_OPTIONS.map((gap) => (
+          <OptionButton
+            label={gap}
+            isActive={() => gridGap() === gap}
+            onClick={() => setGridGap(gap)}
           />
-          <p css="font-size: 12px; color: var(--text-secondary); margin: 0 0 12px;">
-            Uses more power. Pauses when the tab is hidden and respects reduced
-            motion.
-          </p>
-        </div>
-      )
-    }
+        ))}
+      </div>
 
-    <div css="display: grid; gap: calc(8px + var(--shadow-clearance, 0px));">
-      {THEME_PACKS.map((pack) => (
-        <ThemePackButton
-          value={pack.value}
-          label={pack.label}
-          description={pack.description}
-          swatches={pack.swatches}
-        />
-      ))}
-    </div>
+      <SectionTitle text="Image Fit" />
+      <div
+        css={`
+          display: flex;
+          flex-wrap: wrap;
+          gap: calc(6px + var(--shadow-clearance, 0px));
+        `}
+      >
+        {FIT_OPTIONS.map((fit) => (
+          <OptionButton
+            label={fit}
+            isActive={() => imageFit() === fit}
+            onClick={() => imageFit.change(fit)}
+          />
+        ))}
+      </div>
 
-    <div
-      css={`
-        display: flex;
-        gap: calc(6px + var(--shadow-clearance, 0px));
-        margin-top: calc(10px + var(--shadow-clearance, 0px));
-      `}
-    >
-      <ThemeModeButton mode="light" label="Light" />
-      <ThemeModeButton mode="dark" label="Dark" />
-      <ThemeModeButton mode="system" label="System" />
+      <SectionTitle text="UI Options" />
+      <ToggleSwitch
+        label="Show Image Names"
+        checked={() => showImageNames()}
+        onToggle={showImageNames.toggle}
+      />
+      <ToggleSwitch
+        label="Show File Sizes"
+        checked={() => showFileSizes()}
+        onToggle={showFileSizes.toggle}
+      />
+      <ToggleSwitch
+        label="Ignore EXIF Orientation"
+        checked={() => ignoreExifOrientation()}
+        onToggle={ignoreExifOrientation.toggle}
+      />
+      <ToggleSwitch
+        label="Develop RAW at Full Size"
+        checked={() => developRawFullSize()}
+        onToggle={developRawFullSize.toggle}
+      />
+
+      <SectionTitle text="Lightbox Navigation" />
+      <ToggleSwitch
+        label="Wrap at Folder Ends"
+        checked={() => wrapFolderNavigation()}
+        onToggle={wrapFolderNavigation.toggle}
+      />
+      <ToggleSwitch
+        label="Keep Zoom While Navigating"
+        checked={() => keepLightboxView()}
+        onToggle={keepLightboxView.toggle}
+      />
+      <ToggleSwitch
+        label="Show Folder Scrubber"
+        checked={() => showLightboxScrubber()}
+        onToggle={showLightboxScrubber.toggle}
+      />
+
+      <SectionTitle text="Theme" />
+      {() =>
+        themePack() === 'glass' && (
+          <div>
+            <ToggleSwitch
+              label="Animate Glass Background"
+              checked={() => glassBackgroundAnimation()}
+              onToggle={glassBackgroundAnimation.toggle}
+            />
+            <p css="font-size: 12px; color: var(--text-secondary); margin: 0 0 12px;">
+              Uses more power. Pauses when the tab is hidden and respects reduced
+              motion.
+            </p>
+          </div>
+        )
+      }
+
+      <div css="display: grid; gap: calc(8px + var(--shadow-clearance, 0px));">
+        {THEME_PACKS.map((pack) => (
+          <ThemePackButton
+            value={pack.value}
+            label={pack.label}
+            description={pack.description}
+            swatches={pack.swatches}
+          />
+        ))}
+      </div>
+
+      <div
+        css={`
+          display: flex;
+          gap: calc(6px + var(--shadow-clearance, 0px));
+          margin-top: calc(10px + var(--shadow-clearance, 0px));
+        `}
+      >
+        <ThemeModeButton mode="light" label="Light" />
+        <ThemeModeButton mode="dark" label="Dark" />
+        <ThemeModeButton mode="system" label="System" />
+      </div>
     </div>
   </aside>
 )

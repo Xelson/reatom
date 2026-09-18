@@ -1,5 +1,6 @@
 import { computed } from '@reatom/core'
 
+import { cartoonTheme } from './components/CartoonTheme'
 import { resolvedThemeMode, themePack } from './model'
 import type { ResolvedThemeMode, ThemePack } from './types'
 
@@ -14,6 +15,12 @@ type ThemeMeta = {
 }
 
 export const THEME_PACKS: ThemeMeta[] = [
+  {
+    value: 'cartoon',
+    label: 'Cartoon',
+    description: 'Comic lettering, bold ink and halftone paper',
+    swatches: ['#111111', '#ffffff', '#bdbdbd'],
+  },
   {
     value: 'blueprint',
     label: 'Blueprint',
@@ -73,6 +80,7 @@ export const THEME_PACKS: ThemeMeta[] = [
 const transparentLayer = 'linear-gradient(transparent, transparent)'
 
 const THEMES = {
+  cartoon: cartoonTheme,
   blueprint: {
     dark: {
       '--font-ui': '"SFMono-Regular", Consolas, "Liberation Mono", monospace',
@@ -1227,6 +1235,8 @@ const THEMES = {
 
 const getThemeDefinition = (pack: ThemePack): ThemeDefinition => {
   switch (pack) {
+    case 'cartoon':
+      return THEMES.cartoon
     case 'blueprint':
       return THEMES.blueprint
     case 'terminal':
