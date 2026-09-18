@@ -6,10 +6,28 @@ import { resetFolderTreeUi } from './navigation'
 
 export const folderTree = atom<FolderNode | null>(null, 'folderTree')
 export const currentFolder = atom<FolderNode | null>(null, 'currentFolder')
+
+const selectedFolderHandlePersistKey = 'gallery.selectedFolderHandle'
+
 export const selectedFolderHandle = atom<FileSystemDirectoryHandle | null>(
   null,
   'selectedFolderHandle',
-).extend(withIndexedDb('gallery.selectedFolderHandle'))
+).extend(withIndexedDb(selectedFolderHandlePersistKey))
+
+export async function hasPersistedSelectedFolderHandle(): Promise<boolean> {
+  try {
+    const { createStore, get } = await import('idb-keyval')
+    const store = createStore('reatom_default', 'atoms')
+    const rec: unknown = await get(selectedFolderHandlePersistKey, store)
+    if (rec === null || rec === undefined || typeof rec !== 'object') {
+      return false
+    }
+    if (!('data' in rec)) return false
+    return rec.data != null
+  } catch {
+    return false
+  }
+}
 
 export const parsingProgress = atom<ParsingProgressSnapshot>(
   {

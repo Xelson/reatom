@@ -219,11 +219,18 @@ export function buildPersonalFixtureFolderTree(): FolderNode {
   }
 }
 
-export function buildFixtureFolderTree(tier: FixtureTier): FolderNode {
+export function buildFixtureFolderTree(
+  tier: FixtureTier,
+  destPrefix = '',
+): FolderNode {
+  const normalizedPrefix = destPrefix.replace(/\\/g, '/').replace(/\/$/, '')
+  const rootName = normalizedPrefix
+    ? fixturePathBasename(normalizedPrefix)
+    : 'Fixtures'
   const root: FolderNode = {
-    name: 'Fixtures',
+    name: rootName,
     path: '',
-    handle: createMockDirHandle('Fixtures'),
+    handle: createMockDirHandle(rootName),
     images: [],
     children: [],
     imageCount: 0,
@@ -231,9 +238,20 @@ export function buildFixtureFolderTree(tier: FixtureTier): FolderNode {
   const folderMap = new Map<string, FolderNode>([['', root]])
 
   for (const entry of listFixtures(tier)) {
-    const folderPath = fixturePathDirname(entry.dest)
-    const normalizedFolderPath =
-      folderPath === '.' ? '' : folderPath.replace(/\\/g, '/')
+    const dest = entry.dest.replace(/\\/g, '/')
+    if (
+      normalizedPrefix &&
+      dest !== normalizedPrefix &&
+      !dest.startsWith(`${normalizedPrefix}/`)
+    ) {
+      continue
+    }
+
+    const relativeDest = normalizedPrefix
+      ? dest.slice(normalizedPrefix.length).replace(/^\//, '')
+      : dest
+    const folderPath = fixturePathDirname(relativeDest)
+    const normalizedFolderPath = folderPath === '.' ? '' : folderPath
     const folder = getOrCreateFolder(root, folderMap, normalizedFolderPath)
     folder.images.push(createImageFromFixture(entry, normalizedFolderPath))
     folder.imageCount += 1

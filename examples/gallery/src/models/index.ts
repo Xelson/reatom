@@ -44,6 +44,7 @@ export {
 export {
   currentFolder,
   folderTree,
+  hasPersistedSelectedFolderHandle,
   parsingProgress,
   publishFolderScan,
   resetFolderState,

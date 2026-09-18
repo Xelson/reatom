@@ -24,8 +24,8 @@
   "devDependencies": {
     "@storybook/addon-a11y": "^10.2.0",
     "@storybook/addon-vitest": "^10.2.0",
-    "@storybook/html-vite": "^10.2.0",
     "@storybook/html": "^10.2.0",
+    "@storybook/html-vite": "^10.2.0",
     "@testing-library/dom": "^10.4.0",
     "@vitest/browser-playwright": "^4.1.7",
     "playwright": "^1.60.0",
@@ -37,6 +37,7 @@
   "dependencies": {
     "@reatom/core": "1001.*.*",
     "@reatom/jsx": "1001.*.*",
+    "idb-keyval": "^6.3.0",
     "libraw-wasm": "^1.1.2"
   }
 }
