@@ -12,6 +12,8 @@ const loc = {
     canvas.findByRole('heading', { name: 'Your images, polished fast' }),
   openFolderButtonAppears: (canvas) =>
     canvas.findByRole('button', { name: /Open Folder/i }),
+  resetButtonAppears: (canvas) =>
+    canvas.findByRole('button', { name: /^Reset$/ }),
   imageCountAppears: (canvas) => canvas.findByText(/\d+ images/),
   scanningTextAppears: (canvas) => canvas.findByText('Scanning folder...'),
   cancelButtonAppears: (canvas) =>
@@ -29,6 +31,12 @@ const I = createMyself((I) => ({
   },
   seeGalleryLoaded: async () => {
     await I.see(loc.imageCountAppears)
+    await I.see(loc.resetButtonAppears)
+  },
+  resetOpenedFolder: async () => {
+    await I.click(loc.resetButtonAppears)
+    await waitForUpdate()
+    await I.seeEmptyState()
   },
   seeParsingProgress: async () => {
     await I.see(loc.scanningTextAppears)
@@ -89,5 +97,15 @@ export const LightboxFlow: Story = {
   },
   play: async () => {
     await I.openLightboxByClickingFirstImage()
+  },
+}
+
+export const ResetOpenedFolder: Story = {
+  render: () => {
+    loadGalleryState({ tree: mockFolderTree })
+    return <App />
+  },
+  play: async () => {
+    await I.resetOpenedFolder()
   },
 }

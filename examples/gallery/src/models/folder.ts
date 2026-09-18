@@ -42,6 +42,7 @@ export const resetFolderState = action(() => {
   folderTree.set(null)
   currentFolder.set(null)
   parsingProgress.set({ total: 0, current: 0 })
+  selectedFolderHandle.set(null)
 }, 'folder.resetState')
 
 export const publishFolderScan = action((result: { tree: FolderNode }) => {

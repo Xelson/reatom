@@ -13,6 +13,8 @@ import {
   filterSizeMax,
   filterSizeMin,
   filterTypes,
+  folderTree,
+  galleryContentMode,
   includeSubfolders,
   keepLightboxView,
   lightboxImage,
@@ -23,7 +25,9 @@ import {
   navigateLightbox,
   openFolder,
   openLightbox,
+  pendingFolderRestore,
   reatomGalleryImage,
+  resetOpenedFolder,
   searchQuery,
   selectAllImages,
   selectedCount,
@@ -396,4 +400,25 @@ test('openFolder.abort clears parsing state', () =>
   context.start(() => {
     loadGalleryState({ tree: mockFolderTree })
     openFolder.abort()
+  }))
+
+test('resetOpenedFolder unloads the gallery', () =>
+  context.start(() => {
+    loadGalleryState({ tree: mockFolderTree })
+    pendingFolderRestore.set(createMockDirHandle('pending'))
+    const firstImage = [...visibleIndexMap().keys()][0]
+    expect(firstImage).toBeDefined()
+    openLightbox(firstImage!)
+    expect(lightboxOpen()).toBe(true)
+    expect(galleryContentMode()).toBe('gallery')
+
+    resetOpenedFolder()
+
+    expect(folderTree()).toBeNull()
+    expect(currentFolder()).toBeNull()
+    expect(pendingFolderRestore()).toBeNull()
+    expect(lightboxOpen()).toBe(false)
+    expect(lightboxImage()).toBeNull()
+    expect(galleryContentMode()).toBe('empty')
+    expect(visibleIndexMap().size).toBe(0)
   }))

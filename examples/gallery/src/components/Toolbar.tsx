@@ -3,13 +3,14 @@ import {
   clearSelection,
   folderTree,
   openFolder,
+  resetOpenedFolder,
   resolvedThemeMode,
   searchQuery,
   selectAllImages,
   selectedCount,
   setViewMode,
-  toggleResolvedThemeMode,
   themePack,
+  toggleResolvedThemeMode,
   viewMode,
   visibleIndexMap,
 } from '../model'
@@ -17,8 +18,8 @@ import type { ViewMode } from '../types'
 import {
   FilterIcon,
   GalleryMarkIcon,
-  InstantCameraIcon,
   GridIcon,
+  InstantCameraIcon,
   ListIcon,
   MoonIcon,
   SearchIcon,
@@ -227,7 +228,17 @@ export const Toolbar = () => (
             )
           }
         </span>
-        {() => (themePack() === 'polaroid' ? 'Instant' : themePack() === 'blueprint' ? 'Blueprint' : themePack() === 'obsidian' ? 'Obsidian' : themePack() === 'minimal' ? 'Minimal' : 'Gallery')}
+        {() =>
+          themePack() === 'polaroid'
+            ? 'Instant'
+            : themePack() === 'blueprint'
+              ? 'Blueprint'
+              : themePack() === 'obsidian'
+                ? 'Obsidian'
+                : themePack() === 'minimal'
+                  ? 'Minimal'
+                  : 'Gallery'
+        }
       </span>
 
       <ToolbarButton
@@ -243,21 +254,13 @@ export const Toolbar = () => (
       />
 
       {() => {
-        const tree = folderTree()
-        if (!tree) return <span />
+        if (folderTree() === null) return <span />
         return (
-          <span
-            css={`
-              font-size: 13px;
-              color: var(--text-secondary);
-              max-width: 160px;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-            `}
-          >
-            {tree.name}
-          </span>
+          <ToolbarButton
+            label="Reset"
+            onClick={() => resetOpenedFolder()}
+            title="Unload the current folder"
+          />
         )
       }}
     </div>

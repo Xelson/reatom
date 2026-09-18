@@ -76,7 +76,7 @@ export const handleKeyboardShortcut = action((event: KeyboardEvent) => {
   if (!lightboxOpen() && (event.key === '-' || event.key === '_')) {
     event.preventDefault()
     if (viewMode() === 'grid') {
-      decreaseGridColumns()
+      increaseGridColumns()
     } else {
       decreaseImagePreviewSize()
     }
@@ -86,7 +86,7 @@ export const handleKeyboardShortcut = action((event: KeyboardEvent) => {
   if (!lightboxOpen() && (event.key === '=' || event.key === '+')) {
     event.preventDefault()
     if (viewMode() === 'grid') {
-      increaseGridColumns()
+      decreaseGridColumns()
     } else {
       increaseImagePreviewSize()
     }

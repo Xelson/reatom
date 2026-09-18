@@ -15,6 +15,9 @@ const waitForUpdate = () => new Promise<void>((r) => setTimeout(r, 50))
 
 const loc = {
   openButtonAppears: (canvas) => canvas.findByRole('button', { name: /Open/i }),
+  resetButtonAppears: (canvas) =>
+    canvas.findByRole('button', { name: /^Reset$/ }),
+  maybeResetButton: (canvas) => canvas.queryByRole('button', { name: /^Reset$/ }),
   searchInputAppears: (canvas) =>
     canvas.findByPlaceholderText('Search images...'),
   listViewButtonAppears: (canvas) =>
@@ -24,10 +27,17 @@ const loc = {
 const I = createMyself((I) => ({
   seeToolbarWithGallery: async () => {
     await I.see(loc.openButtonAppears)
+    await I.see(loc.resetButtonAppears)
     await I.see(loc.searchInputAppears)
   },
   seeToolbarEmpty: async () => {
     await I.see(loc.openButtonAppears)
+    await I.dontSee(loc.maybeResetButton)
+  },
+  resetOpenedFolder: async () => {
+    await I.click(loc.resetButtonAppears as DefiniteLocator)
+    await waitForUpdate()
+    await I.dontSee(loc.maybeResetButton)
   },
   switchToListView: async () => {
     await I.click(loc.listViewButtonAppears as DefiniteLocator)
@@ -73,6 +83,20 @@ export const EmptyState: Story = {
   },
   play: async () => {
     await I.seeToolbarEmpty()
+  },
+}
+
+export const ResetOpenedFolder: Story = {
+  render: () => {
+    loadGalleryState({ tree: mockFolderTree })
+    return (
+      <StoryWrapper>
+        <Toolbar />
+      </StoryWrapper>
+    )
+  },
+  play: async () => {
+    await I.resetOpenedFolder()
   },
 }
 

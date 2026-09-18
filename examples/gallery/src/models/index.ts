@@ -55,6 +55,7 @@ export {
   pendingFolderRestore,
   queryDirectoryPermission,
   requestFolderRestore,
+  resetOpenedFolder,
   restoreSelectedFolder,
 } from './folderOpen'
 export {

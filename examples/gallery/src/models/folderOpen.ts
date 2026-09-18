@@ -9,6 +9,7 @@ import { resetGallerySession } from './collection'
 import {
   parsingProgress,
   publishFolderScan,
+  resetFolderState,
   selectedFolderHandle,
 } from './folder'
 import { resetLightboxOnFolderChange } from './lightbox'
@@ -113,3 +114,13 @@ export const requestFolderRestore = action(async () => {
   pendingFolderRestore.set(null)
   await wrap(openFolder(handle))
 }, 'requestFolderRestore').extend(withAsync(), withAbort())
+
+export const resetOpenedFolder = action(() => {
+  openFolder.abort()
+  restoreSelectedFolder.abort()
+  requestFolderRestore.abort()
+  pendingFolderRestore.set(null)
+  resetLightboxOnFolderChange()
+  resetGallerySession()
+  resetFolderState()
+}, 'folder.resetOpened')
