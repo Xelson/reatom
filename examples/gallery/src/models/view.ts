@@ -3,15 +3,15 @@ import {
   atom,
   computed,
   reatomEnum,
-  withLocalStorage,
   withActions,
+  withLocalStorage,
 } from '@reatom/core'
 
 import { quantizeThumbnailBucket } from '../image-engine/decodePolicy'
 import { type GridGap, VIEW_MODES, type ViewMode } from '../types'
 import { imageGrid } from './gridLayout'
-import { devicePixelRatio } from './viewport'
 import { themePack } from './preferences'
+import { devicePixelRatio } from './viewport'
 
 const normalizeViewMode = (snapshot: unknown): ViewMode => {
   switch (snapshot) {

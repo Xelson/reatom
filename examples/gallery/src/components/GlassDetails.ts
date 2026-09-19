@@ -106,17 +106,12 @@ export const glassDetailsCss = `
       background: transparent; color: var(--text-primary); box-shadow: none;
       border-radius: 0; width: 25px; height: 25px;
     }
-    .gallery-toolbar button, .gallery-toolbar input, .gallery-pathbar button {
-      background: transparent;
-      color: var(--text-primary);
-      border: 1px solid transparent;
+    .gallery-toolbar input {
       border-radius: 999px;
-      box-shadow: none;
       min-height: 38px;
       font-weight: 500;
-      transition: background 160ms, box-shadow 160ms, transform 120ms, filter 160ms;
     }
-    .gallery-toolbar button:has(svg) { width: 38px; font-size: 17px; }
+    .gallery-toolbar [data-ui='button']:has(svg) { width: 38px; font-size: 17px; }
     .gallery-toolbar input {
       width: 205px; padding-left: 34px;
       background: var(--input-bg);
@@ -128,25 +123,7 @@ export const glassDetailsCss = `
       background: #ffffff18;
       box-shadow: inset 0 1px 3px #18233312;
     }
-    .gallery-toolbar button[aria-pressed='true'],
-    .gallery-toolbar [aria-pressed='true'],
-    .gallery-pathbar button[data-active='true'] {
-      ${crystalChipCss}
-    }
-    .gallery-toolbar button[aria-expanded='true'] { ${crystalChipCss} }
-    .gallery-toolbar button:active:not(:disabled),
-    .gallery-pathbar button:active:not(:disabled),
-    .glass-lens:active:not(:disabled) {
-      transform: scale(0.98);
-      box-shadow: var(--glass-lens-shadow, inset 0 0 14px #fff6);
-    }
-    @media (hover: hover) and (pointer: fine) {
-      .gallery-toolbar button:hover:not(:disabled):not([aria-pressed='true']),
-      .gallery-pathbar button:hover:not(:disabled),
-      .glass-lens:hover:not(:disabled):not([aria-pressed='true']):not([data-active='true']) {
-        background: var(--hover-bg);
-      }
-    }
+    .gallery-pathbar [data-ui='button'] { min-height: 30px; padding: 5px 12px; font-size: 11px; }
     .gallery-workspace {
       position: relative; gap: 12px;
       margin: 0 12px 12px; padding: 8px 0 0;
@@ -168,7 +145,6 @@ export const glassDetailsCss = `
     }
     .gallery-folder-sidebar [role='treeitem'] svg { color: var(--accent); }
     .gallery-pathbar { padding: 0 6px 12px; border: 0; background: none; backdrop-filter: none; gap: 10px; }
-    .gallery-pathbar button { min-height: 30px; padding: 5px 12px; font-size: 11px; }
     main { padding: 4px 6px 8px; margin: 0; background: transparent; border: 0; box-shadow: none; border-radius: 0; }
     .glass-card {
       border-radius: 16px; padding: 0; border: 0;
@@ -189,21 +165,9 @@ export const glassDetailsCss = `
     /* Fixed-size optical primitive: its map matches the rendered circle. */
     .glass-card .glass-overlay-control {
       width: 30px; height: 30px; border-radius: 50%;
-      background:
-        var(--glass-refraction-target, none),
-        #2020203d;
-      color: white;
-      border: 1px solid #ffffff40;
       -webkit-backdrop-filter: blur(8px) saturate(1.2);
       backdrop-filter: blur(8px) saturate(1.2);
-      box-shadow:
-        inset 1px 0 4px var(--glass-chroma-cyan, transparent),
-        inset -1px 0 4px var(--glass-chroma-violet, transparent),
-        inset 0 1px 0 #ffffff60,
-        0 2px 6px #0003;
     }
-    .glass-card .glass-overlay-control[aria-pressed='true'] { color: #c8c8c8; }
-    .glass-card .glass-overlay-control:active:not(:disabled) { transform: scale(0.94); }
     .glass-card:focus-within .grid-image-overlay { opacity: 1; }
     aside[role='dialog'] {
       --glass-panel-radius: 34px;
@@ -226,39 +190,8 @@ export const glassDetailsCss = `
       transform: translateZ(0);
     }
     aside[role='dialog']:not([data-open='true']) { box-shadow: none; right: -24px; }
-    aside[role='dialog'] .glass-lens {
-      background: transparent;
-      border-color: var(--border);
-      box-shadow: none;
-    }
-    aside[role='dialog'] [data-glass-toggle='true'] {
-      background: color-mix(in srgb, var(--liquid-ink) 16%, transparent);
-      border-color: var(--liquid-edge);
-      box-shadow: inset 0 1px 3px #0002;
-    }
-    aside[role='dialog'] [data-glass-toggle='true'][aria-checked='true'] {
-      background: #248a4b;
-      border-color: #167139;
-    }
-    aside[role='dialog'] [data-glass-toggle='true']::after {
-      background: linear-gradient(#fff, #e9edef);
-      box-shadow: inset 0 1px 0 #fff, 0 1px 3px #0003;
-    }
-    aside[role='dialog'] .glass-lens[aria-pressed='true'],
-    aside[role='dialog'] .glass-lens[data-active='true'] {
-      ${crystalChipCss}
-      border-color: color-mix(in srgb, var(--liquid-ink) 30%, transparent);
-      font-weight: 600;
-    }
-    button:focus:not(:focus-visible),
     input:focus:not(:focus-visible) {
       outline: none;
-    }
-    /* Keep focus independent of the neutral accent and the material shadow. */
-    button:focus-visible, input:focus-visible {
-      outline: 2px solid #0867d5;
-      outline-offset: 2px;
-      box-shadow: 0 0 0 2px #fff;
     }
     input:is([type='search'], [type='number']):focus {
       border-color: #0867d5;
@@ -298,7 +231,7 @@ export const glassDetailsCss = `
         -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
       }
       .glass-card .grid-image-caption > div { color: CanvasText; text-shadow: none; }
-      button:focus-visible, input:focus-visible,
+      input:focus-visible,
       input:is([type='search'], [type='number']):focus {
         outline: 2px solid Highlight;
         outline-offset: 3px;
@@ -322,11 +255,7 @@ export const glassDetailsCss = `
       .glass-card .grid-image-caption, .glass-card .glass-overlay-control { background: #2f2f2f; -webkit-backdrop-filter: none; backdrop-filter: none !important; }
     }
     @media (prefers-reduced-motion: reduce) {
-      button, .glass-card, .glass-lens { transition: none; }
-      .gallery-toolbar button:active,
-      .gallery-pathbar button:active,
-      .glass-lens:active,
-      .glass-card .glass-overlay-control:active { transform: none; }
+      .glass-card { transition: none; }
     }
     @supports not (backdrop-filter: blur(1px)) {
       .gallery-toolbar, .gallery-folder-sidebar, aside[role='dialog'] { background: var(--liquid-solid); }

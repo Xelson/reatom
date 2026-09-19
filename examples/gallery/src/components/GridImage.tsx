@@ -1,4 +1,5 @@
 import { focusableCardAttrs } from '../a11y'
+import { ChoiceButton, IconButton } from '../design-system'
 import { resolveImageOrientationStyle } from '../image-engine/orientation'
 import type { ImageModel } from '../model'
 import {
@@ -44,7 +45,7 @@ export const GridImage = ({ image }: { image: ImageModel }) => {
   return (
     <div
       class="glass-card"
-      {...focusableCardAttrs(openLabel(), () => openLightbox(image))}
+      {...focusableCardAttrs(openLabel, () => openLightbox(image))}
       attr:data-selected={isSelected}
       attr:data-gap={gridGap}
       css={`
@@ -111,7 +112,8 @@ export const GridImage = ({ image }: { image: ImageModel }) => {
         on:keydown={(event: KeyboardEvent) => {
           // Native buttons activate themselves; do not also activate the card
           // or gallery-wide Space shortcut.
-          if (event.key === 'Enter' || event.key === ' ') event.stopPropagation()
+          if (event.key === 'Enter' || event.key === ' ')
+            event.stopPropagation()
         }}
         css={`
           position: absolute;
@@ -121,99 +123,51 @@ export const GridImage = ({ image }: { image: ImageModel }) => {
           pointer-events: none;
         `}
       >
-        <button
-          type="button"
+        <ChoiceButton
           class="glass-overlay-control"
-          on:click={(e: Event) => {
-            e.stopPropagation()
-            selectImage(image)
-          }}
-          role="checkbox"
-          aria-checked={isSelected}
-          aria-label={() =>
+          slot="overlay"
+          label={() =>
             isSelected() ? `Deselect ${imageName()}` : `Select ${imageName()}`
           }
+          selected={isSelected}
+          selection="checked"
+          stopPropagation
+          onClick={() => selectImage(image)}
+          size="icon"
           css={`
             position: absolute;
             top: 8px;
             left: 8px;
             width: 24px;
             height: 24px;
-            border-radius: var(--radius-sm);
-            border: var(--border-width) var(--control-border-style)
-              rgba(255, 255, 255, 0.82);
-            background: var(--overlay-control);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: white;
             pointer-events: auto;
-            transition: all 0.15s ease;
-
-            &[aria-checked='true'] {
-              background: var(--accent);
-              border-color: var(--accent);
-              color: var(--accent-contrast);
-            }
-            @media (hover: hover) and (pointer: fine) {
-              &:hover {
-                transform: scale(1.1);
-              }
-            }
           `}
         >
           {() => (isSelected() ? <CheckIcon /> : null)}
-        </button>
+        </ChoiceButton>
 
-        <button
+        <IconButton
           class="glass-overlay-control"
-          on:click={(e: Event) => {
-            e.stopPropagation()
-            image.favorite.toggle()
-          }}
-          aria-pressed={isFavorite}
-          aria-label={() =>
+          slot="overlay"
+          label={() =>
             isFavorite()
               ? `Remove ${imageName()} from favorites`
               : `Add ${imageName()} to favorites`
           }
-          type="button"
+          selected={isFavorite}
+          stopPropagation
+          onClick={() => image.favorite.toggle()}
           css={`
             position: absolute;
             top: 8px;
             right: 8px;
             width: 28px;
             height: 28px;
-            border-radius: var(--radius-round);
-            border: var(--border-width) var(--control-border-style) transparent;
-            background: var(--overlay-control);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-            color: #fff;
             pointer-events: auto;
-            transition: all 0.15s ease;
-
-            &[aria-pressed='true'] {
-              color: var(--accent);
-              background: var(--overlay-control-hover);
-            }
-
-            @media (hover: hover) and (pointer: fine) {
-              &:hover {
-                transform: scale(1.15);
-                box-shadow: var(--glow);
-                background: var(--overlay-control-hover);
-              }
-            }
           `}
         >
           {() => <HeartIcon filled={isFavorite()} />}
-        </button>
+        </IconButton>
       </div>
 
       {() => {

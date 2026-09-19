@@ -1,5 +1,10 @@
 import { onEvent, wrap } from '@reatom/core'
 
+import {
+  ChoiceButton,
+  IconButton,
+  resolveViewerControlCssVars,
+} from '../design-system'
 import { resolveImageOrientationStyle } from '../image-engine/orientation'
 import {
   bindLightboxDisplayTargetDebouncer,
@@ -38,8 +43,10 @@ import {
   navigateLightbox,
   openLightboxAtVisibleIndex,
   resetLightboxSession,
+  resolvedThemeMode,
   showLightboxScrubber,
   startLightboxPan,
+  themePack,
   thumbnailWindow,
   toggleLightboxImageFavorite,
   visibleImages,
@@ -59,48 +66,16 @@ import {
   PlusIcon,
 } from './Icons'
 import { imageInfoPanelOpen } from './panelState'
-import { pressEvents } from './pressEvents'
 import { Slideshow } from './Slideshow'
 
-const controlBtnCss = `
-  background: var(--overlay-control);
-  border: var(--border-width) var(--control-border-style) rgba(255, 255, 255, 0.12);
-  color: #fff;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-round);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  transition: background 0.2s;
-  backdrop-filter: blur(12px);
-  box-shadow: var(--glow);
-  &:hover { background: var(--overlay-control-hover); }
-`
-
-const navBtnCss = `
+const navLayoutCss = `
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: var(--overlay-control);
-  border: var(--border-width) var(--control-border-style) rgba(255, 255, 255, 0.12);
-  color: #fff;
   width: 48px;
   height: 48px;
-  border-radius: var(--radius-round);
-  cursor: pointer;
-  font-size: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s, opacity 0.2s;
   z-index: 1010;
-  opacity: 0.7;
-  backdrop-filter: blur(12px);
-  box-shadow: var(--glow);
-  &:hover { background: var(--overlay-control-hover); opacity: 1; }
+  font-size: 28px;
 `
 
 const fullscreenExitGuardMs = 500
@@ -177,9 +152,7 @@ const LightboxImageFrame = ({
     {() => {
       const model = lightboxImage()
       if (!model) {
-        return (
-          <div css="color: #fff; font-size: 18px;">No image selected</div>
-        )
+        return <div css="color: #fff; font-size: 18px;">No image selected</div>
       }
 
       return (
@@ -299,16 +272,11 @@ const LightboxContent = () => {
     focusLightboxImage()
   }
 
-  const pressLightboxControl = (action: () => void) => {
-    const press = pressEvents(action)
-    return {
-      'on:mousedown': (event: MouseEvent) => {
-        lightboxShowControlsFromPointer()
-        press['on:mousedown'](event)
-      },
-      'on:click': press['on:click'],
-      'on:keydown': press['on:keydown'],
-    }
+  const lightboxActivation = {
+    activation: 'press' as const,
+    stopPropagation: true,
+    onBefore: lightboxShowControlsFromPointer,
+    surface: 'viewer' as const,
   }
 
   const handleFullscreenToggle = () => {
@@ -387,6 +355,9 @@ const LightboxContent = () => {
         }
       }}
       attr:data-controls-visible={lightboxControlsVisible}
+      style={() =>
+        resolveViewerControlCssVars(themePack(), resolvedThemeMode())
+      }
       on:keydown={handleLightboxKeyDown}
       on:click={(event: MouseEvent & { currentTarget: HTMLDivElement }) => {
         if (event.target === event.currentTarget) closeLightbox()
@@ -463,93 +434,78 @@ const LightboxContent = () => {
           style:margin-right={() => (imageInfoPanelOpen() ? '300px' : '0px')}
           css="display: flex; gap: 8px; align-items: center; transition: margin-right 0.3s ease;"
         >
-          <button
-            {...pressLightboxControl(toggleLightboxImageFavorite)}
-            type="button"
-            css={controlBtnCss}
+          <IconButton
+            {...lightboxActivation}
+            label={lightboxFavoriteButtonLabel}
             title={lightboxFavoriteButtonLabel}
-            aria-label={lightboxFavoriteButtonLabel}
-            aria-pressed={() => lightboxImage()?.favorite() ?? false}
+            selected={() => lightboxImage()?.favorite() ?? false}
+            onClick={toggleLightboxImageFavorite}
           >
             {() => {
               const img = lightboxImage()
               return <HeartIcon filled={img?.favorite() ?? false} />
             }}
-          </button>
-          <button
-            {...pressLightboxControl(downloadLightboxImage)}
-            type="button"
-            css={controlBtnCss}
-            title="Download image"
-            aria-label="Download image"
+          </IconButton>
+          <IconButton
+            {...lightboxActivation}
+            label="Download image"
+            onClick={downloadLightboxImage}
           >
             <DownloadIcon />
-          </button>
-          <button
-            {...pressLightboxControl(copyLightboxImageAsJpeg)}
-            type="button"
-            css={controlBtnCss}
-            title="Copy as JPEG"
-            aria-label="Copy as JPEG"
+          </IconButton>
+          <IconButton
+            {...lightboxActivation}
+            label="Copy as JPEG"
+            onClick={copyLightboxImageAsJpeg}
           >
             <CopyJpegIcon />
-          </button>
-          <button
-            {...pressLightboxControl(lightboxZoomOut)}
-            type="button"
-            css={controlBtnCss}
-            title="Zoom out"
-            aria-label="Zoom out"
+          </IconButton>
+          <IconButton
+            {...lightboxActivation}
+            label="Zoom out"
+            onClick={lightboxZoomOut}
           >
             <MinusIcon />
-          </button>
-          <button
-            {...pressLightboxControl(lightboxZoomReset)}
-            type="button"
-            css={controlBtnCss}
-            title="Reset zoom"
-            aria-label="Reset zoom"
+          </IconButton>
+          <IconButton
+            {...lightboxActivation}
+            label="Reset zoom"
+            onClick={lightboxZoomReset}
           >
             <FitIcon />
-          </button>
-          <button
-            {...pressLightboxControl(handleFullscreenToggle)}
-            type="button"
-            css={controlBtnCss}
+          </IconButton>
+          <IconButton
+            {...lightboxActivation}
+            label={lightboxFullscreenButtonLabel}
             title={lightboxFullscreenButtonLabel}
-            aria-label={lightboxFullscreenButtonLabel}
-            aria-pressed={lightboxIsFullscreen}
+            selected={lightboxIsFullscreen}
+            onClick={handleFullscreenToggle}
           >
             <FullscreenIcon />
-          </button>
-          <button
-            {...pressLightboxControl(lightboxZoomIn)}
-            type="button"
-            css={controlBtnCss}
-            title="Zoom in"
-            aria-label="Zoom in"
+          </IconButton>
+          <IconButton
+            {...lightboxActivation}
+            label="Zoom in"
+            onClick={lightboxZoomIn}
           >
             <PlusIcon />
-          </button>
-          <button
-            {...pressLightboxControl(imageInfoPanelOpen.toggle)}
-            type="button"
-            css={controlBtnCss}
+          </IconButton>
+          <IconButton
+            {...lightboxActivation}
+            label={lightboxDetailsButtonLabel}
             title={lightboxDetailsButtonLabel}
-            aria-label={lightboxDetailsButtonLabel}
-            aria-expanded={imageInfoPanelOpen}
+            expanded={imageInfoPanelOpen}
+            onClick={imageInfoPanelOpen.toggle}
           >
             <InfoIcon />
-          </button>
-          <button
-            {...pressLightboxControl(closeLightbox)}
-            type="button"
-            css={controlBtnCss}
-            title="Close preview"
-            aria-label="Close preview"
+          </IconButton>
+          <IconButton
+            {...lightboxActivation}
+            label="Close preview"
+            onClick={closeLightbox}
           >
             <CloseIcon />
-          </button>
+          </IconButton>
         </div>
       </div>
 
@@ -588,30 +544,28 @@ const LightboxContent = () => {
         )
       }}
 
-      <button
+      <IconButton
+        {...lightboxActivation}
         class="lightbox-control-layer"
-        {...pressLightboxControl(() => navigateLightbox(-1))}
-        type="button"
-        title="Previous image"
-        aria-label="Previous image"
+        label="Previous image"
+        onClick={() => navigateLightbox(-1)}
         css={`
-          ${navBtnCss} left: 16px;
+          ${navLayoutCss} left: 16px;
         `}
       >
         <ChevronLeftIcon />
-      </button>
-      <button
+      </IconButton>
+      <IconButton
+        {...lightboxActivation}
         class="lightbox-control-layer"
-        {...pressLightboxControl(() => navigateLightbox(1))}
-        type="button"
-        title="Next image"
-        aria-label="Next image"
+        label="Next image"
+        onClick={() => navigateLightbox(1)}
         css={`
-          ${navBtnCss} right: 16px;
+          ${navLayoutCss} right: 16px;
         `}
       >
         <ChevronRightIcon />
-      </button>
+      </IconButton>
 
       <Slideshow
         class="lightbox-control-layer"
@@ -680,42 +634,36 @@ const LightboxContent = () => {
           );
           z-index: 1010;
           overflow-x: auto;
+          [data-ui='button'] {
+            border-radius: min(var(--radius-xs), 8px);
+          }
         `}
       >
         {() =>
           thumbnailWindow().map((imageNode) => (
-            <button
-              {...pressLightboxControl(() => {
+            <ChoiceButton
+              {...lightboxActivation}
+              selection="current"
+              label={() => `View ${imageNode.source.name}`}
+              title={() => `View ${imageNode.source.name}`}
+              selected={() => lightboxImage()?.id === imageNode.id}
+              onClick={() => {
                 const index = visibleIndexMap().get(imageNode)
                 if (index === undefined) return
                 openLightboxAtVisibleIndex(index)
-              })}
-              type="button"
-              title={() => `View ${imageNode.source.name}`}
-              aria-label={() => `View ${imageNode.source.name}`}
-              aria-current={() =>
-                lightboxImage()?.id === imageNode.id ? 'true' : undefined
-              }
-              data-active={() => lightboxImage()?.id === imageNode.id}
+              }}
               css={`
                 flex-shrink: 0;
                 padding: 2px;
-                border: var(--border-width) var(--control-border-style)
-                  transparent;
-                background: none;
-                cursor: pointer;
-                border-radius: var(--radius-sm);
-                transition:
-                  border-color 0.2s,
-                  opacity 0.2s;
+                overflow: hidden;
                 opacity: 0.6;
-                &[data-active='true'] {
-                  border-color: var(--accent);
+                &[data-ui-selected='true'] {
                   opacity: 1;
-                  box-shadow: var(--glow);
                 }
-                &:hover {
-                  opacity: 1;
+                @media (hover: hover) and (pointer: fine) {
+                  &:hover {
+                    opacity: 1;
+                  }
                 }
               `}
             >
@@ -729,12 +677,12 @@ const LightboxContent = () => {
                   width: 60px;
                   height: 40px;
                   object-fit: cover;
-                  border-radius: var(--radius-xs);
+                  border-radius: inherit;
                   display: block;
                 `}
                 draggable={false}
               />
-            </button>
+            </ChoiceButton>
           ))
         }
       </div>

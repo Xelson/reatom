@@ -1,3 +1,4 @@
+import { Button, ChoiceButton, IconButton } from '../design-system'
 import { isFileSystemAccessSupported } from '../filesystem'
 import {
   clearSelection,
@@ -14,7 +15,6 @@ import {
   viewMode,
   visibleIndexMap,
 } from '../model'
-import type { ViewMode } from '../types'
 import {
   FilterIcon,
   GalleryMarkIcon,
@@ -32,127 +32,6 @@ import {
   filterPanelOpen,
   settingsPanelOpen,
 } from './panelState'
-
-const ToolbarButton = ({
-  label,
-  onClick,
-  variant = 'default',
-  disabled = false,
-  title,
-}: {
-  label: string
-  onClick: () => void
-  variant?: 'default' | 'accent'
-  disabled?: boolean
-  title?: string
-}) => (
-  <button
-    type="button"
-    on:click={onClick}
-    data-terminal-bracket="true"
-    prop:disabled={disabled}
-    title={title}
-    css={`
-      padding: 7px 13px;
-      font-size: 13px;
-      font-weight: 650;
-      border: var(--border-width) var(--control-border-style)
-        var(--input-border);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      white-space: nowrap;
-      background: ${variant === 'accent' ? 'var(--accent)' : 'var(--input-bg)'};
-      background-image: var(--surface-bg-image);
-      background-size: var(--surface-bg-size);
-      color: ${variant === 'accent'
-        ? 'var(--accent-contrast)'
-        : 'var(--text-primary)'};
-      box-shadow: ${variant === 'accent' ? 'var(--glow)' : 'none'};
-      text-transform: var(--control-transform);
-
-      @media (hover: hover) and (pointer: fine) {
-        &:hover {
-          background: ${variant === 'accent'
-            ? 'var(--accent-hover)'
-            : 'var(--hover-bg)'};
-          border-color: ${variant === 'accent'
-            ? 'var(--accent-hover)'
-            : 'var(--text-muted)'};
-          transform: var(--card-hover-transform);
-          box-shadow: ${variant === 'accent'
-            ? 'var(--card-hover-shadow)'
-            : 'none'};
-        }
-      }
-      &:disabled {
-        cursor: not-allowed;
-        opacity: 0.62;
-        filter: grayscale(0.18);
-      }
-      &:disabled:hover {
-        background: ${variant === 'accent'
-          ? 'var(--accent)'
-          : 'var(--input-bg)'};
-        border-color: ${variant === 'accent'
-          ? 'var(--accent)'
-          : 'var(--input-border)'};
-        transform: none;
-        box-shadow: ${variant === 'accent' ? 'var(--glow)' : 'none'};
-      }
-    `}
-  >
-    {label}
-  </button>
-)
-
-const ViewModeButton = ({
-  mode,
-  icon,
-  onClick,
-}: {
-  mode: ViewMode
-  icon: () => Element
-  onClick: () => void
-}) => (
-  <button
-    type="button"
-    class="glass-lens"
-    aria-pressed={() => viewMode() === mode}
-    on:click={onClick}
-    title={`${mode} view`}
-    aria-label={`${mode} view`}
-    css={`
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      border: var(--border-width) var(--control-border-style) transparent;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      background: transparent;
-      color: var(--text-secondary);
-
-      &[aria-pressed='true'] {
-        background: var(--accent);
-        color: var(--accent-contrast);
-        border-color: var(--accent);
-        box-shadow: var(--glow);
-      }
-      @media (hover: hover) and (pointer: fine) {
-        &:not([aria-pressed='true']):hover {
-          background: var(--hover-bg);
-          color: var(--text-primary);
-        }
-      }
-    `}
-  >
-    {icon()}
-  </button>
-)
 
 export const Toolbar = () => (
   <header
@@ -241,11 +120,11 @@ export const Toolbar = () => (
         }
       </span>
 
-      <ToolbarButton
+      <Button
         label="Open"
         onClick={() => openFolder()}
-        variant="accent"
         disabled={!isFileSystemAccessSupported()}
+        bracket
         title={
           isFileSystemAccessSupported()
             ? 'Open a local image folder'
@@ -256,9 +135,11 @@ export const Toolbar = () => (
       {() => {
         if (folderTree() === null) return <span />
         return (
-          <ToolbarButton
+          <Button
+            appearance="quiet"
             label="Reset"
             onClick={() => resetOpenedFolder()}
+            bracket
             title="Unload the current folder"
           />
         )
@@ -283,21 +164,30 @@ export const Toolbar = () => (
         flex-shrink: 0;
       `}
     >
-      <ViewModeButton
-        mode="grid"
-        icon={GridIcon}
+      <ChoiceButton
+        label="grid view"
+        selected={() => viewMode() === 'grid'}
         onClick={() => setViewMode('grid')}
-      />
-      <ViewModeButton
-        mode="list"
-        icon={ListIcon}
+        size="icon"
+      >
+        <GridIcon />
+      </ChoiceButton>
+      <ChoiceButton
+        label="list view"
+        selected={() => viewMode() === 'list'}
         onClick={() => setViewMode('list')}
-      />
-      <ViewModeButton
-        mode="table"
-        icon={TableIcon}
+        size="icon"
+      >
+        <ListIcon />
+      </ChoiceButton>
+      <ChoiceButton
+        label="table view"
+        selected={() => viewMode() === 'table'}
         onClick={() => setViewMode('table')}
-      />
+        size="icon"
+      >
+        <TableIcon />
+      </ChoiceButton>
     </div>
 
     <div
@@ -338,8 +228,18 @@ export const Toolbar = () => (
           </span>
         )
       }}
-      <ToolbarButton label="All" onClick={() => selectAllImages()} />
-      <ToolbarButton label="Clear" onClick={() => clearSelection()} />
+      <Button
+        appearance="quiet"
+        label="All"
+        onClick={() => selectAllImages()}
+        bracket
+      />
+      <Button
+        appearance="quiet"
+        label="Clear"
+        onClick={() => clearSelection()}
+        bracket
+      />
     </div>
 
     <div css="flex: 1;" />
@@ -418,37 +318,15 @@ export const Toolbar = () => (
     />
 
     <div css="display: flex; gap: calc(4px + var(--shadow-clearance, 0px)); flex-shrink: 0;">
-      <button
-        type="button"
-        on:click={() => filterPanelOpen.set((s) => !s)}
-        title="Filters"
-        aria-label={() => {
+      <IconButton
+        label={() => {
           const count = activeFilterCount()
           return count > 0 ? `Filters, ${count} active` : 'Filters'
         }}
-        aria-expanded={filterPanelOpen}
-        css={`
-          width: 32px;
-          height: 32px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 16px;
-          background: transparent;
-          border: var(--border-width) var(--control-border-style) transparent;
-          border-radius: var(--radius-sm);
-          cursor: pointer;
-          color: var(--text-secondary);
-          transition: all 0.15s ease;
-          position: relative;
-
-          @media (hover: hover) and (pointer: fine) {
-            &:hover {
-              background: var(--hover-bg);
-              color: var(--text-primary);
-            }
-          }
-        `}
+        title="Filters"
+        expanded={filterPanelOpen}
+        onClick={() => filterPanelOpen.set((s) => !s)}
+        css="position: relative;"
       >
         <FilterIcon />
         {() => {
@@ -476,72 +354,27 @@ export const Toolbar = () => (
             </span>
           )
         }}
-      </button>
+      </IconButton>
 
-      <button
-        type="button"
-        on:click={() => settingsPanelOpen.set((s) => !s)}
-        title="Settings"
-        aria-label="Settings"
-        aria-expanded={settingsPanelOpen}
-        css={`
-          width: 32px;
-          height: 32px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 16px;
-          background: transparent;
-          border: var(--border-width) var(--control-border-style) transparent;
-          border-radius: var(--radius-sm);
-          cursor: pointer;
-          color: var(--text-secondary);
-          transition: all 0.15s ease;
-
-          @media (hover: hover) and (pointer: fine) {
-            &:hover {
-              background: var(--hover-bg);
-              color: var(--text-primary);
-            }
-          }
-        `}
+      <IconButton
+        label="Settings"
+        expanded={settingsPanelOpen}
+        onClick={() => settingsPanelOpen.set((s) => !s)}
       >
         <SettingsIcon />
-      </button>
+      </IconButton>
 
-      <button
-        type="button"
-        on:click={toggleResolvedThemeMode}
-        title="Toggle light/dark theme"
-        aria-label={() =>
+      <IconButton
+        label={() =>
           resolvedThemeMode() === 'dark'
             ? 'Switch to light theme'
             : 'Switch to dark theme'
         }
-        css={`
-          width: 32px;
-          height: 32px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 16px;
-          background: transparent;
-          border: var(--border-width) var(--control-border-style) transparent;
-          border-radius: var(--radius-sm);
-          cursor: pointer;
-          color: var(--text-secondary);
-          transition: all 0.15s ease;
-
-          @media (hover: hover) and (pointer: fine) {
-            &:hover {
-              background: var(--hover-bg);
-              color: var(--text-primary);
-            }
-          }
-        `}
+        title="Toggle light/dark theme"
+        onClick={toggleResolvedThemeMode}
       >
         {() => (resolvedThemeMode() === 'dark' ? <MoonIcon /> : <SunIcon />)}
-      </button>
+      </IconButton>
     </div>
   </header>
 )

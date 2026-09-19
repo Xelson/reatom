@@ -1,3 +1,4 @@
+import { Button } from '../design-system'
 import {
   exifColumnNames,
   hiddenExifColumns,
@@ -22,20 +23,18 @@ export const ImageTableFilters = () => (
       <span css="font-size: 13px; font-weight: 700; color: var(--text-primary);">
         EXIF columns
       </span>
-      <button
-        type="button"
-        on:click={showAllExifColumns}
-        css="padding: 5px 9px; border-radius: var(--radius-sm); border: var(--border-width) var(--control-border-style) var(--input-border); background: var(--input-bg); color: var(--text-primary); cursor: pointer;"
-      >
-        Show all
-      </button>
-      <button
-        type="button"
-        on:click={hideAllExifColumns}
-        css="padding: 5px 9px; border-radius: var(--radius-sm); border: var(--border-width) var(--control-border-style) var(--input-border); background: var(--input-bg); color: var(--text-primary); cursor: pointer;"
-      >
-        Hide all
-      </button>
+      <Button
+        appearance="quiet"
+        size="sm"
+        label="Show all"
+        onClick={showAllExifColumns}
+      />
+      <Button
+        appearance="quiet"
+        size="sm"
+        label="Hide all"
+        onClick={hideAllExifColumns}
+      />
       <span css="font-size: 12px; color: var(--text-muted);">
         {() =>
           `${visibleExifColumnNames().length} of ${exifColumnNames().length} shown`

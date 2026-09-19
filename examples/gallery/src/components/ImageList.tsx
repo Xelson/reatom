@@ -1,4 +1,5 @@
 import { focusableCardAttrs } from '../a11y'
+import { ChoiceButton, IconButton } from '../design-system'
 import {
   bindGalleryImagePreview,
   folderModelTree,
@@ -25,7 +26,7 @@ const ListImage = ({ image }: { image: ImageModel }) => {
     ) : null
   }
 
-  const openLabel = `Open ${image.name}`
+  const openLabel = () => `Open ${image.name}`
 
   return (
     <div
@@ -64,38 +65,19 @@ const ListImage = ({ image }: { image: ImageModel }) => {
         }
       `}
     >
-      <button
-        on:click={(e: Event) => {
-          e.stopPropagation()
-          selectImage(image)
-        }}
-        role="checkbox"
-        aria-checked={isSelected}
-        aria-label={() =>
+      <ChoiceButton
+        label={() =>
           isSelected() ? `Deselect ${image.name}` : `Select ${image.name}`
         }
-        type="button"
-        css={`
-          width: 26px;
-          height: 26px;
-          border-radius: var(--radius-sm);
-          border: var(--border-width) var(--control-border-style)
-            var(--input-border);
-          background: var(--input-bg);
-          color: var(--accent-contrast);
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          &[aria-checked='true'] {
-            background: var(--accent);
-            border-color: var(--accent);
-          }
-        `}
+        selected={isSelected}
+        selection="checked"
+        stopPropagation
+        onClick={() => selectImage(image)}
+        size="icon"
+        css="width: 26px; height: 26px;"
       >
         {() => (isSelected() ? <CheckIcon /> : null)}
-      </button>
+      </ChoiceButton>
 
       <div
         css={`
@@ -146,43 +128,19 @@ const ListImage = ({ image }: { image: ImageModel }) => {
         </div>
       </div>
 
-      <button
-        on:click={(e: Event) => {
-          e.stopPropagation()
-          image.favorite.toggle()
-        }}
-        aria-pressed={isFavorite}
-        aria-label={() =>
+      <IconButton
+        label={() =>
           isFavorite()
             ? `Remove ${image.name} from favorites`
             : `Add ${image.name} to favorites`
         }
-        type="button"
-        css={`
-          width: 34px;
-          height: 34px;
-          border-radius: var(--radius-round);
-          border: var(--border-width) var(--control-border-style) transparent;
-          background: var(--input-bg);
-          color: var(--text-secondary);
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.15s ease;
-
-          &[aria-pressed='true'] {
-            color: var(--accent);
-            box-shadow: var(--glow);
-          }
-          &:hover {
-            background: var(--hover-bg);
-            color: var(--text-primary);
-          }
-        `}
+        selected={isFavorite}
+        stopPropagation
+        onClick={() => image.favorite.toggle()}
+        css="width: 34px; height: 34px;"
       >
         {() => <HeartIcon filled={isFavorite()} />}
-      </button>
+      </IconButton>
     </div>
   )
 }

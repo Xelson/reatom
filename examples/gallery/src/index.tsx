@@ -16,7 +16,11 @@ const loadDevDefaultFolderIfNoSaved = action(async () => {
   if (folderTree() !== null || selectedFolderHandle() !== null) return
 
   const hasSavedFolder = await wrap(hasPersistedSelectedFolderHandle())
-  if (hasSavedFolder || folderTree() !== null || selectedFolderHandle() !== null) {
+  if (
+    hasSavedFolder ||
+    folderTree() !== null ||
+    selectedFolderHandle() !== null
+  ) {
     return
   }
 

@@ -1,3 +1,4 @@
+import { Button } from '../design-system'
 import { isFileSystemAccessSupported } from '../filesystem'
 import { openFolder } from '../model'
 import { GalleryMarkIcon } from './Icons'
@@ -188,73 +189,19 @@ export const EmptyState = () => {
             folders.
           </div>
         )}
-        <button
-          type="button"
-          on:click={() => openFolder()}
-          prop:disabled={!fileSystemAccessSupported}
-          attr:aria-describedby={emptyStateDescriptionIds}
+        <Button
+          label="Open Folder"
+          onClick={() => openFolder()}
+          disabled={!fileSystemAccessSupported}
+          size="lg"
           title={
             fileSystemAccessSupported
               ? 'Open a local image folder'
               : 'File System Access is unavailable in this browser'
           }
-          css={`
-            min-width: 152px;
-            min-height: 48px;
-            padding: 13px 26px;
-            font-size: 16px;
-            font-weight: 750;
-            color: var(--accent-contrast);
-            background: linear-gradient(
-              135deg,
-              var(--accent),
-              var(--accent-hover)
-            );
-            border: var(--border-width) var(--control-border-style)
-              var(--accent);
-            border-radius: var(--radius-round);
-            cursor: pointer;
-            transition:
-              transform 0.2s ease,
-              box-shadow 0.2s ease,
-              filter 0.2s ease;
-            box-shadow: 0 14px 34px var(--shadow);
-
-            &:hover {
-              transform: translateY(-2px);
-              box-shadow: 0 18px 42px var(--shadow-strong);
-            }
-            &:focus-visible {
-              outline: 3px solid var(--focus-ring);
-              outline-offset: 4px;
-              box-shadow:
-                0 0 0 1px var(--bg-elevated),
-                0 0 0 6px var(--focus-ring),
-                0 18px 42px var(--shadow-strong);
-            }
-            &:active {
-              transform: translateY(0);
-            }
-            &:disabled {
-              cursor: not-allowed;
-              opacity: 0.64;
-              filter: grayscale(0.18);
-            }
-            &:disabled:hover {
-              transform: none;
-              box-shadow: 0 14px 34px var(--shadow);
-            }
-            @media (prefers-reduced-motion: reduce) {
-              transition: none;
-              &:hover,
-              &:active {
-                transform: none;
-              }
-            }
-          `}
-        >
-          Open Folder
-        </button>
+          describedBy={emptyStateDescriptionIds}
+          css="min-width: 152px;"
+        />
       </div>
     </div>
   )

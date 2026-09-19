@@ -178,7 +178,7 @@ export const blueprintDetailsCss = `
       color: var(--text-primary);
       -webkit-backdrop-filter: blur(8px);
       backdrop-filter: blur(8px);
-      .lightbox-control-layer {
+      .lightbox-control-layer:not([data-ui]) {
         background: var(--blueprint-viewer-surface);
         border: 1px solid var(--border-strong);
         border-radius: 0; color: var(--text-primary);
@@ -186,16 +186,9 @@ export const blueprintDetailsCss = `
       }
     }
     &[data-theme-mode='light'] .gallery-lightbox {
-      --overlay-control: #234f9b0c;
-      --overlay-control-hover: #234f9b20;
       --image-overlay: var(--blueprint-viewer-surface);
-      .lightbox-toolbar > span,
-      .lightbox-toolbar button,
-      .slideshow-controls button {
+      .lightbox-toolbar > span {
         color: var(--text-primary);
-      }
-      .slideshow-controls button[aria-pressed='true'] {
-        color: var(--accent-contrast);
       }
     }
     @media (max-width: 1200px) {
@@ -238,7 +231,7 @@ export const blueprintDetailsCss = `
         -webkit-backdrop-filter: none;
         backdrop-filter: none;
       }
-      .gallery-lightbox .lightbox-control-layer { background: var(--bg-secondary); }
+      .gallery-lightbox .lightbox-control-layer:not([data-ui]) { background: var(--bg-secondary); }
     }
     @media (prefers-reduced-motion: reduce) {
       &, *, *::before, *::after { transition: none; }

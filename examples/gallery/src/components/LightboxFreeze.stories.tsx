@@ -2,9 +2,7 @@ import { context, effect } from '@reatom/core'
 import type { Meta, StoryObj } from '@storybook/html'
 import { expect } from 'storybook/test'
 
-import {
-  buildPersonalFixtureFolderTree,
-} from '../__fixtures__/fixtureLoader'
+import { buildPersonalFixtureFolderTree } from '../__fixtures__/fixtureLoader'
 import { currentImages, openLightbox } from '../model'
 import { viewportSize } from '../models/viewport'
 import { StoryWrapper } from '../shared/StoryWrapper'
@@ -51,11 +49,11 @@ export default meta
 type Story = StoryObj
 
 /**
- * Minimal reproduction of the tab freeze: `viewportSize` returns a fresh
- * object identity from `getState` on every read, so two reactive subscribers
- * invalidate each other forever. The lightbox subscribes it several times
- * (one `displayTargetSize` per windowed image plus the debouncer effect),
- * which is why opening any image froze the tab.
+ * Minimal reproduction of the tab freeze: `viewportSize` returns a fresh object
+ * identity from `getState` on every read, so two reactive subscribers
+ * invalidate each other forever. The lightbox subscribes it several times (one
+ * `displayTargetSize` per windowed image plus the debouncer effect), which is
+ * why opening any image froze the tab.
  */
 export const ViewportSizeSubscribersSettle: Story = {
   render: () => {
@@ -90,8 +88,8 @@ export const ViewportSizeSubscribersSettle: Story = {
 
 /**
  * End-to-end angle: open the lightbox on a real photo and make sure the main
- * thread stays responsive while the sized-image pipeline reacts to the
- * display target. Times out if the reactive loop freezes the tab.
+ * thread stays responsive while the sized-image pipeline reacts to the display
+ * target. Times out if the reactive loop freezes the tab.
  */
 export const OpenImageKeepsMainThreadResponsive: Story = {
   loaders: [loadPersonalTree],

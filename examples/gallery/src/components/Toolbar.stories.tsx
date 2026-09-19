@@ -17,7 +17,8 @@ const loc = {
   openButtonAppears: (canvas) => canvas.findByRole('button', { name: /Open/i }),
   resetButtonAppears: (canvas) =>
     canvas.findByRole('button', { name: /^Reset$/ }),
-  maybeResetButton: (canvas) => canvas.queryByRole('button', { name: /^Reset$/ }),
+  maybeResetButton: (canvas) =>
+    canvas.queryByRole('button', { name: /^Reset$/ }),
   searchInputAppears: (canvas) =>
     canvas.findByPlaceholderText('Search images...'),
   listViewButtonAppears: (canvas) =>

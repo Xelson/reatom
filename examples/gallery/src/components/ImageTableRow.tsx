@@ -1,4 +1,5 @@
 import { focusableRowAttrs } from '../a11y'
+import { ChoiceButton, IconButton } from '../design-system'
 import { formatExifDisplayValue } from '../image-engine/exifDisplay'
 import { resolveImageOrientationStyle } from '../image-engine/orientation'
 import type { ImageModel } from '../model'
@@ -88,39 +89,19 @@ export const ImageTableRow = ({
           vertical-align: middle;
         `}
       >
-        <button
-          on:click={(e: Event) => {
-            e.stopPropagation()
-            selectImage(image)
-          }}
-          role="checkbox"
-          aria-checked={isSelected}
-          aria-label={() =>
+        <ChoiceButton
+          label={() =>
             isSelected() ? `Deselect ${image.name}` : `Select ${image.name}`
           }
-          type="button"
-          css={`
-            width: 24px;
-            height: 24px;
-            border-radius: var(--radius-sm);
-            border: var(--border-width) var(--control-border-style)
-              var(--input-border);
-            background: var(--input-bg);
-            color: var(--accent-contrast);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-inline: auto;
-
-            &[aria-checked='true'] {
-              background: var(--accent);
-              border-color: var(--accent);
-            }
-          `}
+          selected={isSelected}
+          selection="checked"
+          stopPropagation
+          onClick={() => selectImage(image)}
+          size="icon"
+          css="width: 24px; height: 24px; margin-inline: auto;"
         >
           {() => (isSelected() ? <CheckIcon /> : null)}
-        </button>
+        </ChoiceButton>
       </td>
       <td css={tableCellCss}>
         <div
@@ -185,42 +166,19 @@ export const ImageTableRow = ({
         </td>
       ))}
       <td css={tableCellCss}>
-        <button
-          on:click={(e: Event) => {
-            e.stopPropagation()
-            image.favorite.toggle()
-          }}
-          aria-pressed={isFavorite}
-          aria-label={() =>
+        <IconButton
+          label={() =>
             isFavorite()
               ? `Remove ${image.name} from favorites`
               : `Add ${image.name} to favorites`
           }
-          type="button"
-          css={`
-            width: 30px;
-            height: 30px;
-            border-radius: var(--radius-round);
-            border: var(--border-width) var(--control-border-style) transparent;
-            background: var(--input-bg);
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            &[aria-pressed='true'] {
-              color: var(--accent);
-              box-shadow: var(--glow);
-            }
-            &:hover {
-              background: var(--hover-bg);
-              color: var(--text-primary);
-            }
-          `}
+          selected={isFavorite}
+          stopPropagation
+          onClick={() => image.favorite.toggle()}
+          css="width: 30px; height: 30px;"
         >
           {() => <HeartIcon filled={isFavorite()} />}
-        </button>
+        </IconButton>
       </td>
     </tr>
   )

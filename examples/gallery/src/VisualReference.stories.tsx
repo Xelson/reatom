@@ -122,9 +122,7 @@ export const GalleryGridReference: Story = {
   },
 }
 
-/**
- * Reference render of the lightbox on a real photo at full resolution.
- */
+/** Reference render of the lightbox on a real photo at full resolution. */
 export const LightboxReference: Story = {
   loaders: [loadPersonalTree],
   render: () => {

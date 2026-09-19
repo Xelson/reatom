@@ -1,3 +1,4 @@
+import { IconButton } from '../design-system'
 import {
   imageInfoPanelExpanded,
   imageInfoPanelOpen,
@@ -37,30 +38,6 @@ const panelHeaderCss = `
   padding-right: 40px;
 `
 
-const panelCloseButtonCss = `
-  position: sticky;
-  top: 12px;
-  z-index: 1;
-  margin: 0 0 -28px auto;
-  width: 28px;
-  height: 28px;
-  border: var(--border-width) var(--control-border-style) transparent;
-  border-radius: var(--radius-sm);
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s;
-  cursor: pointer;
-
-  &:hover {
-    background: var(--accent);
-    color: var(--accent-contrast);
-  }
-`
-
 export const ImageInfoPanel = () => (
   <div css="position: fixed; right: 0; top: 0; bottom: 0; z-index: 1050; pointer-events: none;">
     <aside
@@ -98,15 +75,13 @@ export const ImageInfoPanel = () => (
         }
       `}
     >
-      <button
-        type="button"
-        on:click={() => imageInfoPanelOpen.set(false)}
-        css={panelCloseButtonCss}
-        title="Close details"
-        aria-label="Close details"
+      <IconButton
+        label="Close details"
+        onClick={() => imageInfoPanelOpen.set(false)}
+        css="position: sticky; top: 12px; z-index: 1; margin: 0 0 -28px auto;"
       >
         <CloseIcon />
-      </button>
+      </IconButton>
 
       <div css={panelHeaderCss}>
         <div>

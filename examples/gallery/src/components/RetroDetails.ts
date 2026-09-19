@@ -74,34 +74,9 @@ export const retroDetailsCss = `
       color: #fff;
       box-shadow: inset 1px 1px #e2f2d9, 1px 1px var(--retro-edge);
     }
-    .gallery-toolbar button, .gallery-pathbar button,
-    aside[role='dialog'] button {
-      color: var(--retro-ink);
-      background: var(--retro-face);
-      background-image: none;
-      border: 1px solid var(--retro-edge);
-      border-radius: 0;
-      box-shadow: var(--retro-raised);
-      text-transform: none;
+    .gallery-toolbar [data-ui='button'], .gallery-pathbar [data-ui='button'] {
       font-size: 12px;
       font-weight: 400;
-      transition: none;
-    }
-    .gallery-toolbar button:hover, .gallery-pathbar button:hover,
-    aside[role='dialog'] button:hover { outline: 1px dotted var(--retro-muted); outline-offset: -5px; }
-    .gallery-toolbar button:active, .gallery-pathbar button:active,
-    aside[role='dialog'] button:active,
-    .gallery-toolbar button[aria-pressed='true'],
-    .gallery-toolbar button[aria-checked='true'] {
-      box-shadow: var(--retro-inset);
-      background: var(--retro-paper);
-      transform: none;
-    }
-    .gallery-pathbar button[data-active='true'],
-    aside[role='dialog'] button[aria-pressed='true'] {
-      background: #234e7a;
-      color: #fff;
-      box-shadow: var(--retro-inset);
     }
     &[data-theme-mode='dark'] .gallery-pathbar { --accent: #bdd9ee; }
     .gallery-toolbar input {
@@ -211,14 +186,8 @@ export const retroDetailsCss = `
       box-shadow: var(--retro-raised), 3px 4px 0 #15343466;
     }
     .glass-card .glass-overlay-control {
-      border: 1px solid var(--retro-edge);
       border-radius: 0;
-      background: var(--retro-face);
-      color: var(--retro-ink);
-      box-shadow: var(--retro-raised);
     }
-    .glass-card .glass-overlay-control[aria-checked='true'],
-    .glass-card .glass-overlay-control[aria-pressed='true'] { background: #234e7a; color: #fff; }
     aside[role='dialog'] {
       border: 2px solid var(--retro-edge);
       box-shadow: var(--retro-raised), -4px 0 0 #0003;
@@ -231,26 +200,9 @@ export const retroDetailsCss = `
       letter-spacing: 0;
     }
     .gallery-folder-toggle {
-      background: var(--retro-face);
-      color: var(--retro-ink);
-      border: 1px solid var(--retro-edge);
-      border-radius: 0;
-      box-shadow: var(--retro-raised);
-      backdrop-filter: none;
       transform: translateX(-50%);
       transition: left .3s ease;
     }
-    .gallery-folder-toggle:hover {
-      background: var(--retro-face);
-      color: var(--retro-ink);
-      border-color: var(--retro-edge);
-      box-shadow: var(--retro-raised);
-      transform: translateX(-50%);
-      outline: 1px dotted var(--retro-ink);
-      outline-offset: -5px;
-    }
-    .gallery-folder-toggle:active { box-shadow: var(--retro-inset); }
-    .gallery-folder-toggle:active svg { transform: translate(1px, 1px); }
     .glass-card:not([data-gap='none']) {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
@@ -268,39 +220,7 @@ export const retroDetailsCss = `
     }
     .glass-card:focus-within .grid-image-overlay { opacity: 1; }
     &[data-theme-mode='light'] {
-      .gallery-toolbar button, .gallery-pathbar button,
-      aside[role='dialog'] button, .glass-overlay-control {
-        transition: none;
-        border-radius: 0;
-      }
-      .gallery-toolbar button:hover, .gallery-pathbar button:hover,
-      aside[role='dialog'] button:hover, .glass-overlay-control:hover {
-        background: var(--retro-face);
-        color: var(--retro-ink);
-        border-color: var(--retro-edge);
-        transform: none;
-        box-shadow: var(--retro-raised);
-      }
-      .gallery-toolbar button[aria-pressed='true'],
-      .gallery-toolbar button[aria-checked='true'],
-      .gallery-pathbar button[data-active='true'],
-      aside[role='dialog'] button[aria-pressed='true'],
-      .glass-overlay-control[aria-checked='true'],
-      .glass-overlay-control[aria-pressed='true'] {
-        background: var(--retro-paper);
-        color: var(--retro-ink);
-        box-shadow: var(--retro-inset);
-        outline: 1px dotted var(--retro-muted);
-        outline-offset: -4px;
-      }
-      .gallery-toolbar button:active, .gallery-pathbar button:active,
-      aside[role='dialog'] button:active, .glass-overlay-control:active {
-        background: var(--retro-face);
-        box-shadow: var(--retro-inset);
-        transform: none;
-      }
-      button:active > svg { transform: translate(1px, 1px); }
-      button:focus-visible, [role='treeitem']:focus-visible {
+      [role='treeitem']:focus-visible {
         outline: 1px dotted #252723;
         outline-offset: -4px;
       }
@@ -317,31 +237,6 @@ export const retroDetailsCss = `
         gap: 8px;
       }
       aside[role='dialog'] h2 { background: transparent; margin: 0; padding: 3px 6px; }
-      aside[role='dialog'] button[role='switch'] {
-        --toggle-width: 18px;
-        --toggle-height: 18px;
-        width: 18px; height: 18px;
-        border: 1px solid var(--retro-edge);
-        background: var(--retro-paper);
-        box-shadow: var(--retro-inset);
-        outline: none;
-      }
-      aside[role='dialog'] button[role='switch']::after {
-        content: '';
-        inset: 3px auto auto 5px;
-        width: 5px; height: 9px;
-        border: solid #252723;
-        border-width: 0 2px 2px 0;
-        background: none;
-        border-radius: 0;
-        box-shadow: none;
-        transform: rotate(45deg);
-        opacity: 0;
-        transition: none;
-      }
-      aside[role='dialog'] button[role='switch'][aria-checked='true']::after { opacity: 1; }
-      aside[role='dialog'] button[role='switch']:active { background: var(--retro-face); }
-      aside[role='dialog'] button[role='switch']:focus-visible { outline: 1px dotted #252723; outline-offset: 3px; }
       aside[role='dialog'] input[type='range'] {
         appearance: none;
         height: 5px;
@@ -394,27 +289,8 @@ export const retroDetailsCss = `
         color: #00ffff;
         box-shadow: none;
       }
-      .gallery-toolbar button, .gallery-pathbar button,
-      aside[role='dialog'] button {
-        background: #008080;
-        color: #fff;
-        border: 1px solid transparent;
-        box-shadow: none;
+      .gallery-toolbar [data-ui='button'], .gallery-pathbar [data-ui='button'] {
         font-family: var(--far-font);
-      }
-      .gallery-toolbar button:hover, .gallery-pathbar button:hover,
-      aside[role='dialog'] button:hover {
-        outline: 1px dotted #00ffff;
-        outline-offset: -3px;
-      }
-      .gallery-toolbar button[aria-checked='true'],
-      .gallery-toolbar button[aria-pressed='true'],
-      .gallery-pathbar button[data-active='true'],
-      aside[role='dialog'] button[aria-pressed='true'] {
-        background: #00aaaa;
-        color: #000;
-        border-color: #00ffff;
-        box-shadow: none;
       }
       .gallery-toolbar input {
         color: #ffff55;
@@ -492,7 +368,7 @@ export const retroDetailsCss = `
       .glass-card[data-selected='true'] { outline: 1px solid #ffff55; }
       .glass-card[data-selected='true'] .grid-image-caption { background: #008080; }
       .glass-card[data-selected='true'] .grid-image-caption > div { color: #ffff55; }
-      .glass-card .glass-overlay-control { background: #008080; color: #fff; box-shadow: none; }
+      .glass-card .glass-overlay-control { border-radius: 0; }
       aside[role='dialog'] {
         background: #008080;
         color: #fff;
@@ -518,39 +394,6 @@ export const retroDetailsCss = `
         box-shadow: none;
       }
       .gallery-folder-toggle:active { background: #00aaaa; color: #000080; }
-      aside[role='dialog'] button[role='switch'] {
-        width: 36px; height: 24px;
-        padding: 0;
-        border: 1px solid transparent;
-        border-radius: 0;
-        background: transparent;
-        color: #fff;
-        box-shadow: none;
-        font: 16px/22px var(--far-font);
-        transition: none;
-      }
-      aside[role='dialog'] button[role='switch']::after {
-        content: '[ ]';
-        position: static;
-        display: block;
-        width: auto; height: auto;
-        border: 0;
-        border-radius: 0;
-        background: none;
-        color: inherit;
-        box-shadow: none;
-        transform: none;
-        transition: none;
-        white-space: pre;
-      }
-      aside[role='dialog'] button[role='switch'][aria-checked='true']::after { content: '[×]'; }
-      aside[role='dialog'] button[role='switch']:hover,
-      aside[role='dialog'] button[role='switch']:focus-visible {
-        color: #ffff55;
-        border-color: #00ffff;
-        outline: none;
-      }
-      aside[role='dialog'] button[role='switch']:active { background: #00aaaa; color: #000080; }
       .gallery-lightbox {
         background: #000080;
         .lightbox-toolbar {
@@ -559,18 +402,8 @@ export const retroDetailsCss = `
           box-shadow: none;
         }
         .lightbox-toolbar > span { color: #ffff55; font: 14px var(--far-font); }
-        .lightbox-toolbar button, > button.lightbox-control-layer,
-        .slideshow-controls button {
-          background: #008080;
-          color: #fff;
-          border: 1px solid #00aaaa;
-          box-shadow: none;
-          font-family: var(--far-font);
-        }
         .lightbox-photo-print { box-shadow: 0 0 0 1px #00ffff, 0 0 0 3px #000080, 0 0 0 4px #00aaaa; }
         .lightbox-filmstrip { background: #000080; border-top: 3px double #00aaaa; }
-        .lightbox-filmstrip button { border: 1px solid #00aaaa; }
-        .lightbox-filmstrip button[data-active='true'] { outline: 1px solid #ffff55; }
         .slideshow-controls, > label.lightbox-control-layer {
           background: #008080;
           color: #fff;
@@ -578,7 +411,6 @@ export const retroDetailsCss = `
           box-shadow: none;
           font-family: var(--far-font);
         }
-        .slideshow-controls button[aria-pressed='true'] { background: #00aaaa; color: #000; box-shadow: none; }
       }
     }
     @media (max-width: 600px) {

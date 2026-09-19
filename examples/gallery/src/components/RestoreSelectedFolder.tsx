@@ -1,5 +1,6 @@
 import { isAbort, wrap } from '@reatom/core'
 
+import { Button } from '../design-system'
 import {
   folderTree,
   openFolder,
@@ -69,25 +70,11 @@ export const RestoreSelectedFolder = () => (
           >
             Restore your previous folder?
           </span>
-          <button
-            type="button"
-            on:click={() => requestFolderRestore()}
-            css={`
-              flex-shrink: 0;
-              min-height: 36px;
-              padding: 8px 14px;
-              font-size: 14px;
-              font-weight: 650;
-              color: var(--accent-contrast);
-              background: var(--accent);
-              border: var(--border-width) var(--control-border-style)
-                var(--accent);
-              border-radius: var(--radius-round);
-              cursor: pointer;
-            `}
-          >
-            Restore folder
-          </button>
+          <Button
+            label="Restore folder"
+            onClick={() => requestFolderRestore()}
+            css="flex-shrink: 0;"
+          />
         </div>
       )
     }}

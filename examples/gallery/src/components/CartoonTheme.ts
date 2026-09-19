@@ -1,5 +1,5 @@
 import bangersFont from '../assets/Bangers-Regular.ttf?url'
-import type { ThemeVariables } from '../theme'
+import type { ThemeVariables } from '../design-system/themeTypes'
 import type { ResolvedThemeMode } from '../types'
 
 // Bundled with its OFL license so the comic lettering also works offline.
@@ -13,7 +13,7 @@ export const cartoonFontCss = `
   }
 `
 
-const common: ThemeVariables = {
+const common = {
   '--font-ui': '"Gallery Bangers", "Impact", sans-serif',
   '--accent': 'var(--text-primary)',
   '--accent-hover': 'var(--text-secondary)',
@@ -44,6 +44,10 @@ const common: ThemeVariables = {
   '--overlay-bg': '#101010f5',
   '--overlay-control': '#333333',
   '--overlay-control-hover': '#555555',
+  '--viewer-fg': '#ffffff',
+  '--viewer-bg': 'var(--overlay-control)',
+  '--viewer-bg-hover': 'var(--overlay-control-hover)',
+  '--viewer-border': 'rgba(255, 255, 255, 0.12)',
   '--image-overlay': '#00000000',
   '--app-bg-image': 'none',
   '--surface-bg-image': 'none',
@@ -100,9 +104,9 @@ export const cartoonDetailsCss = `
     padding: 6px;
     gap: 12px;
 
-    button, input, h2, .gallery-brand { font-weight: 400; }
-    button, input, select, textarea { font-family: var(--font-ui); }
-    button:focus-visible, input:focus-visible, [tabindex='0']:focus-visible {
+    input, h2, .gallery-brand { font-weight: 400; }
+    input, select, textarea { font-family: var(--font-ui); }
+    input:focus-visible, [tabindex='0']:focus-visible {
       outline: 2px dashed var(--text-primary);
       outline-offset: 4px;
     }
@@ -126,19 +130,10 @@ export const cartoonDetailsCss = `
       height: 30px;
     }
     .gallery-brand svg { width: 25px; height: 25px; }
-    .gallery-toolbar button, .gallery-pathbar button {
-      background: transparent;
-      color: var(--text-primary);
-      border-color: transparent;
-      box-shadow: none;
+    .gallery-toolbar [data-ui='button'], .gallery-pathbar [data-ui='button'] {
       font-size: 17px;
       letter-spacing: .025em;
       padding: 6px 9px;
-    }
-    .gallery-toolbar button:hover, .gallery-pathbar button:hover {
-      background: var(--hover-bg);
-      border-color: var(--text-primary);
-      transform: none;
     }
     .gallery-toolbar [role='group'] {
       border: 3px solid var(--text-primary);
@@ -147,22 +142,16 @@ export const cartoonDetailsCss = `
       gap: 2px;
       box-shadow: 2px 3px 0 var(--text-primary);
     }
-    .gallery-toolbar [role='group'] button {
+    .gallery-toolbar [role='group'] [data-ui='button'] {
       border-radius: 50%;
       width: 34px;
       height: 34px;
       padding: 6px;
     }
-    .gallery-toolbar button[aria-label] { padding: 5px; }
-    .gallery-toolbar > div:last-child button { width: 36px; height: 36px; font-size: 22px; }
+    .gallery-toolbar > div:last-child [data-ui='button'] { width: 36px; height: 36px; font-size: 22px; }
     .gallery-pathbar nav { font-size: 21px; }
     .gallery-pathbar nav span { font-size: inherit; font-weight: 400; }
-    .gallery-toolbar button[aria-pressed='true'],
-    .gallery-pathbar button[data-active='true'] {
-      border-color: var(--text-primary);
-      background: var(--bg-secondary);
-      box-shadow: 1px 2px 0 var(--text-primary);
-    }
+    .gallery-pathbar [data-ui='button'] { font-size: 16px; padding: 4px 8px; border-radius: 22px; }
     .gallery-toolbar input {
       width: 210px;
       font-family: Arial, sans-serif;
@@ -200,7 +189,6 @@ export const cartoonDetailsCss = `
       gap: 6px;
       font-size: 21px;
     }
-    .gallery-pathbar button { font-size: 16px; padding: 4px 8px; border-radius: 22px; }
     main { background: transparent; padding: 4px 10px 18px; }
     .gallery-folder-sidebar {
       position: relative;
@@ -256,28 +244,19 @@ export const cartoonDetailsCss = `
     }
     .grid-image-caption > div + div { font-size: 15px; color: #111; }
     .glass-overlay-control {
-      border: 2px solid #111;
-      background: white;
-      color: #111;
-      box-shadow: 2px 2px 0 #111;
+      border-radius: 0;
     }
-    .glass-overlay-control[aria-checked='true'],
-    .glass-overlay-control[aria-pressed='true'] { background: #111; color: white; }
     aside[role='dialog'] {
       border-left: 4px solid var(--text-primary);
       box-shadow: -6px 0 0 #000;
       max-width: 100vw;
       h2 { font-size: 26px; letter-spacing: .035em; }
+      h3 { margin-top: 22px; margin-bottom: 12px; }
+      [data-ui='button'][data-ui-role='choice'] { padding: 10px 14px; }
+      label:has([data-ui='switch']) { padding: 14px 2px; }
     }
     .gallery-lightbox {
-      .lightbox-toolbar button, > button.lightbox-control-layer {
-        color: #111;
-        background: #fff;
-        border: 2px solid #111;
-        box-shadow: 2px 3px 0 #000;
-      }
       .lightbox-toolbar > span { font-size: 20px; }
-      .lightbox-filmstrip button[data-active='true'] { border-color: white; }
     }
     @media (max-width: 700px) {
       padding: 4px;

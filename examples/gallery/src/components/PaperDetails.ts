@@ -24,9 +24,8 @@ export const paperDetailsCss = `
       border-radius: 50%;
       box-shadow: none;
     }
-    .gallery-toolbar button, .gallery-toolbar input,
-    .gallery-pathbar button, aside[role='dialog'] button { box-shadow: none; }
-    .gallery-toolbar button { font-size: 12px; font-weight: 700; }
+    .gallery-toolbar input { box-shadow: none; }
+    .gallery-toolbar [data-ui='button'] { font-size: 12px; font-weight: 700; }
     .gallery-toolbar input { border-radius: 24px; }
     .gallery-pathbar {
       min-height: 48px;
@@ -117,16 +116,6 @@ export const paperDetailsCss = `
     }
     .glass-card .glass-overlay-control {
       border-radius: 50%;
-      background: var(--panel-bg);
-      color: var(--text-primary);
-      border: 1px solid var(--border);
-      box-shadow: none;
-    }
-    .glass-card .glass-overlay-control[aria-pressed='true'],
-    .glass-card .glass-overlay-control[aria-checked='true'] {
-      background: var(--paper-blush);
-      color: #17232d;
-      border-color: var(--paper-blush);
     }
     aside[role='dialog'] { box-shadow: -12px 0 40px var(--shadow); }
     aside[role='dialog'] h2 { font-weight: 800; letter-spacing: -.04em; }
@@ -134,18 +123,9 @@ export const paperDetailsCss = `
       background: #161a1d;
       .lightbox-toolbar { background: transparent; }
       .lightbox-toolbar > span { font-family: var(--font-ui); font-weight: 700; }
-      .lightbox-toolbar button, > button.lightbox-control-layer {
-        background: #f7f7f2;
-        color: #17232d;
-        border: 0;
-        border-radius: 50%;
-        box-shadow: none;
-      }
       .lightbox-filmstrip { background: #161a1d; }
-      .lightbox-filmstrip button[data-active='true'] { border-color: var(--paper-blush); box-shadow: none; }
       .slideshow-controls { bottom: 82px; box-shadow: none; }
       > label.lightbox-control-layer { bottom: 82px; box-shadow: none; }
-      .slideshow-controls button[aria-pressed='true'] { background: var(--paper-blush); color: #17232d; }
       @media (max-width: 1000px) { > label.lightbox-control-layer { bottom: 138px; } }
     }
     @media (max-width: 600px) {

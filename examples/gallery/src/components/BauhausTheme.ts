@@ -4,8 +4,7 @@ export const bauhausCss = `
     --bauhaus-blue: #254bbc;
     --bauhaus-yellow: #e8bb35;
     --bauhaus-red: #c63c2b;
-    button, button:hover { box-shadow: none; }
-    button:focus-visible, input:focus-visible {
+    input:focus-visible {
       outline: 2px solid var(--text-primary);
       outline-offset: 3px;
     }
@@ -30,22 +29,17 @@ export const bauhausCss = `
       box-shadow: none;
     }
     .gallery-brand svg { display: none; }
-    .gallery-toolbar button {
+    .gallery-toolbar [data-ui='button'] {
       min-height: 36px;
       font-size: 11px;
       letter-spacing: 0.08em;
       font-weight: 700;
     }
-    .gallery-toolbar button:has(svg) { font-size: 17px; min-width: 36px; }
+    .gallery-toolbar [data-ui='button']:has(svg) { font-size: 17px; min-width: 36px; }
     .gallery-toolbar input {
       min-height: 36px;
       background: transparent;
       border-color: var(--border);
-    }
-    .gallery-toolbar [aria-pressed='true'] {
-      background: var(--text-primary);
-      border-color: var(--text-primary);
-      color: var(--bg-primary);
     }
     main { padding: 24px 28px; background: var(--bg-primary); }
     .gallery-empty {
@@ -103,15 +97,11 @@ export const bauhausCss = `
       min-height: 50px;
       margin-top: 8px;
       padding: 15px 20px;
-      background: var(--accent);
-      border-color: var(--accent);
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      box-shadow: none;
     }
     .gallery-empty button::after { content: '↗'; font-size: 22px; line-height: 16px; }
-    .gallery-empty button:hover { background: var(--accent-hover); transform: none; }
     .gallery-empty .bauhaus-art {
       display: block;
       position: absolute;
@@ -202,12 +192,6 @@ export const bauhausCss = `
       background: var(--bg-primary);
     }
     .gallery-brand:hover > span { transform: rotate(90deg); }
-    .gallery-toolbar button:not([aria-pressed='true']):not(:disabled):hover {
-      background: var(--bauhaus-yellow);
-      color: #20211f;
-      border-color: #20211f;
-    }
-    .gallery-toolbar button:active { transform: translateY(2px); }
     .gallery-folder-sidebar { display: flex; flex-direction: column; }
     .bauhaus-sidebar-print {
       display: flex;
@@ -269,15 +253,6 @@ export const bauhausCss = `
     .glass-card[data-selected='true'] .grid-image-overlay { opacity: 1; }
     .glass-card .glass-overlay-control {
       width: 28px; height: 28px;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      border-color: var(--text-primary);
-    }
-    .glass-card .glass-overlay-control[aria-pressed='true'] {
-      background: var(--bauhaus-yellow); color: #20211f; border-radius: 50%;
-    }
-    .glass-card .glass-overlay-control[aria-checked='true'] {
-      background: var(--bauhaus-blue); color: white; border-color: var(--bauhaus-blue);
     }
     .bauhaus-art > span:not(.bauhaus-art-caption) { transition: transform 450ms cubic-bezier(.2,.8,.2,1); }
     .bauhaus-art:hover .bauhaus-circle { transform: translate(8px, -6px); }

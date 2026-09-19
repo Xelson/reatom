@@ -35,7 +35,8 @@ export const lightboxImageFrameSize = computed(() => {
 
   const ratio = width / height
   const viewportWidth = 'max(1px, calc(100vw - 160px))'
-  const viewportHeight = 'max(1px, calc(100vh - var(--lightbox-vertical-chrome, 180px)))'
+  const viewportHeight =
+    'max(1px, calc(100vh - var(--lightbox-vertical-chrome, 180px)))'
 
   return {
     width: `min(${viewportWidth}, calc(${viewportHeight} * ${ratio}))`,

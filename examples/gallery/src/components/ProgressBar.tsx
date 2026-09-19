@@ -1,3 +1,4 @@
+import { Button } from '../design-system'
 import { openFolder, parsingProgress } from '../model'
 import { GalleryMarkIcon } from './Icons'
 
@@ -109,30 +110,11 @@ export const ProgressBar = () => {
         </div>
       </div>
 
-      <button
-        on:click={() => openFolder.abort()}
-        css={`
-          padding: 10px 24px;
-          font-size: 14px;
-          font-weight: 500;
-          color: var(--text-secondary);
-          background: var(--input-bg);
-          border: var(--border-width) var(--control-border-style)
-            var(--input-border);
-          border-radius: var(--radius-round);
-          cursor: pointer;
-          transition: all 0.15s ease;
-          text-transform: var(--control-transform);
-
-          &:hover {
-            color: var(--accent);
-            border-color: var(--accent);
-            background: var(--accent-soft);
-          }
-        `}
-      >
-        Cancel
-      </button>
+      <Button
+        appearance="quiet"
+        label="Cancel"
+        onClick={() => openFolder.abort()}
+      />
     </div>
   )
 }

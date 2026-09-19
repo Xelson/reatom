@@ -24,7 +24,7 @@ export const obsidianCss = `
     --obsidian-serif: 'Baskerville', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
     .gallery-workspace { min-height: 0; }
     button, input, select { border-radius: 2px; clip-path: none; }
-    button:focus-visible, input:focus-visible, [tabindex='0']:focus-visible {
+    input:focus-visible, [tabindex='0']:focus-visible {
       outline: 2px solid var(--accent); outline-offset: 3px;
     }
     .gallery-toolbar {
@@ -43,15 +43,10 @@ export const obsidianCss = `
       box-shadow: none;
     }
     .gallery-brand svg { display: none; }
-    .gallery-toolbar button, .gallery-toolbar input {
+    .gallery-toolbar [data-ui='button'], .gallery-toolbar input {
       min-height: 34px; font-size: 10px; font-weight: 500; letter-spacing: .08em;
     }
     .gallery-toolbar [aria-label='View mode'] { gap: 3px; background: var(--input-bg); padding: 3px; border: 1px solid var(--border); }
-    .gallery-toolbar [aria-pressed='true'] { background: var(--active-bg); color: var(--accent); border-color: var(--border-strong); }
-    .gallery-toolbar button:not(:disabled):hover {
-      background: var(--hover-bg); color: var(--text-primary); border-color: var(--accent);
-      box-shadow: 0 0 14px #a99ac217; transform: none;
-    }
     .gallery-folder-sidebar {
       background: linear-gradient(170deg, #9f8fb00a, transparent 42%), var(--panel-bg);
       border-right: 1px solid var(--border); box-shadow: 8px 0 30px #00000014;
@@ -104,19 +99,16 @@ export const obsidianCss = `
     }
     .glass-card:not([data-gap='none']):is(:hover, :focus-within) { border-color: var(--accent); box-shadow: 0 10px 28px #00000040, inset 0 0 12px #bcaed90b; }
     .glass-card:is(:focus-within, [data-selected='true']) .grid-image-overlay { opacity: 1; }
-    .glass-overlay-control { background: #101017db; color: #ded7e8; border: 1px solid #82758d; border-radius: 2px; box-shadow: none; width: 28px; height: 28px; }
-    .glass-overlay-control:is([aria-checked='true'], [aria-pressed='true']) { background: #c6bfd8; color: #131019; border-color: #e4e0e9; }
+    .glass-overlay-control { border-radius: 2px; width: 28px; height: 28px; }
     aside[role='dialog'] { border-left: 1px solid var(--border-strong); box-shadow: -20px 0 50px #00000040; }
     aside[role='dialog'] h2 { font: 38px var(--obsidian-serif); letter-spacing: -.02em; }
     aside[role='dialog'] h3 { border-top: 1px solid var(--border); padding-top: 20px; font-size: 10px; font-weight: 500; letter-spacing: .16em; }
-    aside[role='dialog'] button { box-shadow: none; }
-    aside[role='dialog'] button[data-active='true'] { border-color: var(--accent); box-shadow: inset 0 0 16px #ae9ac414; }
+    aside[role='dialog'] [data-ui='button'][data-ui-role='choice'] { padding: 10px 16px; }
     input[type='range'] { accent-color: var(--accent); }
     .gallery-lightbox { background: #08090df7; }
-    .gallery-lightbox .lightbox-control-layer { border-radius: 2px; backdrop-filter: none; box-shadow: none; }
+    .gallery-lightbox .lightbox-control-layer:not([data-ui]) { border-radius: 2px; backdrop-filter: none; box-shadow: none; }
     .gallery-lightbox .lightbox-toolbar { background: #101117ef; border-bottom: 1px solid #47404f; }
     .gallery-lightbox .lightbox-filmstrip { background: #101117ef; border-top: 1px solid #47404f; }
-    .gallery-lightbox .lightbox-filmstrip button[data-active='true'] { border-color: #c6bfd8; }
     .gallery-empty { min-height: 500px; padding: 28px; }
     .gallery-empty::before, .gallery-empty::after { display: none; }
     .gallery-empty [role='region'] {
@@ -133,7 +125,7 @@ export const obsidianCss = `
     .empty-gallery-mark svg { opacity: 0; }
     #empty-gallery-title { font: 400 clamp(36px, 4vw, 58px)/1.05 var(--obsidian-serif); letter-spacing: -.025em; max-width: 540px; }
     #empty-gallery-description { max-width: 400px; line-height: 1.7; font-size: 13px; }
-    .gallery-empty button { padding: 14px 26px; font-size: 10px; letter-spacing: .12em; box-shadow: none; }
+    .gallery-empty button { padding: 14px 26px; font-size: 10px; letter-spacing: .12em; }
     .obsidian-footer {
       flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
       gap: 16px; padding: 12px 26px; background: var(--bg-secondary); color: var(--text-muted);

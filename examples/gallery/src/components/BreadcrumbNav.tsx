@@ -1,3 +1,4 @@
+import { Button } from '../design-system'
 import { currentFolder, folderBreadcrumbSegments } from '../model'
 
 export const BreadcrumbNav = () => (
@@ -37,29 +38,13 @@ export const BreadcrumbNav = () => (
               {folder.name}
             </span>
           ) : (
-            <button
-              type="button"
-              on:click={() => currentFolder.set(folder)}
-              css={`
-                background: none;
-                border: none;
-                color: var(--text-secondary);
-                cursor: pointer;
-                padding: 2px 4px;
-                border-radius: var(--radius-xs);
-                font-size: 13px;
-                text-transform: var(--control-transform);
-                transition:
-                  color 0.15s,
-                  background 0.15s;
-                &:hover {
-                  color: var(--text-primary);
-                  background: var(--hover-bg);
-                }
-              `}
-            >
-              {folder.name}
-            </button>
+            <Button
+              appearance="quiet"
+              label={folder.name}
+              onClick={() => currentFolder.set(folder)}
+              size="sm"
+              css="padding: 2px 4px; min-height: 24px;"
+            />
           ),
         )
       })

@@ -18,10 +18,13 @@ export const keyboardActivate = (action: () => void) => ({
   },
 })
 
-export const focusableCardAttrs = (label: string, action: () => void) => ({
+export const focusableCardAttrs = (
+  label: string | (() => string),
+  action: () => void,
+) => ({
   role: 'button' as const,
   tabindex: 0,
-  'aria-label': label,
+  'aria-label': typeof label === 'function' ? label : () => label,
   ...keyboardActivate(action),
 })
 

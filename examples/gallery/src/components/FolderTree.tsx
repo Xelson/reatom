@@ -1,4 +1,5 @@
 import { keyboardActivate } from '../a11y'
+import { IconButton } from '../design-system'
 import {
   currentFolder,
   folderTree,
@@ -243,63 +244,20 @@ export const FolderTree = () => (
       </div>
     </div>
 
-    <button
-      type="button"
+    <IconButton
       class="gallery-folder-toggle"
-      aria-expanded={folderTreeSidebarVisible}
-      aria-label={() =>
+      label={() =>
         folderTreeSidebarVisible() ? 'Hide folder tree' : 'Show folder tree'
       }
-      title={() =>
-        folderTreeSidebarVisible() ? 'Hide folder tree' : 'Show folder tree'
-      }
-      on:click={folderTreeSidebarVisible.toggle}
+      expanded={folderTreeSidebarVisible}
+      onClick={folderTreeSidebarVisible.toggle}
       css={`
         position: absolute;
         top: ${(folderHeaderRailHeight - folderToggleSize) / 2}px;
         z-index: 10;
         width: ${folderToggleSize}px;
         height: ${folderToggleSize}px;
-        display: grid;
-        place-items: center;
-        padding: 0;
-        background:
-          linear-gradient(135deg, var(--surface-strong), var(--panel-bg)),
-          var(--surface-bg-image);
-        background-size: auto, var(--surface-bg-size);
-        border: var(--border-width) var(--control-border-style)
-          var(--card-border);
-        color: var(--accent);
-        border-radius: var(--radius-round);
-        cursor: pointer;
-        font-size: 15px;
-        line-height: 1;
-        box-shadow:
-          var(--glow),
-          0 10px 24px var(--shadow);
-        backdrop-filter: var(--panel-backdrop-filter);
         transform: translateX(-50%);
-        transition:
-          left 0.3s ease,
-          background 0.2s,
-          border-color 0.2s,
-          color 0.2s,
-          box-shadow 0.2s,
-          transform 0.2s;
-        &:hover {
-          background: var(--bg-elevated);
-          border-color: var(--accent);
-          color: var(--accent-hover);
-          transform: translateX(-50%);
-          box-shadow: var(--card-hover-shadow);
-        }
-        &:focus-visible {
-          outline: 3px solid var(--focus-ring);
-          outline-offset: 2px;
-        }
-        svg {
-          display: block;
-        }
       `}
       style:left={() =>
         folderTreeSidebarVisible()
@@ -310,6 +268,6 @@ export const FolderTree = () => (
       {() =>
         folderTreeSidebarVisible() ? <ChevronLeftIcon /> : <ChevronRightIcon />
       }
-    </button>
+    </IconButton>
   </div>
 )

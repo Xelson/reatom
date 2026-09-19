@@ -1,3 +1,12 @@
+## Design system
+
+Gallery controls go through `src/design-system`. A new theme is a typed registry entry with complete resolved states for every control role, both modes, and both `app` and `viewer` surfaces.
+
+- Feature components supply actions, selected/checked values, labels, size, and layout. They do not set hover, press, selected-hover, or focus colors.
+- Theme decoration CSS may style paper, frames, halftone, glass materials, and other noninteractive chrome. It must not restyle `[data-ui]` control paint in any state, including rest. Layout (`width`, `height`, `padding`, position) may stay on the consumer `css` prop; the recipe uses `:where()` so those rules win.
+- Isolated stories wrap in `StoryWrapper`, which uses the same `ThemeRoot` as the app. Pass `pack` and `mode` for specimens so they do not mutate saved preferences.
+- Add control checks to the registry matrix rather than copying state CSS into a feature story.
+
 ## Testing
 
 ### Introduction

@@ -63,22 +63,17 @@ export const polaroidDetailsCss = `
       box-shadow: none;
       transform: rotate(-5deg);
     }
-    .gallery-toolbar button,
-    .gallery-toolbar input,
-    aside[role='dialog'] button {
+    .gallery-toolbar input {
       border-color: var(--input-border);
       border-radius: 2px;
       box-shadow: 0 2px 0 var(--shadow);
     }
-    .gallery-toolbar button {
+    .gallery-toolbar [data-ui='button'] {
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.08em;
-      text-transform: uppercase;
     }
-    .gallery-toolbar button:hover,
-    .gallery-toolbar input:focus,
-    aside[role='dialog'] button:hover { border-color: var(--polaroid-coral); }
+    .gallery-toolbar input:focus { border-color: var(--polaroid-coral); }
 
     .glass-card {
       border-color: var(--card-border);
@@ -159,18 +154,7 @@ export const polaroidDetailsCss = `
       letter-spacing: 0.04em;
     }
     .glass-card .glass-overlay-control {
-      border-color: rgba(255, 250, 242, 0.75);
-      background: rgba(49, 38, 28, 0.54);
-      box-shadow: 0 2px 5px var(--shadow);
-    }
-    .glass-card .glass-overlay-control[aria-pressed='true'] {
-      color: #fffaf2;
-      background: var(--polaroid-coral);
-      border-color: var(--polaroid-coral);
-    }
-    .glass-card .glass-overlay-control[aria-checked='true'] {
-      background: var(--polaroid-blue);
-      border-color: var(--polaroid-blue);
+      border-radius: 50%;
     }
 
     .gallery-folder-sidebar {

@@ -8,6 +8,7 @@ import {
   type PersonalFixtureEntry,
 } from '../__fixtures__/fixtureLoader'
 import { mockFolderTree } from '../__fixtures__/mockData'
+import { assertHoverChangesPaint } from '../design-system/testing/paint'
 import { currentImages, openLightbox } from '../model'
 import { StoryWrapper } from '../shared/StoryWrapper'
 import { createMyself, type Locator } from '../shared/test'
@@ -25,8 +26,7 @@ const loc = {
     canvas.findByRole('button', { name: 'Close preview' }),
   scrubberAppears: (canvas) =>
     canvas.findByRole('slider', { name: 'Folder position' }),
-  nextButton: (canvas) =>
-    canvas.findByRole('button', { name: 'Next image' }),
+  nextButton: (canvas) => canvas.findByRole('button', { name: 'Next image' }),
 } satisfies Record<string, Locator>
 
 const largePhotoDecodeTimeoutMs = 60_000
@@ -106,6 +106,33 @@ export const OpenWithImages: Story = {
   },
 }
 
+const renderCartoonLightbox = (mode: 'light' | 'dark') => {
+  loadGalleryStateWithImageModels({ tree: mockFolderTree })
+  const first = currentImages()[0]
+  if (first) openLightbox(first)
+  return (
+    <StoryWrapper pack="cartoon" mode={mode}>
+      <Lightbox />
+    </StoryWrapper>
+  )
+}
+
+const playCartoonLightboxControls = async () => {
+  await I.seeLightboxOpen()
+  await assertHoverChangesPaint(await I.see(loc.closeButtonAppears))
+  await assertHoverChangesPaint(await I.see(loc.nextButton))
+}
+
+export const CartoonLightControlStates: Story = {
+  render: () => renderCartoonLightbox('light'),
+  play: playCartoonLightboxControls,
+}
+
+export const CartoonDarkControlStates: Story = {
+  render: () => renderCartoonLightbox('dark'),
+  play: playCartoonLightboxControls,
+}
+
 /**
  * Regression on real ~54 MP camera JPEGs from `__fixtures__/personal/`.
  * Navigating to the preloaded neighbor used to get stuck on preview quality
@@ -167,9 +194,7 @@ export const PreviewRemainsVisibleAcrossNavigation: Story = {
   },
 }
 
-/**
- * Same regression from the "open the second image first" angle.
- */
+/** Same regression from the "open the second image first" angle. */
 export const FullResolutionFromMiddleImage: Story = {
   parameters: largePhotoStoryParameters,
   loaders: [loadPersonalTree],

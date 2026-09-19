@@ -1,3 +1,4 @@
+import { Button, IconButton, Switch } from '../design-system'
 import {
   clearFilters,
   filterSizeMaxKb,
@@ -94,31 +95,12 @@ export const FilterPanel = () => (
         >
           Filters
         </h2>
-        <button
-          type="button"
-          on:click={() => filterPanelOpen.set(false)}
-          aria-label="Close filters"
-          css={`
-            width: 28px;
-            height: 28px;
-            border: var(--border-width) var(--control-border-style) transparent;
-            border-radius: var(--radius-sm);
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.15s;
-
-            &:hover {
-              background: var(--accent);
-              color: var(--accent-contrast);
-            }
-          `}
+        <IconButton
+          label="Close filters"
+          onClick={() => filterPanelOpen.set(false)}
         >
           <CloseIcon />
-        </button>
+        </IconButton>
       </div>
 
       <div css="margin-bottom: 16px;">
@@ -247,84 +229,20 @@ export const FilterPanel = () => (
         />
       </div>
 
-      <label
-        css={`
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 8px 0;
-          margin-bottom: 16px;
-          cursor: pointer;
-          font-size: 13px;
-          color: var(--text-primary);
-        `}
-      >
-        <span>Include Subfolders</span>
-        <button
-          type="button"
-          role="switch"
-          aria-label="Include Subfolders"
-          aria-checked={includeSubfolders}
-          data-glass-toggle="true"
-          on:click={includeSubfolders.toggle}
-          attr:data-on={includeSubfolders}
-          css={`
-            padding: 0;
-            flex-shrink: 0;
-            width: 40px;
-            height: 22px;
-            border-radius: var(--radius-round);
-            background: var(--bg-tertiary);
-            border: var(--border-width) var(--control-border-style)
-              var(--border);
-            position: relative;
-            transition: background 0.2s;
-            cursor: pointer;
-
-            &::after {
-              content: '';
-              position: absolute;
-              width: 18px;
-              height: 18px;
-              border-radius: var(--radius-round);
-              background: var(--accent-contrast);
-              box-shadow: 0 2px 6px var(--shadow);
-              top: 1px;
-              left: 1px;
-              transition: transform 0.2s;
-            }
-
-            &[data-on='true'] {
-              background: var(--accent);
-            }
-
-            &[data-on='true']::after {
-              transform: translateX(18px);
-            }
-          `}
+      <div css="margin-bottom: 16px;">
+        <Switch
+          label="Include Subfolders"
+          checked={includeSubfolders}
+          onToggle={includeSubfolders.toggle}
         />
-      </label>
+      </div>
 
-      <button
-        on:click={clearFilters}
-        css={`
-          width: 100%;
-          padding: 10px;
-          border: var(--border-width) var(--control-border-style) var(--border);
-          border-radius: var(--radius-sm);
-          background: transparent;
-          color: var(--text-secondary);
-          font-size: 13px;
-          transition: all 0.15s;
-
-          &:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-          }
-        `}
-      >
-        Clear All Filters
-      </button>
+      <Button
+        appearance="quiet"
+        label="Clear All Filters"
+        onClick={clearFilters}
+        css="width: 100%;"
+      />
     </div>
   </aside>
 )

@@ -1,3 +1,4 @@
+import { ChoiceButton, IconButton, Switch, THEME_PACKS } from '../design-system'
 import {
   developRawFullSize,
   glassBackgroundAnimation,
@@ -15,7 +16,6 @@ import {
   themePack,
   wrapFolderNavigation,
 } from '../model'
-import { THEME_PACKS } from '../theme'
 import type { GridGap, ImageFit, ThemeMode, ThemePack } from '../types'
 import { CloseIcon } from './Icons'
 import { settingsPanelOpen } from './panelState'
@@ -31,145 +31,12 @@ const SectionTitle = ({ text }: { text: string }) => (
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--text-secondary);
-      margin-bottom: 8px;
-      margin-top: 16px;
+      margin-bottom: 10px;
+      margin-top: 20px;
     `}
   >
     {text}
   </h3>
-)
-
-const OptionButton = ({
-  label,
-  isActive,
-  onClick,
-}: {
-  label: string
-  isActive: () => boolean
-  onClick: () => void
-}) => (
-  <button
-    type="button"
-    class="glass-lens"
-    on:click={onClick}
-    attr:data-active={isActive}
-    aria-pressed={isActive}
-    data-terminal-bracket="true"
-    css={`
-      padding: 6px 12px;
-      border: var(--border-width) var(--control-border-style) var(--border);
-      border-radius: var(--radius-sm);
-      background: var(--bg-secondary);
-      background-image: var(--surface-bg-image);
-      background-size: var(--surface-bg-size);
-      color: var(--text-primary);
-      font-size: 12px;
-      transition: all 0.15s;
-      white-space: nowrap;
-      text-transform: var(--control-transform);
-
-      @media (hover: hover) and (pointer: fine) {
-        &:hover {
-          border-color: var(--accent);
-          color: var(--accent);
-        }
-      }
-
-      &[data-active='true'] {
-        background: var(--accent);
-        border-color: var(--accent);
-        color: var(--accent-contrast);
-      }
-    `}
-  >
-    {label}
-  </button>
-)
-
-const ToggleSwitch = ({
-  label,
-  checked,
-  onToggle,
-}: {
-  label: string
-  checked: () => boolean
-  onToggle: () => void
-}) => (
-  <label
-    css={`
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 0;
-      cursor: pointer;
-      font-size: 13px;
-      color: var(--text-primary);
-    `}
-  >
-    <span>{label}</span>
-    <button
-      type="button"
-      role="switch"
-      aria-label={label}
-      aria-checked={checked}
-      data-glass-toggle="true"
-      on:click={onToggle}
-      attr:data-on={checked}
-      css={`
-        padding: 0;
-        flex-shrink: 0;
-        --toggle-width: 40px;
-        --toggle-height: 22px;
-        --toggle-knob-size: 18px;
-        --toggle-inset: max(
-          1px,
-          calc(
-            (var(--toggle-height) - var(--toggle-knob-size)) /
-              2 - var(--border-width)
-          )
-        );
-        width: var(--toggle-width);
-        height: var(--toggle-height);
-        border-radius: var(--radius-round);
-        background: var(--bg-tertiary);
-        border: var(--border-width) var(--control-border-style) var(--border);
-        position: relative;
-        transition: background 0.2s;
-        cursor: pointer;
-
-        &::after {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: var(--toggle-inset);
-          width: var(--toggle-knob-size);
-          height: var(--toggle-knob-size);
-          border-radius: var(--radius-round);
-          background: var(--accent-contrast);
-          box-shadow: 0 2px 6px var(--shadow);
-          transform: translateY(-50%);
-          transition: transform 0.2s;
-        }
-
-        &[data-on='true'] {
-          background: var(--accent);
-        }
-
-        &[data-on='true']::after {
-          transform: translate(
-            calc(
-              var(--toggle-width) - var(--toggle-knob-size) - var(
-                  --toggle-inset
-                ) - var(--toggle-inset) - var(--border-width) - var(
-                  --border-width
-                )
-            ),
-            -50%
-          );
-        }
-      `}
-    />
-  </label>
 )
 
 const ThemePackButton = ({
@@ -183,12 +50,10 @@ const ThemePackButton = ({
   description: string
   swatches: readonly [string, string, string]
 }) => (
-  <button
-    type="button"
-    class="glass-lens"
-    on:click={() => themePack.set(value)}
-    attr:data-active={() => themePack() === value}
-    aria-pressed={() => themePack() === value}
+  <ChoiceButton
+    label={`${label}. ${description}`}
+    selected={() => themePack() === value}
+    onClick={() => themePack.set(value)}
     css={`
       width: 100%;
       display: grid;
@@ -197,28 +62,7 @@ const ThemePackButton = ({
       align-items: center;
       text-align: left;
       padding: 10px;
-      border: var(--border-width) var(--control-border-style) var(--border);
-      border-radius: var(--radius-md);
-      background: var(--input-bg);
-      background-image: var(--surface-bg-image);
-      background-size: var(--surface-bg-size);
-      color: var(--text-primary);
-      transition: all 0.15s ease;
-
-      @media (hover: hover) and (pointer: fine) {
-        &:hover {
-          border-color: var(--accent);
-          background: var(--hover-bg);
-        }
-      }
-
-      &[data-active='true'] {
-        border-color: var(--accent);
-        background: var(--active-bg);
-        box-shadow:
-          0 0 0 3px var(--focus-ring),
-          var(--glow);
-      }
+      min-height: 52px;
     `}
   >
     <span css="display: flex; gap: 3px;">
@@ -240,7 +84,7 @@ const ThemePackButton = ({
         {description}
       </span>
     </span>
-  </button>
+  </ChoiceButton>
 )
 
 const ThemeModeButton = ({
@@ -250,46 +94,14 @@ const ThemeModeButton = ({
   mode: ThemeMode
   label: string
 }) => (
-  <button
-    type="button"
-    class="glass-lens"
-    on:click={() => themeMode.set(mode)}
-    attr:aria-pressed={() => themeMode() === mode}
+  <ChoiceButton
+    label={label}
+    selected={() => themeMode() === mode}
+    onClick={() => themeMode.set(mode)}
     css={`
       flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       gap: 6px;
-      padding: 8px 12px;
-      border: var(--border-width) var(--control-border-style) var(--border);
-      border-radius: var(--radius-sm);
-      background: var(--input-bg);
-      color: var(--text-primary);
-      font-size: 12px;
       font-weight: 700;
-      transition: all 0.15s ease;
-      text-transform: var(--control-transform);
-
-      @media (hover: hover) and (pointer: fine) {
-        &:hover {
-          border-color: var(--accent);
-          background: var(--hover-bg);
-        }
-      }
-
-      &[aria-pressed='true'] {
-        border-color: var(--accent);
-        background: var(--accent);
-        color: var(--accent-contrast);
-        box-shadow:
-          var(--glow),
-          0 8px 20px var(--shadow);
-      }
-
-      &[aria-pressed='true'] .theme-mode-dot {
-        background: currentColor;
-      }
     `}
   >
     <span
@@ -298,12 +110,13 @@ const ThemeModeButton = ({
         width: 7px;
         height: 7px;
         border-radius: var(--radius-round);
-        background: var(--text-muted);
+        background: currentColor;
         flex-shrink: 0;
+        opacity: 0.55;
       `}
     />
     {label}
-  </button>
+  </ChoiceButton>
 )
 
 export const SettingsPanel = () => (
@@ -338,6 +151,10 @@ export const SettingsPanel = () => (
       &[data-open='true'] {
         transform: translateX(0);
       }
+
+      [data-ui='button'][aria-pressed='true'] .theme-mode-dot {
+        opacity: 1;
+      }
     `}
   >
     <div class="gallery-panel-scroll" css="display: contents;">
@@ -358,33 +175,12 @@ export const SettingsPanel = () => (
         >
           Settings
         </h2>
-        <button
-          type="button"
-          on:click={() => settingsPanelOpen.set(false)}
-          aria-label="Close settings"
-          css={`
-            width: 28px;
-            height: 28px;
-            border: var(--border-width) var(--control-border-style) transparent;
-            border-radius: var(--radius-sm);
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.15s;
-
-            @media (hover: hover) and (pointer: fine) {
-              &:hover {
-                background: var(--accent);
-                color: var(--accent-contrast);
-              }
-            }
-          `}
+        <IconButton
+          label="Close settings"
+          onClick={() => settingsPanelOpen.set(false)}
         >
           <CloseIcon />
-        </button>
+        </IconButton>
       </div>
 
       <SectionTitle text="Grid Columns" />
@@ -428,10 +224,12 @@ export const SettingsPanel = () => (
         `}
       >
         {GAP_OPTIONS.map((gap) => (
-          <OptionButton
+          <ChoiceButton
             label={gap}
-            isActive={() => gridGap() === gap}
+            selected={() => gridGap() === gap}
             onClick={() => setGridGap(gap)}
+            bracket
+            css="padding: 8px 14px;"
           />
         ))}
       </div>
@@ -445,48 +243,50 @@ export const SettingsPanel = () => (
         `}
       >
         {FIT_OPTIONS.map((fit) => (
-          <OptionButton
+          <ChoiceButton
             label={fit}
-            isActive={() => imageFit() === fit}
+            selected={() => imageFit() === fit}
             onClick={() => imageFit.change(fit)}
+            bracket
+            css="padding: 8px 14px;"
           />
         ))}
       </div>
 
       <SectionTitle text="UI Options" />
-      <ToggleSwitch
+      <Switch
         label="Show Image Names"
         checked={() => showImageNames()}
         onToggle={showImageNames.toggle}
       />
-      <ToggleSwitch
+      <Switch
         label="Show File Sizes"
         checked={() => showFileSizes()}
         onToggle={showFileSizes.toggle}
       />
-      <ToggleSwitch
+      <Switch
         label="Ignore EXIF Orientation"
         checked={() => ignoreExifOrientation()}
         onToggle={ignoreExifOrientation.toggle}
       />
-      <ToggleSwitch
+      <Switch
         label="Develop RAW at Full Size"
         checked={() => developRawFullSize()}
         onToggle={developRawFullSize.toggle}
       />
 
       <SectionTitle text="Lightbox Navigation" />
-      <ToggleSwitch
+      <Switch
         label="Wrap at Folder Ends"
         checked={() => wrapFolderNavigation()}
         onToggle={wrapFolderNavigation.toggle}
       />
-      <ToggleSwitch
+      <Switch
         label="Keep Zoom While Navigating"
         checked={() => keepLightboxView()}
         onToggle={keepLightboxView.toggle}
       />
-      <ToggleSwitch
+      <Switch
         label="Show Folder Scrubber"
         checked={() => showLightboxScrubber()}
         onToggle={showLightboxScrubber.toggle}
@@ -496,14 +296,14 @@ export const SettingsPanel = () => (
       {() =>
         themePack() === 'glass' && (
           <div>
-            <ToggleSwitch
+            <Switch
               label="Animate Glass Background"
               checked={() => glassBackgroundAnimation()}
               onToggle={glassBackgroundAnimation.toggle}
             />
             <p css="font-size: 12px; color: var(--text-secondary); margin: 0 0 12px;">
-              Uses more power. Pauses when the tab is hidden and respects reduced
-              motion.
+              Uses more power. Pauses when the tab is hidden and respects
+              reduced motion.
             </p>
           </div>
         )

@@ -35,7 +35,7 @@ const I = createMyself((I) => ({
     const sizeBtn = await I.resolveLocator(
       loc.sizeSortButtonAppears as DefiniteLocator,
     )
-    await expect(sizeBtn).toHaveAttribute('data-active', 'true')
+    await expect(sizeBtn).toHaveAttribute('aria-pressed', 'true')
   },
   toggleSortOrder: async () => {
     const orderBtn = await I.resolveLocator(
