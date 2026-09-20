@@ -44,10 +44,7 @@ const config: StorybookConfig = {
           '@reatom/core': resolve(dir, '../../core/src'),
           '@reatom/jsx': resolve(dir, '../../jsx/src'),
           test: resolve(dir, '../src/test.ts'),
-          'gallery-app': resolve(
-            dir,
-            '../../../examples/gallery/src',
-          ),
+          'gallery-app': resolve(dir, '../../../examples/gallery/src'),
         },
       },
       oxc: {

@@ -6,11 +6,11 @@ This note is for the gallery’s `glass` theme pack (`src/glass.ts`, `src/glassS
 
 ## TL;DR
 
-- **Liquid Glass is lensing, not frost.** Apple’s material *bends and concentrates* light at curved edges. `backdrop-filter: blur()` is scattering — frosted glass. Realism comes from an **SDF / ray-traced displacement map** in `feDisplacementMap`, plus a **Fresnel rim**, a **neutral tint layer**, and **content sitting above every filter**.
+- **Liquid Glass is lensing, not frost.** Apple’s material _bends and concentrates_ light at curved edges. `backdrop-filter: blur()` is scattering — frosted glass. Realism comes from an **SDF / ray-traced displacement map** in `feDisplacementMap`, plus a **Fresnel rim**, a **neutral tint layer**, and **content sitting above every filter**.
 - **Four layers, always.** Optics (blur + optional SVG refraction) → tint/scrim → specular rim → content. A single element cannot do all four. Text and icons must never sit inside `filter` / `backdrop-filter`.
 - **Refraction is Chromium-only today.** `backdrop-filter: url(#filter)` with `feDisplacementMap` works in Chrome/Edge. Safari ([WebKit 245510](https://bugs.webkit.org/show_bug.cgi?id=245510)) and Firefox ignore SVG `url()` on backdrop. Ship blur + rim + tint everywhere; gate refraction with `@supports` and a runtime flag (`data-glass-refraction` in this app).
 - **Peak bend is at the rim.** Naive maps (`½·sin 2θ`, or `feTurbulence`) peak mid-bezel or wobble randomly. A convex slab under Snell’s law displaces hardest at the grazing edge and is **neutral (128) in the interior**. That is the difference between “thick glass” and “jelly filter.”
-- **States change optics, not just fill.** Hover brightens tint and rim — and only under `@media (hover: hover) and (pointer: fine)`. Press *illuminates from within*, slightly scales, and can tighten lensing. Focus is a **two-color ring outside the glass** ([WCAG C40](https://www.w3.org/WAI/WCAG22/Techniques/css/C40)), never an outline that clips the lens. Selected is a second crystal surface *inside* the shared platter — not glass-on-glass. Disabled drops refraction and chroma. Reduced transparency / contrast / motion must flatten the material the way Apple’s HIG does.
+- **States change optics, not just fill.** Hover brightens tint and rim — and only under `@media (hover: hover) and (pointer: fine)`. Press _illuminates from within_, slightly scales, and can tighten lensing. Focus is a **two-color ring outside the glass** ([WCAG C40](https://www.w3.org/WAI/WCAG22/Techniques/css/C40)), never an outline that clips the lens. Selected is a second crystal surface _inside_ the shared platter — not glass-on-glass. Disabled drops refraction and chroma. Reduced transparency / contrast / motion must flatten the material the way Apple’s HIG does.
 - **Apple does not publish IOR, blur px, or chromatic aberration.** Chroma in web ports is a flourish. Official docs never mention it. Disabled-glass and macOS hover are also unspecified — treat WWDC as a behavioral spec, not a token sheet.
 
 ---
@@ -19,16 +19,16 @@ This note is for the gallery’s `glass` theme pack (`src/glass.ts`, `src/glassS
 
 WWDC25 [Meet Liquid Glass (219)](https://developer.apple.com/videos/play/wwdc2025/219/) and [Adopting Liquid Glass](https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass) define a **digital meta-material**, not a blur preset.
 
-| Apple term | Meaning | Web equivalent |
-| --- | --- | --- |
-| **Lensing** | Background warps along the curved silhouette | SDF / Snell displacement map in `feDisplacementMap` |
-| **Highlight** | Specular light that travels with geometry and (sometimes) motion | Inset shadows + masked gradient rim; optional `--light-angle` |
-| **Shadow** | Adaptive separation; stronger over text, weaker over flat fill | Outer `box-shadow` whose alpha tracks backdrop contrast |
-| **Illumination** | Material *glows from under the finger* on press | Inner radial / soft-light overlay; `.interactive` gel |
-| **Regular** | Adaptive, frostier, text-safe | Higher blur (8–20px), stronger tint |
-| **Clear** | Permanently more transparent; media only | ~2px blur, weak tint, **requires a dimming layer** |
-| **Scroll edge effect** | Content dissolves under floating chrome | Masked fade / extra blur strip under toolbars |
-| **Morph thickness** | Menu/popover is a *thicker* slab than the button it came from | Raise `depth` / `scale`, deepen shadow, soften scatter |
+| Apple term             | Meaning                                                          | Web equivalent                                                |
+| ---------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------- |
+| **Lensing**            | Background warps along the curved silhouette                     | SDF / Snell displacement map in `feDisplacementMap`           |
+| **Highlight**          | Specular light that travels with geometry and (sometimes) motion | Inset shadows + masked gradient rim; optional `--light-angle` |
+| **Shadow**             | Adaptive separation; stronger over text, weaker over flat fill   | Outer `box-shadow` whose alpha tracks backdrop contrast       |
+| **Illumination**       | Material _glows from under the finger_ on press                  | Inner radial / soft-light overlay; `.interactive` gel         |
+| **Regular**            | Adaptive, frostier, text-safe                                    | Higher blur (8–20px), stronger tint                           |
+| **Clear**              | Permanently more transparent; media only                         | ~2px blur, weak tint, **requires a dimming layer**            |
+| **Scroll edge effect** | Content dissolves under floating chrome                          | Masked fade / extra blur strip under toolbars                 |
+| **Morph thickness**    | Menu/popover is a _thicker_ slab than the button it came from    | Raise `depth` / `scale`, deepen shadow, soften scatter        |
 
 Rules Apple repeats and web ports keep breaking:
 
@@ -103,7 +103,7 @@ flowchart BT
   B --> O --> T --> R --> C
 ```
 
-**Layer 1 — optics** (sibling *behind* the label, or a `::before` that does not wrap text):
+**Layer 1 — optics** (sibling _behind_ the label, or a `::before` that does not wrap text):
 
 ```css
 .glass-optics {
@@ -111,18 +111,13 @@ flowchart BT
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  backdrop-filter:
-    blur(var(--glass-blur, 8px))
-    saturate(180%)
-    brightness(1.06)
+  backdrop-filter: blur(var(--glass-blur, 8px)) saturate(180%) brightness(1.06)
     contrast(1.04);
 }
 
 @supports (backdrop-filter: url(#glass-pill)) {
   [data-glass-refraction='true'] .glass-optics {
-    backdrop-filter:
-      var(--glass-optics, url(#glass-pill))
-      blur(1.5px)
+    backdrop-filter: var(--glass-optics, url(#glass-pill)) blur(1.5px)
       saturate(180%);
   }
 }
@@ -165,18 +160,18 @@ box-shadow:
 
 Measured Control Center rims are **bright on the horizontal edges, dark on the flanks**, not a single conic swept around the box. Use a travelling conic only on **interactive** surfaces (Apple moves the highlight on press / pointer, not at rest).
 
-**Layer 4 — content.** Own stacking context, no filter. If you need vibrancy, saturate the *optics* layer, not the type.
+**Layer 4 — content.** Own stacking context, no filter. If you need vibrancy, saturate the _optics_ layer, not the type.
 
 ### 2.3 Displacement maps that look like glass
 
 `feDisplacementMap` reads an image: **R = Δx, G = Δy, 128 = rest**. Values above 128 push right/down.
 
-| Map source | Looks like | Use |
-| --- | --- | --- |
-| `feTurbulence` + blur | Wobbly liquid / heat haze | Hero decoration, not chrome |
-| Hand-painted Figma gradient | Soft generic warp | One-off buttons with fixed size |
-| Rounded-rect **SDF** (this gallery) | Thick lens, bend at the rim | Production chrome |
-| **Snell / IOR ray trace** through a convex squircle slab | Closest to iOS 26 | Hero + per-element lens |
+| Map source                                               | Looks like                  | Use                             |
+| -------------------------------------------------------- | --------------------------- | ------------------------------- |
+| `feTurbulence` + blur                                    | Wobbly liquid / heat haze   | Hero decoration, not chrome     |
+| Hand-painted Figma gradient                              | Soft generic warp           | One-off buttons with fixed size |
+| Rounded-rect **SDF** (this gallery)                      | Thick lens, bend at the rim | Production chrome               |
+| **Snell / IOR ray trace** through a convex squircle slab | Closest to iOS 26           | Hero + per-element lens         |
 
 **Gallery SDF (already shipped).** `roundedRectSignedDistance` → gradient → rim bell `sin²(π · edge/rimWidth)` raised to `40 / curvature`. Interior is left at 128. Quadrants are mirrored so the vector field points **inward** (convex magnification). See `src/glass.ts`.
 
@@ -229,24 +224,24 @@ WebKit is still fixing `backdrop-filter` clipping against `corner-shape` ([PR 72
 
 ### 2.6 Browser and performance matrix
 
-| Capability | Chrome / Edge | Safari | Firefox |
-| --- | --- | --- | --- |
-| `backdrop-filter: blur() saturate()` | Yes | Yes (`-webkit-` still useful) | Yes |
-| `backdrop-filter: url(#svg)` | Yes | No ([245510](https://bugs.webkit.org/show_bug.cgi?id=245510)) | No |
-| `filter: url(#svg)` on the element itself | Yes | Yes | Yes |
-| `corner-shape: squircle` | 139+ | Partial | No |
+| Capability                                | Chrome / Edge | Safari                                                        | Firefox |
+| ----------------------------------------- | ------------- | ------------------------------------------------------------- | ------- |
+| `backdrop-filter: blur() saturate()`      | Yes           | Yes (`-webkit-` still useful)                                 | Yes     |
+| `backdrop-filter: url(#svg)`              | Yes           | No ([245510](https://bugs.webkit.org/show_bug.cgi?id=245510)) | No      |
+| `filter: url(#svg)` on the element itself | Yes           | Yes                                                           | Yes     |
+| `corner-shape: squircle`                  | 139+          | Partial                                                       | No      |
 
-`filter: url(#svg)` on the *element* warps the **element’s own pixels**, not the backdrop — useless for a lens, useful only for a duplicated scene layer ([dpawlikowski](https://github.com/dpawlikowski/liquid-glass), [courtsimas/glass-lens](https://github.com/courtsimas/glass-lens), [Aave](https://aave.com/design/building-glass-for-the-web)). Heavier DOM, more portable.
+`filter: url(#svg)` on the _element_ warps the **element’s own pixels**, not the backdrop — useless for a lens, useful only for a duplicated scene layer ([dpawlikowski](https://github.com/dpawlikowski/liquid-glass), [courtsimas/glass-lens](https://github.com/courtsimas/glass-lens), [Aave](https://aave.com/design/building-glass-for-the-web)). Heavier DOM, more portable.
 
 Five incompatible backdrop strategies, pick one per surface:
 
-| # | Strategy | Backdrop | Browsers |
-| --- | --- | --- | --- |
-| 1 | `backdrop-filter: url(#svg)` | Live | Chromium |
-| 2 | `filter: url()` on an owned / cloned scene | You own it | All |
-| 3 | WebGL + DOM snapshot | Stale | All |
-| 4 | WebGL + owned background (video, canvas) | Perfect optics | All |
-| 5 | HTML-in-Canvas `copyElementImageToTexture()` | Live DOM → GPU | Chrome flag / origin trial |
+| #   | Strategy                                     | Backdrop       | Browsers                   |
+| --- | -------------------------------------------- | -------------- | -------------------------- |
+| 1   | `backdrop-filter: url(#svg)`                 | Live           | Chromium                   |
+| 2   | `filter: url()` on an owned / cloned scene   | You own it     | All                        |
+| 3   | WebGL + DOM snapshot                         | Stale          | All                        |
+| 4   | WebGL + owned background (video, canvas)     | Perfect optics | All                        |
+| 5   | HTML-in-Canvas `copyElementImageToTexture()` | Live DOM → GPU | Chrome flag / origin trial |
 
 Safari: [WebKit PR 68614](https://github.com/WebKit/WebKit/pull/68614) is the software-fallback path (capture backdrop, run the SVG graph). Until it ships, blur-only. Also: `filter: url()` can be **ignored when `backdrop-filter` is on the same element** ([WebKit 297770](https://bugs.webkit.org/show_bug.cgi?id=297770)) — keep refraction and frost on **sibling layers**, not one declaration. LightningCSS has dropped the unprefixed `backdrop-filter` when `url()` and `-webkit-` were collapsed into one rule (Chrome 152 reports).
 
@@ -269,7 +264,7 @@ Press/hover in shader glass is **uniforms + a spring**, not CSS transitions: twe
 
 ## 3. States: what must change optically
 
-Apple’s line: *“responds to interaction by instantly flexing and energizing with light… illumination starts under the finger and spreads.”* Resting chrome stays quiet; the lens **comes alive on contact**. Sliders/toggles stay visually quiet until grab, then the knob *becomes* glass.
+Apple’s line: _“responds to interaction by instantly flexing and energizing with light… illumination starts under the finger and spreads.”_ Resting chrome stays quiet; the lens **comes alive on contact**. Sliders/toggles stay visually quiet until grab, then the knob _becomes_ glass.
 
 Do not implement states as “darken the fill 4%.” Change the **material**.
 
@@ -297,19 +292,19 @@ stateDiagram-v2
 
 Values are starting points for a Regular toolbar control on a busy photo backdrop. Animate with `transition` on tint / shadow / transform only — **do not** regenerate the SDF every frame. If you animate lensing, tween `feDisplacementMap[scale]` or a CSS variable that the filter reads.
 
-| State | Blur | Refraction scale | Tint | Rim / specular | Shadow | Transform | Notes |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| **Rest** | 8–20px Regular, ~2px Clear | Base | 12–18% | Measured bezel, static | Soft, adaptive | `none` | Quiet. No travelling highlight. |
-| **Hover** (`:hover` + `@media (hover: hover) and (pointer: fine)`) | +0 | +5–10% or unchanged | +4–8% lightness (M3-style ~8% overlay) | Rim +10–15% | Slightly deeper | Optional `translateY(-0.5px)` | Apple has **no dedicated hover spec** — pointer uses the same `.interactive()` language, more subdued than touch ([HIG: Motion](https://developer.apple.com/design/human-interface-guidelines/motion)). Brighten **tint**, not a second backdrop-filter. |
-| **Press** (`:active`, `[data-pressed]`) | −1px (clearer) | −10–20% (thinner gel) **or** +illumination | Brighter, more opaque | Energize; conic may travel | Shallower (closer to the plane) | `scale(0.97–0.98)` | Apple illuminates *from under the contact point*. A radial gradient at `--press-x/--press-y` beats a uniform flash. Spring 120–180ms; no bounce if reduced-motion. |
-| **Focus-visible** | Rest | Rest | Rest | Unchanged | **Add an outer ring** | None | See §3.2. Never `outline` that insets into the lens. |
-| **Selected** (`[aria-pressed=true]`, `[aria-selected=true]`, `[aria-current]`) | Rest of *parent* platter | Off on the child | Crystal fill (this repo: `crystalSurfaceCss`) | Child gets its own inset rim | Inner, not a second drop shadow | None | Child is **opaque-ish overlay**, not a second `backdrop-filter`. |
-| **Open / expanded** (`[aria-expanded=true]`, menu, dialog) | +4–8px | **Up** (thicker slab) | Stronger | Softer scatter | Deeper, richer | Morph radius / height | Apple: larger glass = thicker material. Gallery dialog already uses a heavier blur (`blur(6px)` vs toolbar `1.5px`) when refraction is on. |
-| **Disabled** | Off or tiny | **Off** | Flatter, 62% opacity | Dim rim | None | None | `pointer-events: none` + `aria-disabled`. No hover brighten (`:disabled:hover` reset). |
-| **Busy** (`aria-busy`, `[data-submitting]`) | Rest | Off | Rest | Rest | Rest | None | Spinner on the content layer. Do not animate the displacement seed. |
-| **Invalid** (`:user-invalid`, `[aria-invalid=true]`) | Rest | Rest | Warm / red **tint** (colored glass, still translucent) | Rim takes the error hue | Solid error ring **outside** | None | Use `:user-invalid`, not `:invalid` (the latter paints “broken” on load). Sync `aria-invalid`. Do not replace the lens with a solid red fill. |
-| **Dragging** | − | Slightly up | + | Travelling highlight follows pointer | Lifts | `scale(1.02)` | Same illumination language as press, but the surface *rises*. |
-| **Window / group inactive** | — | Down | Recede (lower contrast) | Dim | Weaker | None | Mac-like: unfocused chrome visually steps back. `:not(:focus-within)` on the toolbar is the cheap version. |
+| State                                                                          | Blur                       | Refraction scale                           | Tint                                                   | Rim / specular                       | Shadow                          | Transform                     | Notes                                                                                                                                                                                                                                                    |
+| ------------------------------------------------------------------------------ | -------------------------- | ------------------------------------------ | ------------------------------------------------------ | ------------------------------------ | ------------------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Rest**                                                                       | 8–20px Regular, ~2px Clear | Base                                       | 12–18%                                                 | Measured bezel, static               | Soft, adaptive                  | `none`                        | Quiet. No travelling highlight.                                                                                                                                                                                                                          |
+| **Hover** (`:hover` + `@media (hover: hover) and (pointer: fine)`)             | +0                         | +5–10% or unchanged                        | +4–8% lightness (M3-style ~8% overlay)                 | Rim +10–15%                          | Slightly deeper                 | Optional `translateY(-0.5px)` | Apple has **no dedicated hover spec** — pointer uses the same `.interactive()` language, more subdued than touch ([HIG: Motion](https://developer.apple.com/design/human-interface-guidelines/motion)). Brighten **tint**, not a second backdrop-filter. |
+| **Press** (`:active`, `[data-pressed]`)                                        | −1px (clearer)             | −10–20% (thinner gel) **or** +illumination | Brighter, more opaque                                  | Energize; conic may travel           | Shallower (closer to the plane) | `scale(0.97–0.98)`            | Apple illuminates _from under the contact point_. A radial gradient at `--press-x/--press-y` beats a uniform flash. Spring 120–180ms; no bounce if reduced-motion.                                                                                       |
+| **Focus-visible**                                                              | Rest                       | Rest                                       | Rest                                                   | Unchanged                            | **Add an outer ring**           | None                          | See §3.2. Never `outline` that insets into the lens.                                                                                                                                                                                                     |
+| **Selected** (`[aria-pressed=true]`, `[aria-selected=true]`, `[aria-current]`) | Rest of _parent_ platter   | Off on the child                           | Crystal fill (this repo: `crystalSurfaceCss`)          | Child gets its own inset rim         | Inner, not a second drop shadow | None                          | Child is **opaque-ish overlay**, not a second `backdrop-filter`.                                                                                                                                                                                         |
+| **Open / expanded** (`[aria-expanded=true]`, menu, dialog)                     | +4–8px                     | **Up** (thicker slab)                      | Stronger                                               | Softer scatter                       | Deeper, richer                  | Morph radius / height         | Apple: larger glass = thicker material. Gallery dialog already uses a heavier blur (`blur(6px)` vs toolbar `1.5px`) when refraction is on.                                                                                                               |
+| **Disabled**                                                                   | Off or tiny                | **Off**                                    | Flatter, 62% opacity                                   | Dim rim                              | None                            | None                          | `pointer-events: none` + `aria-disabled`. No hover brighten (`:disabled:hover` reset).                                                                                                                                                                   |
+| **Busy** (`aria-busy`, `[data-submitting]`)                                    | Rest                       | Off                                        | Rest                                                   | Rest                                 | Rest                            | None                          | Spinner on the content layer. Do not animate the displacement seed.                                                                                                                                                                                      |
+| **Invalid** (`:user-invalid`, `[aria-invalid=true]`)                           | Rest                       | Rest                                       | Warm / red **tint** (colored glass, still translucent) | Rim takes the error hue              | Solid error ring **outside**    | None                          | Use `:user-invalid`, not `:invalid` (the latter paints “broken” on load). Sync `aria-invalid`. Do not replace the lens with a solid red fill.                                                                                                            |
+| **Dragging**                                                                   | −                          | Slightly up                                | +                                                      | Travelling highlight follows pointer | Lifts                           | `scale(1.02)`                 | Same illumination language as press, but the surface _rises_.                                                                                                                                                                                            |
+| **Window / group inactive**                                                    | —                          | Down                                       | Recede (lower contrast)                                | Dim                                  | Weaker                          | None                          | Mac-like: unfocused chrome visually steps back. `:not(:focus-within)` on the toolbar is the cheap version.                                                                                                                                               |
 
 ### 3.2 Focus rings on glass
 
@@ -345,7 +340,9 @@ This gallery currently uses a single `outline: 2px solid var(--accent); outline-
 Prefer **ARIA the platform already has** over invented classes. The gallery already does this for view-mode and favorites.
 
 ```css
-.glass-control { /* rest tokens */ }
+.glass-control {
+  /* rest tokens */
+}
 
 @media (hover: hover) and (pointer: fine) {
   .glass-control:hover:not(:disabled):not([aria-disabled='true']) {
@@ -357,7 +354,9 @@ Prefer **ARIA the platform already has** over invented classes. The gallery alre
   transform: scale(0.98);
 }
 
-.glass-control:focus-visible { /* ring */ }
+.glass-control:focus-visible {
+  /* ring */
+}
 
 .glass-control[aria-pressed='true'],
 .glass-control[aria-selected='true'],
@@ -381,7 +380,9 @@ Prefer **ARIA the platform already has** over invented classes. The gallery alre
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .glass-control { transition: none; }
+  .glass-control {
+    transition: none;
+  }
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -389,7 +390,9 @@ Prefer **ARIA the platform already has** over invented classes. The gallery alre
     background: var(--liquid-solid);
     backdrop-filter: none;
   }
-  .glass::after { display: none; } /* rim */
+  .glass::after {
+    display: none;
+  } /* rim */
 }
 
 @media (prefers-contrast: more), (forced-colors: active) {
@@ -420,7 +423,7 @@ For press illumination that tracks the finger, set `--press-x` / `--press-y` on 
 
 ### 3.4 Grouped glass vs individual controls
 
-Apple groups toolbar actions onto **one** piece of glass (`NSGlassEffectContainerView` / `GlassEffectContainer`). Different *kinds* of control (segmented, search, pop-up) get their own platter.
+Apple groups toolbar actions onto **one** piece of glass (`NSGlassEffectContainerView` / `GlassEffectContainer`). Different _kinds_ of control (segmented, search, pop-up) get their own platter.
 
 Web translation:
 
@@ -433,7 +436,7 @@ That is why the gallery’s `surfaces` selector is the toolbar / sidebar / dialo
 
 ### 3.5 Adaptive light / dark (the honest version)
 
-Apple Regular glass **reads backdrop luminance** and can flip a *small* control independently of appearance settings. CSS cannot sample backdrop pixels (and should not — that is a readback / privacy hole; see [svgwg#1142](https://github.com/w3c/svgwg/issues/1142)).
+Apple Regular glass **reads backdrop luminance** and can flip a _small_ control independently of appearance settings. CSS cannot sample backdrop pixels (and should not — that is a readback / privacy hole; see [svgwg#1142](https://github.com/w3c/svgwg/issues/1142)).
 
 Do this instead:
 
@@ -470,7 +473,10 @@ Practical rules:
     0 8px 22px #00000020,
     inset 0 1px 1px #fff,
     inset 0 -1px 1px #ffffff4d;
-  transition: background 160ms, box-shadow 160ms, transform 120ms;
+  transition:
+    background 160ms,
+    box-shadow 160ms,
+    transform 120ms;
 }
 
 .glass-button::after {
@@ -489,12 +495,17 @@ Practical rules:
     #ffffffc0 84%,
     #fff
   );
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   mask-composite: exclude;
   padding: 2px;
 }
 
-.glass-button > * { position: relative; z-index: 1; }
+.glass-button > * {
+  position: relative;
+  z-index: 1;
+}
 ```
 
 ### 4.2 Chromium lens (matches this repo)
@@ -529,7 +540,7 @@ Rebuild the `feImage` href whenever width, height, or radius change (`bindGlassS
 }
 
 .glass-button:hover {
-  --glass-tint-a: 0.20;
+  --glass-tint-a: 0.2;
 }
 
 .glass-button:active {
@@ -550,31 +561,31 @@ Tweening `--glass-refract` only helps if the SVG `scale` attribute is bound to i
 
 ## 5. How this gallery maps to the research
 
-| Recommendation | Where it already lives | Gap |
-| --- | --- | --- |
-| SDF rim lens, 128-neutral interior | `src/glass.ts` (`lensDisplacementAt`) | Still a bell-weighted SDF, not Snell/IOR. Rim is strong; physics ports would move the peak even closer to the edge. |
-| Per-surface live maps | `src/glassSurfaces.ts` | Good. Keep chroma at 0 on large surfaces. |
-| Split-channel chroma | `src/components/GlassFilters.tsx` | Correct graph; use only on small presets. |
-| Crystal rim + inset Fresnel | `src/components/CrystalMaterial.ts` | Static; no travelling highlight on press. |
-| Regular-ish toolbar / thicker dialog | `GlassDetails.ts` (`blur(1.5px)` vs `blur(6px)`) | No explicit Regular vs Clear token pair. |
-| Selected = crystal chip, not nested glass | `button[aria-pressed='true']` | Good. |
-| Hover wash | `--hover-bg` | Not gated on `(hover: hover)` yet — iOS sticky hover risk. |
-| Focus ring | `button:focus-visible` outline + offset | Solid. Could add the spacer-shadow recipe on photo backdrops. |
-| Reduced transparency / contrast / motion | bottom of `GlassDetails.ts` | Good. Pair with a user-visible “refraction off” control (already `data-glass-refraction`). |
-| Press illumination from contact point | — | Missing. `:active` scale exists on some generic toolbar buttons, not the glass pack. `glow`, `edgeHighlight`, `specularAngle` on `GlassLens` are unused. |
-| Scroll edge dissolve | — | Missing under the floating toolbar as images scroll. |
-| Adaptive luminance flip | theme `data-theme-mode` only | Correct for large surfaces. |
-| Hover media query | — | `--hover-bg` is not behind `(hover: hover) and (pointer: fine)`. |
-| Per-control lenses | `glass-lens` class, `toggle` preset | Class has **zero CSS**. Settings toggles do not use `#glass-toggle`. |
-| Dead tokens | `--liquid-rim`, `--glass-specular`, `--glass-chroma-*` | Set in `theme.tsx` / `GlassDetails.ts`, never read. |
-| Refraction gate | Chrome UA sniff in `AppShell` | `@supports` is not enough (Safari parses and no-ops); UA sniff matches today’s engines. Pair with a user toggle. |
-| Lightbox optics | `ThemeViewerDetails.ts` `::before` | Correct: text sits above the filtered layer. |
+| Recommendation                            | Where it already lives                                 | Gap                                                                                                                                                      |
+| ----------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SDF rim lens, 128-neutral interior        | `src/glass.ts` (`lensDisplacementAt`)                  | Still a bell-weighted SDF, not Snell/IOR. Rim is strong; physics ports would move the peak even closer to the edge.                                      |
+| Per-surface live maps                     | `src/glassSurfaces.ts`                                 | Good. Keep chroma at 0 on large surfaces.                                                                                                                |
+| Split-channel chroma                      | `src/components/GlassFilters.tsx`                      | Correct graph; use only on small presets.                                                                                                                |
+| Crystal rim + inset Fresnel               | `src/components/CrystalMaterial.ts`                    | Static; no travelling highlight on press.                                                                                                                |
+| Regular-ish toolbar / thicker dialog      | `GlassDetails.ts` (`blur(1.5px)` vs `blur(6px)`)       | No explicit Regular vs Clear token pair.                                                                                                                 |
+| Selected = crystal chip, not nested glass | `button[aria-pressed='true']`                          | Good.                                                                                                                                                    |
+| Hover wash                                | `--hover-bg`                                           | Not gated on `(hover: hover)` yet — iOS sticky hover risk.                                                                                               |
+| Focus ring                                | `button:focus-visible` outline + offset                | Solid. Could add the spacer-shadow recipe on photo backdrops.                                                                                            |
+| Reduced transparency / contrast / motion  | bottom of `GlassDetails.ts`                            | Good. Pair with a user-visible “refraction off” control (already `data-glass-refraction`).                                                               |
+| Press illumination from contact point     | —                                                      | Missing. `:active` scale exists on some generic toolbar buttons, not the glass pack. `glow`, `edgeHighlight`, `specularAngle` on `GlassLens` are unused. |
+| Scroll edge dissolve                      | —                                                      | Missing under the floating toolbar as images scroll.                                                                                                     |
+| Adaptive luminance flip                   | theme `data-theme-mode` only                           | Correct for large surfaces.                                                                                                                              |
+| Hover media query                         | —                                                      | `--hover-bg` is not behind `(hover: hover) and (pointer: fine)`.                                                                                         |
+| Per-control lenses                        | `glass-lens` class, `toggle` preset                    | Class has **zero CSS**. Settings toggles do not use `#glass-toggle`.                                                                                     |
+| Dead tokens                               | `--liquid-rim`, `--glass-specular`, `--glass-chroma-*` | Set in `theme.tsx` / `GlassDetails.ts`, never read.                                                                                                      |
+| Refraction gate                           | Chrome UA sniff in `AppShell`                          | `@supports` is not enough (Safari parses and no-ops); UA sniff matches today’s engines. Pair with a user toggle.                                         |
+| Lightbox optics                           | `ThemeViewerDetails.ts` `::before`                     | Correct: text sits above the filtered layer.                                                                                                             |
 
 ---
 
 ## 6. Implementation order
 
-1. **Ship the four-layer Regular surface** over a busy photo (frost + tint + rim + content). If it does not read as glass *without* refraction, the tint/rim are wrong.
+1. **Ship the four-layer Regular surface** over a busy photo (frost + tint + rim + content). If it does not read as glass _without_ refraction, the tint/rim are wrong.
 2. **Add SDF maps** for a handful of floating surfaces; resize with `ResizeObserver`.
 3. **Gate refraction**; Safari/Firefox keep layer 1 as blur-only.
 4. **State table** on real `<button>` / ARIA attributes. Hover media query. Focus-visible ring outside the lens. Selected = inner crystal. Press = scale + inner glow.

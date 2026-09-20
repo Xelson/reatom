@@ -9,7 +9,7 @@ Comparison baseline:
 
 Oculante is a **native GPU-accelerated** viewer/editor (notan + egui), not Qt. It competes with nomacs on metadata and folder navigation, but emphasizes **non-destructive operator stacks**, **lossless JPEG transforms**, **channel inspection**, and a **very wide codec table** in one static binary.
 
-| Area             | Oculante (Rust)                           | gallery (TS)                     |
+| Area             | Oculante (Rust)                           | gallery (TS)                                |
 | ---------------- | ----------------------------------------- | ------------------------------------------- |
 | UI               | egui panels on notan/wgpu                 | Reatom JSX, CSS themes                      |
 | Decode           | `image_loader.rs` + crates                | `image-engine/header.ts` + `formats/*`      |

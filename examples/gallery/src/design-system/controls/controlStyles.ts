@@ -117,7 +117,8 @@ export const composeControlCss = (
   role: Exclude<ControlRole, 'switch'>,
   size: ControlSize,
   consumerCss?: string,
-) => `${bindSizeVars(surface, role)}${sizeOverrideCss(size)}${consumerCss ?? ''}`
+) =>
+  `${bindSizeVars(surface, role)}${sizeOverrideCss(size)}${consumerCss ?? ''}`
 
 const paintTransition = import.meta.env.TEST
   ? 'none'

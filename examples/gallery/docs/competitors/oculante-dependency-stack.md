@@ -239,7 +239,7 @@ Entry: `open_image()` in `image_loader.rs` — extension + `file-format` sniffin
 
 ## Full stack comparison table
 
-| Layer             | Oculante                       | gallery `image-engine`                       | Gap severity                 |
+| Layer             | Oculante                       | gallery `image-engine`                                  | Gap severity                 |
 | ----------------- | ------------------------------ | ------------------------------------------------------- | ---------------------------- |
 | License           | MIT                            | MIT (in-tree)                                           | —                            |
 | UI                | notan + egui                   | Reatom JSX + DOM                                        | N/A                          |

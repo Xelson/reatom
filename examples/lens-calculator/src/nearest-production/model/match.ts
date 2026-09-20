@@ -12,10 +12,7 @@ export const MAX_MATCH_DISTANCE = 1.6
 
 const focalDistance = (lens: ProductionLens, focal: number) => {
   if (focal >= lens.focal && focal <= lens.focalMax) return 0
-  const nearest =
-    focal < lens.focal
-      ? lens.focal
-      : lens.focalMax
+  const nearest = focal < lens.focal ? lens.focal : lens.focalMax
   return Math.abs(log2(nearest / focal))
 }
 
@@ -54,6 +51,9 @@ export const nearestProductionLens = computed(
 )
 
 export const nearbyProductionLenses = computed(
-  () => matchingLenses().slice(0, 5).map((entry) => entry.lens),
+  () =>
+    matchingLenses()
+      .slice(0, 5)
+      .map((entry) => entry.lens),
   'nearestProduction.nearby',
 )

@@ -27,49 +27,49 @@ flowchart TD
 
 ### Shared High
 
-| Item | Reviewers | Problem | Fix |
-| --- | --- | --- | --- |
-| Recipe vs consumer `css` | both | Done. Geometry/size live in `:where()`; ControlStates asserts a 24px `IconButton`. |
-| `focusableCardAttrs` | both | Done. Accepts `string \| (() => string)`; GridImage/ImageList pass getters. |
-| Document reset | both | Done. `ThemeRoot` scopes box-sizing, heading margins, and raw `button` font/cursor. |
+| Item                     | Reviewers | Problem                                                                             | Fix |
+| ------------------------ | --------- | ----------------------------------------------------------------------------------- | --- |
+| Recipe vs consumer `css` | both      | Done. Geometry/size live in `:where()`; ControlStates asserts a 24px `IconButton`.  |
+| `focusableCardAttrs`     | both      | Done. Accepts `string \| (() => string)`; GridImage/ImageList pass getters.         |
+| Document reset           | both      | Done. `ThemeRoot` scopes box-sizing, heading margins, and raw `button` font/cursor. |
 
 ### Sol High
 
-| Item | Problem | Fix |
-| --- | --- | --- |
-| Press activation | Done. Click-only events activate; only the post-mousedown click is swallowed. |
+| Item                           | Problem                                                                                                                             | Fix |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- | --- |
+| Press activation               | Done. Click-only events activate; only the post-mousedown click is swallowed.                                                       |
 | Decoration rest/selected paint | Done. Overlay rest lives in `ControlTheme.overlay`. Boundary test flags rest paint on control hooks; chrome uses `:not([data-ui])`. |
 
 ### Fable High
 
-| Item | Problem | Fix |
-| --- | --- | --- |
+| Item           | Problem                                                                                                                                                                                            | Fix |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
 | Theme identity | Done for the listed looks: Retro bevels + dark FAR, Minimal underline, Glass pills, Cartoon borderless quiet, Polaroid nav/filmstrip, Terminal tracking. Glass expanded chip is still not a token. |
 
 ### Medium — recipe and a11y
 
-| Item | Reviewers | Fix |
-| --- | --- | --- |
-| Icons shrink to `1em` of the losing font-size | Fable | Done. `--_icon-size` plus `:where()` so consumer `font-size` / width wins. |
-| Recipe inserted in `ref` | Fable | Done. Recipe and fonts bind at module evaluation; `ref` still refreshes for HMR. |
-| Switch knob ignores `--_border-width` | Fable | Done. Inset and travel use border width and a fitted knob. |
-| `:disabled { pointer-events: none }` | Fable | Done. Removed. |
-| `background-image: none` | Sol | Done. Optional `ControlPaint.image`. |
-| Filmstrip `aria-pressed` | both | Done. `selection="current"` emits `aria-current`. |
-| Light-theme switch knobs | Sol | Done. Unchecked knob is `--text-primary`. |
-| `forced-color-adjust: none` | both | Done. Forced-colors uses system colors. |
-| Tests do not prove interaction | both | Partial. Focus now requires a visible outline. Hover still uses Playwright `:hover`. Press-in-browser is not driven (`page.mouse` is unavailable). Matrix still covers choice + selected only. |
+| Item                                          | Reviewers | Fix                                                                                                                                                                                            |
+| --------------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Icons shrink to `1em` of the losing font-size | Fable     | Done. `--_icon-size` plus `:where()` so consumer `font-size` / width wins.                                                                                                                     |
+| Recipe inserted in `ref`                      | Fable     | Done. Recipe and fonts bind at module evaluation; `ref` still refreshes for HMR.                                                                                                               |
+| Switch knob ignores `--_border-width`         | Fable     | Done. Inset and travel use border width and a fitted knob.                                                                                                                                     |
+| `:disabled { pointer-events: none }`          | Fable     | Done. Removed.                                                                                                                                                                                 |
+| `background-image: none`                      | Sol       | Done. Optional `ControlPaint.image`.                                                                                                                                                           |
+| Filmstrip `aria-pressed`                      | both      | Done. `selection="current"` emits `aria-current`.                                                                                                                                              |
+| Light-theme switch knobs                      | Sol       | Done. Unchecked knob is `--text-primary`.                                                                                                                                                      |
+| `forced-color-adjust: none`                   | both      | Done. Forced-colors uses system colors.                                                                                                                                                        |
+| Tests do not prove interaction                | both      | Partial. Focus now requires a visible outline. Hover still uses Playwright `:hover`. Press-in-browser is not driven (`page.mouse` is unavailable). Matrix still covers choice + selected only. |
 
 ### Visual follow-up (closed)
 
-| Item | Fix |
-| --- | --- |
+| Item             | Fix                                                                                                                                          |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | Settings row air | ThemeRoot heading reset is `:where(h1…)`. SectionTitle keeps 20/10. Switch rows `12px 0`. Cartoon aside and Obsidian chips add pack padding. |
-| Filmstrip radius | Viewer `ChoiceButton` clips with `overflow: hidden`; the image uses `border-radius: inherit`. Cartoon/Paper echo that. |
+| Filmstrip radius | Viewer `ChoiceButton` clips with `overflow: hidden`; the image uses `border-radius: inherit`. Cartoon/Paper echo that.                       |
 
 ### Viewer tokens (closed)
 
-Custom properties inherit the *computed* value. `--ui-viewer-*-bg: var(--overlay-control)` on ThemeRoot became a hex, so `.gallery-lightbox { --overlay-control: … }` never retinted `[data-ui]` buttons. Blueprint light then painted `--text-primary` (navy) on `--overlay-control` (navy).
+Custom properties inherit the _computed_ value. `--ui-viewer-*-bg: var(--overlay-control)` on ThemeRoot became a hex, so `.gallery-lightbox { --overlay-control: … }` never retinted `[data-ui]` buttons. Blueprint light then painted `--text-primary` (navy) on `--overlay-control` (navy).
 
 ```mermaid
 flowchart LR
@@ -82,14 +82,14 @@ flowchart LR
   derive --> host
 ```
 
-| Rule | Where |
-| --- | --- |
-| Required pair, both modes | `--viewer-fg`, `--viewer-bg`, `--viewer-bg-hover`, `--viewer-border` in `DECORATIVE_TOKEN_KEYS` |
-| `deriveViewer` | Reads only those vars. Overlay stays `--overlay-control`. Retro mode fn is the escape hatch, not the system. |
-| Host binding | `resolveViewerControlCssVars` on `.gallery-lightbox`. ThemeRoot still sets the full set for stories. |
-| Dark-stage default | White ink on `var(--overlay-control)`. |
-| Blueprint light | Navy ink on `#234f9b0c` / `#234f9b20`. No viewer paint override. No decoration rewrite of `--overlay-control`. |
-| Stories | `StoryWrapper` writes `themePack` / `themeMode` when pack or mode is passed, because the lightbox host reads those atoms. |
+| Rule                      | Where                                                                                                                     |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Required pair, both modes | `--viewer-fg`, `--viewer-bg`, `--viewer-bg-hover`, `--viewer-border` in `DECORATIVE_TOKEN_KEYS`                           |
+| `deriveViewer`            | Reads only those vars. Overlay stays `--overlay-control`. Retro mode fn is the escape hatch, not the system.              |
+| Host binding              | `resolveViewerControlCssVars` on `.gallery-lightbox`. ThemeRoot still sets the full set for stories.                      |
+| Dark-stage default        | White ink on `var(--overlay-control)`.                                                                                    |
+| Blueprint light           | Navy ink on `#234f9b0c` / `#234f9b20`. No viewer paint override. No decoration rewrite of `--overlay-control`.            |
+| Stories                   | `StoryWrapper` writes `themePack` / `themeMode` when pack or mode is passed, because the lightbox host reads those atoms. |
 
 ### Medium / Low — keep on the list
 

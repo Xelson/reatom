@@ -178,8 +178,7 @@ export const format = reatomEnum(formats, {
     ...search,
     parse: (value = defaultSpec.format) =>
       formats.find((variant) => variant === value) ?? defaultSpec.format,
-    serialize: (value) =>
-      value === defaultSpec.format ? undefined : value,
+    serialize: (value) => (value === defaultSpec.format ? undefined : value),
   }),
 )
 
@@ -215,12 +214,14 @@ export const barrel = reatomEnum(barrels, {
     ...search,
     parse: (value = defaultSpec.barrel) =>
       barrels.find((variant) => variant === value) ?? defaultSpec.barrel,
-    serialize: (value) =>
-      value === defaultSpec.barrel ? undefined : value,
+    serialize: (value) => (value === defaultSpec.barrel ? undefined : value),
   }),
 )
 
-export const autofocus = reatomBoolean(defaultSpec.autofocus, 'autofocus').extend(
+export const autofocus = reatomBoolean(
+  defaultSpec.autofocus,
+  'autofocus',
+).extend(
   withSearchParams<boolean>('af', {
     ...search,
     parse: flagParam(defaultSpec.autofocus),

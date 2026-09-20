@@ -1,4 +1,9 @@
-export { barrelLabels, correctionLabels, manufacturerLabels, mountLabels } from './labels'
+export {
+  barrelLabels,
+  correctionLabels,
+  manufacturerLabels,
+  mountLabels,
+} from './labels'
 export { productionCatalog } from './load'
 export { catalogMeta } from './meta'
 export {
