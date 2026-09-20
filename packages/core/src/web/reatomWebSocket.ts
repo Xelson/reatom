@@ -46,7 +46,7 @@ export interface WebSocketAtom<T = any> extends Atom<
   /** Disconnect from WebSocket */
   disconnect: Action<[code?: number, reason?: string], void>
   /** Send message */
-  send: Action<[data: string | ArrayBuffer | Blob | ArrayBufferView], void>
+  send: Action<[data: string | Blob | BufferSource], void>
   /** Send JSON message */
   sendJson: Action<[data: any], void>
   /** Clear message history */
@@ -322,7 +322,7 @@ export const experimental_reatomWebSocket = <T = any>(
     reconnectAttempts.set(0)
   }, `${name}.disconnect`)
 
-  const send = action((data: string | ArrayBuffer | Blob | ArrayBufferView) => {
+  const send = action((data: string | Blob | BufferSource) => {
     const ws = socket()
     if (!ws || ws.readyState !== WebSocket.OPEN) {
       throw new Error('WebSocket is not connected')

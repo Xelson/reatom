@@ -30,7 +30,7 @@
     "@vitest/browser-playwright": "^4.1.7",
     "playwright": "^1.60.0",
     "storybook": "^10.2.0",
-    "typescript": "^5.9.3",
+    "typescript": "^7.0.2",
     "vite": "^8.0.14",
     "vitest": "^4.1.7"
   },

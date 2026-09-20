@@ -41,7 +41,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: "24.2"
+          node-version: "24.21"
 
       - name: Setup Pages
         id: pages

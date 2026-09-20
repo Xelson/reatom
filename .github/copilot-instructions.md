@@ -35,7 +35,7 @@ sync symlink targets** — identical content at these paths is expected.
 
 ## Build and test
 
-- Install once from the repo root (Node 24.2.0, `pnpm@10.32.1` recommended):
+- Install once from the repo root (Node 24.21.0, `pnpm@10.32.1` recommended):
   `pnpm install` (installs all packages, builds only `@reatom/core`).
 - Build the package you edit: `pnpm --filter <PACKAGE_NAME> run build`.
 - Test it: `pnpm --filter <PACKAGE_NAME> run test`.

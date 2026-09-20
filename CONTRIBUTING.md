@@ -14,7 +14,7 @@ If you want to report a bug, create a reproduction using StackBlitz or CodeSandb
 
 1. fork and clone the repository
 2. create a development branch from `v1001`
-3. install dependencies from the root of the repo (Node 24.2.0 and `pnpm@10.25.0` are recommended):
+3. install dependencies from the root of the repo (Node 24.21.0 and `pnpm@10.32.1` are recommended):
    ```sh
    pnpm install
    ```
