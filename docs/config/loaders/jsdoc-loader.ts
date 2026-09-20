@@ -14,7 +14,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import type { Loader } from 'astro/loaders'
 import { z } from 'astro/zod'
 import fg from 'fast-glob'
-import * as ts from 'typescript'
+import ts from '@typescript/typescript6'
 
 type PackageSelector =
   | string
