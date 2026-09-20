@@ -9,7 +9,7 @@ import { EXIF_TAGS_WITH_CUSTOM_FORMAT } from '../image-engine/formats/exif'
 import { primarySelectedImage, selectedCount } from './collection'
 import type { GalleryImageModel } from './contracts'
 import { lightboxImage, lightboxOpen } from './lightbox'
-import { imageInfoPanelOpen, settingsPanelOpen } from './panels'
+import { imageInfoPanelOpen } from './panels'
 
 export const inspectedImage = computed((): GalleryImageModel | null => {
   if (lightboxOpen()) return lightboxImage()
@@ -42,10 +42,6 @@ export const inspectionExifRows = computed((): [string, string][] => {
 }, 'inspection.exifRows')
 
 export const imageInfoPanelExpanded = computed(
-  () =>
-    imageInfoPanelOpen() &&
-    lightboxOpen() &&
-    inspectedImage() !== null &&
-    !settingsPanelOpen(),
+  () => imageInfoPanelOpen() && lightboxOpen() && inspectedImage() !== null,
   'inspection.panelExpanded',
 )

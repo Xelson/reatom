@@ -20,7 +20,13 @@ import {
 } from '../model'
 import type { ResolvedThemeMode, ThemePack } from '../types'
 import { bindControlRecipe } from './controls/controlStyles'
-import { bindDocumentStyles, bindThemeFonts } from './documentStyles'
+import {
+  applyDocumentThemeVars,
+  bindDocumentStyles,
+  bindPanelMotionStyles,
+  bindThemeFonts,
+  clearDocumentThemeVars,
+} from './documentStyles'
 import { resolveThemeCssVars } from './themes/registry'
 import { OPTIONAL_DECORATIVE_TOKEN_KEYS } from './themeTypes'
 
@@ -34,7 +40,6 @@ export type ThemeRootProps = {
   mode?: ResolvedThemeMode | (() => ResolvedThemeMode)
   includeAtmosphere?: boolean
   bindDocument?: boolean
-  class?: string
   css?: string
 }
 
@@ -55,6 +60,15 @@ const resolveMode = (
 const supportsGlassRefraction = /Chrome\/|Chromium\//.test(navigator.userAgent)
 
 const themeBoundaryCss = `
+  --sidebar-width: 240px;
+  --folder-toggle-size: 34px;
+  --folder-toggle-inset: 8px;
+  --folder-header-rail-height: 40px;
+  --header-inline-pad: 18px;
+  --chrome-end-inset: 0px;
+  --app-panel-inset: 0px;
+  --panel-end-gap: 0px;
+
   &, *, *::before, *::after {
     box-sizing: border-box;
   }
@@ -167,25 +181,32 @@ export const ThemeRoot = ({
   mode,
   includeAtmosphere = false,
   bindDocument = false,
-  class: className,
   css = '',
 }: ThemeRootProps) => (
   <div
-    class={['gallery-theme-root', className].filter(Boolean).join(' ')}
     ref={(node) => {
       bindThemeFonts()
       bindControlRecipe()
+      bindPanelMotionStyles()
       if (bindDocument) bindDocumentStyles()
-      return bindGlassSurfaces(node)
+      const unbindGlass = bindGlassSurfaces(node)
+      return () => {
+        unbindGlass()
+        if (bindDocument) clearDocumentThemeVars()
+      }
     }}
     attr:data-theme-pack={() => resolvePack(pack)}
     attr:data-theme-mode={() => resolveMode(mode)}
     attr:data-glass-animation={glassBackgroundAnimation}
     attr:data-glass-refraction={supportsGlassRefraction}
-    style={() => ({
-      ...clearedOptionalTokens,
-      ...resolveThemeCssVars(resolvePack(pack), resolveMode(mode)),
-    })}
+    style={() => {
+      const vars = {
+        ...clearedOptionalTokens,
+        ...resolveThemeCssVars(resolvePack(pack), resolveMode(mode)),
+      }
+      if (bindDocument) applyDocumentThemeVars(vars)
+      return vars
+    }}
     css={`
       ${themeBoundaryCss}${css}
     `}

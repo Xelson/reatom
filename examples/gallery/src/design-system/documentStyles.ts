@@ -41,6 +41,29 @@ const documentResetCss = `
   }
 `
 
+const PANEL_MOTION_STYLE_ID = 'gallery-panel-motion'
+
+const panelMotionCss = `
+  @property --lightbox-aside {
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 0px;
+  }
+`
+
+export const bindPanelMotionStyles = () => {
+  if (typeof document === 'undefined') return
+  const existing = document.getElementById(PANEL_MOTION_STYLE_ID)
+  if (existing instanceof HTMLStyleElement) {
+    existing.textContent = panelMotionCss
+    return
+  }
+  const style = document.createElement('style')
+  style.id = PANEL_MOTION_STYLE_ID
+  style.textContent = panelMotionCss
+  document.head.append(style)
+}
+
 export const bindDocumentStyles = () => {
   if (typeof document === 'undefined') return
   const existing = document.getElementById(DOCUMENT_STYLE_ID)
@@ -52,4 +75,29 @@ export const bindDocumentStyles = () => {
   style.id = DOCUMENT_STYLE_ID
   style.textContent = documentResetCss
   document.head.append(style)
+}
+
+const appliedDocumentThemeKeys = new Set<string>()
+
+export const applyDocumentThemeVars = (vars: Record<string, string>) => {
+  if (typeof document === 'undefined') return
+  const root = document.documentElement
+  const nextKeys = new Set<string>()
+  for (const [key, value] of Object.entries(vars)) {
+    nextKeys.add(key)
+    if (value) root.style.setProperty(key, value)
+    else root.style.removeProperty(key)
+  }
+  for (const key of appliedDocumentThemeKeys) {
+    if (!nextKeys.has(key)) root.style.removeProperty(key)
+  }
+  appliedDocumentThemeKeys.clear()
+  for (const key of nextKeys) appliedDocumentThemeKeys.add(key)
+}
+
+export const clearDocumentThemeVars = () => {
+  if (typeof document === 'undefined') return
+  const root = document.documentElement
+  for (const key of appliedDocumentThemeKeys) root.style.removeProperty(key)
+  appliedDocumentThemeKeys.clear()
 }

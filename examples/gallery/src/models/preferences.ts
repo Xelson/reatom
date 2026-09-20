@@ -73,6 +73,13 @@ export const toggleResolvedThemeMode = action(() => {
   themeMode.set(resolvedThemeMode() === 'light' ? 'dark' : 'light')
 }, 'themeMode.toggleResolved')
 
+export const cycleThemePack = action(() => {
+  const packs = Object.values(themePack.enum)
+  const currentIndex = packs.indexOf(themePack())
+  const nextPack = packs[(currentIndex + 1) % packs.length]
+  if (nextPack) themePack.set(nextPack)
+}, 'themePack.cycle')
+
 const defaultShowImageNames = reatomBoolean(
   true,
   'defaultShowImageNames',

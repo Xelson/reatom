@@ -154,6 +154,7 @@ export {
   settingsPanelOpen,
 } from './panels'
 export {
+  cycleThemePack,
   developRawFullSize,
   glassBackgroundAnimation,
   ignoreExifOrientation,

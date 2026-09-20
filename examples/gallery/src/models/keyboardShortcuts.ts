@@ -1,9 +1,10 @@
 import { action, effect, onEvent } from '@reatom/core'
 
+import { isNativeActivationTarget } from '../a11y'
 import { clearSelection, currentImages, selectAllImages } from './collection'
 import { closeLightbox, lightboxOpen, navigateLightbox } from './lightbox'
 import { filterPanelOpen, settingsPanelOpen } from './panels'
-import { toggleResolvedThemeMode } from './preferences'
+import { cycleThemePack, toggleResolvedThemeMode } from './preferences'
 import { slideshowPlaying } from './slideshow'
 import {
   cycleGridColumnPreset,
@@ -54,6 +55,8 @@ export const handleKeyboardShortcut = action((event: KeyboardEvent) => {
       return
     }
     if (event.key === ' ') {
+      if (event.defaultPrevented) return
+      if (isNativeActivationTarget(event.target)) return
       event.preventDefault()
       slideshowPlaying.toggle()
       return
@@ -105,6 +108,11 @@ export const handleKeyboardShortcut = action((event: KeyboardEvent) => {
 
   if (event.key === 't' || event.key === 'T') {
     toggleResolvedThemeMode()
+    return
+  }
+
+  if (event.key === 'p' || event.key === 'P') {
+    cycleThemePack()
     return
   }
 }, 'keyboardShortcuts.handleKeyDown')

@@ -1,19 +1,33 @@
 import {
   bindBackgroundPreviewLoader,
-  folderTreeSidebarVisible,
   galleryContentMode,
+  themePack,
 } from '../model'
 import { BreadcrumbNav } from './BreadcrumbNav'
 import { EmptyState } from './EmptyState'
 import { FolderTree } from './FolderTree'
 import { ImageGrid } from './ImageGrid'
+import { packChromeEndInset, shellEndInset } from './panelLayout'
+import { filterPanelOpen, settingsPanelOpen } from './panelState'
 import { ProgressBar } from './ProgressBar'
 import { SortPanel } from './SortPanel'
 
 export const GalleryWorkspace = () => (
   <div
-    class="gallery-workspace"
-    css="flex: 1; overflow: hidden; display: flex;"
+    id="gallery-workspace"
+    style:margin-right={() =>
+      shellEndInset(
+        settingsPanelOpen(),
+        filterPanelOpen(),
+        packChromeEndInset(themePack()),
+      )
+    }
+    css={`
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      transition: margin-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    `}
   >
     {() => {
       if (galleryContentMode() !== 'gallery') return null
@@ -34,9 +48,12 @@ export const GalleryWorkspace = () => (
 
         return (
           <div
-            class="gallery-pathbar"
+            id="gallery-pathbar"
             css={`
-              padding: 4px 16px;
+              padding: 4px var(--header-inline-pad, 18px);
+              padding-right: calc(
+                var(--header-inline-pad, 18px) + var(--shadow-clearance, 0px)
+              );
               display: flex;
               align-items: center;
               gap: 12px;
@@ -50,10 +67,13 @@ export const GalleryWorkspace = () => (
             `}
           >
             <div
-              css="transition: margin-left 0.3s ease;"
-              style:margin-left={() =>
-                folderTreeSidebarVisible() ? '0px' : '22px'
-              }
+              css={`
+                transition: margin-left 0.3s ease;
+                margin-left: calc(
+                  var(--folder-toggle-size, 34px) +
+                    var(--folder-toggle-inset, 8px) + 8px
+                );
+              `}
             >
               <BreadcrumbNav />
             </div>

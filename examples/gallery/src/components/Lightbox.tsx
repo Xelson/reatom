@@ -1,10 +1,7 @@
 import { onEvent, wrap } from '@reatom/core'
 
-import {
-  ChoiceButton,
-  IconButton,
-  resolveViewerControlCssVars,
-} from '../design-system'
+import { ChoiceButton, IconButton } from '../design-system'
+import { registerGlassSurface } from '../glassSurfaces'
 import { resolveImageOrientationStyle } from '../image-engine/orientation'
 import {
   bindLightboxDisplayTargetDebouncer,
@@ -18,6 +15,7 @@ import {
   type GalleryImageModel,
   handleLightboxKeyDown,
   ignoreExifOrientation,
+  imageInfoPanelExpanded,
   lightboxControlsVisible,
   lightboxCounter,
   lightboxDetailsButtonLabel,
@@ -43,10 +41,8 @@ import {
   navigateLightbox,
   openLightboxAtVisibleIndex,
   resetLightboxSession,
-  resolvedThemeMode,
   showLightboxScrubber,
   startLightboxPan,
-  themePack,
   thumbnailWindow,
   toggleLightboxImageFavorite,
   visibleImages,
@@ -65,6 +61,8 @@ import {
   MinusIcon,
   PlusIcon,
 } from './Icons'
+import { lightboxChromeCss } from './lightboxChrome'
+import { detailsPanelWidth, panelMotionTransition } from './panelLayout'
 import { imageInfoPanelOpen } from './panelState'
 import { Slideshow } from './Slideshow'
 
@@ -157,7 +155,7 @@ const LightboxImageFrame = ({
 
       return (
         <div
-          class="lightbox-photo-print"
+          id="lightbox-print"
           attr:data-caption={() => model.source.name}
           style:width={() => lightboxImageFrameSize().width}
           style:height={() => lightboxImageFrameSize().height}
@@ -257,6 +255,7 @@ const LightboxContent = () => {
   let focusFrame: number | null = null
   let fullscreenTransition: Promise<void> | null = null
   let fullscreenEnteredAt = 0
+  let closeOnBackdropClick = false
 
   const focusLightboxImage = () => {
     if (focusFrame !== null) cancelAnimationFrame(focusFrame)
@@ -312,7 +311,7 @@ const LightboxContent = () => {
 
   return (
     <div
-      class="gallery-lightbox"
+      id="gallery-lightbox"
       role="dialog"
       aria-modal="true"
       aria-label={lightboxDialogLabel}
@@ -340,6 +339,14 @@ const LightboxContent = () => {
           'fullscreenchange',
           updateFullscreenState,
         )
+        const stopBackdropPointer = onEvent(
+          el,
+          'pointerdown',
+          (event: PointerEvent) => {
+            closeOnBackdropClick = event.target === el
+          },
+          { capture: true },
+        )
 
         return () => {
           stopHideControls()
@@ -347,6 +354,7 @@ const LightboxContent = () => {
           stopDisplayTargetDebouncer()
           stopSizedImageWindowSync()
           stopFullscreenListener()
+          stopBackdropPointer()
           if (focusFrame !== null) cancelAnimationFrame(focusFrame)
           resetLightboxSession()
           lightboxIsFullscreen.set(false)
@@ -355,12 +363,12 @@ const LightboxContent = () => {
         }
       }}
       attr:data-controls-visible={lightboxControlsVisible}
-      style={() =>
-        resolveViewerControlCssVars(themePack(), resolvedThemeMode())
-      }
+      attr:data-details-open={() => String(imageInfoPanelExpanded())}
       on:keydown={handleLightboxKeyDown}
       on:click={(event: MouseEvent & { currentTarget: HTMLDivElement }) => {
-        if (event.target === event.currentTarget) closeLightbox()
+        if (closeOnBackdropClick && event.target === event.currentTarget) {
+          closeLightbox()
+        }
       }}
       on:mousedown={(event: MouseEvent) =>
         startLightboxPan(event.clientX, event.clientY)
@@ -374,7 +382,7 @@ const LightboxContent = () => {
       css={`
         position: fixed;
         inset: 0;
-        z-index: 1000;
+        z-index: 1100;
         background: var(--overlay-bg);
         display: flex;
         flex-direction: column;
@@ -382,31 +390,29 @@ const LightboxContent = () => {
         justify-content: center;
         outline: none;
         user-select: none;
-        .lightbox-control-layer {
-          opacity: 1;
-          pointer-events: auto;
-          transition: opacity 0.35s ease;
+        --lightbox-aside: 0px;
+        --control-opacity: 1;
+        --control-pointer: auto;
+        transition: --lightbox-aside ${panelMotionTransition};
+        &[data-details-open='true'] {
+          --lightbox-aside: ${detailsPanelWidth};
         }
-        &[data-controls-visible='false'] .lightbox-control-layer {
-          opacity: 0;
-          pointer-events: none;
-        }
-        &[data-controls-visible='false'] .lightbox-control-layer:focus-within {
-          opacity: 1;
-          pointer-events: auto;
+        &[data-controls-visible='false'] {
+          --control-opacity: 0;
+          --control-pointer: none;
         }
         @media (prefers-reduced-motion: reduce) {
-          .lightbox-control-layer {
-            opacity: 1 !important;
-            pointer-events: auto !important;
-            transition: none !important;
-          }
+          --control-opacity: 1;
+          --control-pointer: auto;
+          transition: none;
         }
       `}
     >
       <div
-        class="lightbox-control-layer lightbox-toolbar"
+        id="lightbox-toolbar"
+        ref={registerGlassSurface('viewer')}
         css={`
+          ${lightboxChromeCss}
           position: absolute;
           top: 0;
           left: 0;
@@ -416,6 +422,7 @@ const LightboxContent = () => {
           align-items: center;
           padding: 12px 16px;
           z-index: 1010;
+          right: var(--lightbox-aside);
           background: linear-gradient(
             to bottom,
             var(--image-overlay),
@@ -430,10 +437,7 @@ const LightboxContent = () => {
         >
           {() => lightboxCounter()}
         </span>
-        <div
-          style:margin-right={() => (imageInfoPanelOpen() ? '300px' : '0px')}
-          css="display: flex; gap: 8px; align-items: center; transition: margin-right 0.3s ease;"
-        >
+        <div css="display: flex; gap: 8px; align-items: center;">
           <IconButton
             {...lightboxActivation}
             label={lightboxFavoriteButtonLabel}
@@ -510,7 +514,7 @@ const LightboxContent = () => {
       </div>
 
       <div
-        class="lightbox-photo-stage"
+        id="lightbox-stage"
         style:cursor={lightboxImageCursor}
         css={`
           flex: 1;
@@ -519,7 +523,7 @@ const LightboxContent = () => {
           justify-content: center;
           width: 100%;
           overflow: hidden;
-          padding: 60px 80px 120px;
+          padding: 60px calc(80px + var(--lightbox-aside)) 120px 80px;
           pointer-events: none;
         `}
       >
@@ -546,10 +550,11 @@ const LightboxContent = () => {
 
       <IconButton
         {...lightboxActivation}
-        class="lightbox-control-layer"
+        ref={registerGlassSurface('viewer')}
         label="Previous image"
         onClick={() => navigateLightbox(-1)}
         css={`
+          ${lightboxChromeCss}
           ${navLayoutCss} left: 16px;
         `}
       >
@@ -557,30 +562,30 @@ const LightboxContent = () => {
       </IconButton>
       <IconButton
         {...lightboxActivation}
-        class="lightbox-control-layer"
+        ref={registerGlassSurface('viewer')}
         label="Next image"
         onClick={() => navigateLightbox(1)}
         css={`
-          ${navLayoutCss} right: 16px;
+          ${lightboxChromeCss}
+          ${navLayoutCss} right: calc(16px + var(--lightbox-aside));
         `}
       >
         <ChevronRightIcon />
       </IconButton>
 
-      <Slideshow
-        class="lightbox-control-layer"
-        onControlPress={lightboxShowControlsFromPointer}
-      />
+      <Slideshow onControlPress={lightboxShowControlsFromPointer} />
 
       {() => {
         if (!showLightboxScrubber() || visibleImages().length <= 1) return null
 
         return (
           <label
-            class="lightbox-control-layer"
+            id="lightbox-scrubber"
+            ref={registerGlassSurface('viewer')}
             css={`
+              ${lightboxChromeCss}
               position: absolute;
-              right: max(16px, calc(16px + var(--shadow-clearance, 0px)));
+              right: max(16px, calc(16px + var(--shadow-clearance, 0px) + var(--lightbox-aside)));
               bottom: 58px;
               display: grid;
               gap: 4px;
@@ -617,12 +622,14 @@ const LightboxContent = () => {
       }}
 
       <div
-        class="lightbox-control-layer lightbox-filmstrip"
+        id="lightbox-filmstrip"
+        ref={registerGlassSurface('viewer')}
         css={`
+          ${lightboxChromeCss}
           position: absolute;
           bottom: 0;
           left: 0;
-          right: 0;
+          right: var(--lightbox-aside);
           display: flex;
           justify-content: center;
           gap: 4px;
