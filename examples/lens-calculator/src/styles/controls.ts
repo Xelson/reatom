@@ -67,31 +67,31 @@ export const numberInput = `
 export const segmented = `
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 1fr;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 1px;
   border: 1px solid var(--hairline);
   border-radius: 1px;
-  background: var(--paper-deep);
+  background: var(--hairline);
 
   & > button {
     appearance: none;
-    padding: 0.5rem 0.25rem;
+    min-width: 0;
+    padding: 0.45rem 0.25rem;
     border: 0;
-    border-right: 1px solid var(--hairline);
-    background: transparent;
+    background: var(--paper-deep);
     color: var(--ink-faint);
     font-family: var(--font-ui);
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     font-weight: 500;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--segment-tracking);
+    line-height: 1.2;
+    overflow-wrap: normal;
+    word-break: keep-all;
     text-transform: uppercase;
     cursor: pointer;
     transition:
       color 160ms ease,
       background-color 160ms ease;
-
-    &:last-child {
-      border-right: 0;
-    }
 
     &:hover {
       color: var(--ink);

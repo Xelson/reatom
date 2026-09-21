@@ -118,10 +118,21 @@ export const IrisField = () => (
     <div
       css={`
         ${mono}
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: start;
+        gap: 0.35rem;
         font-size: 0.5625rem;
         color: var(--ink-faint);
+
+        & > :first-child {
+          justify-self: start;
+        }
+
+        & > :last-child {
+          justify-self: end;
+          text-align: right;
+        }
       `}
     >
       <span>{t.controls.towardFront}</span>
