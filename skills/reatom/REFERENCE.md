@@ -1107,6 +1107,7 @@ Persistence
 Web
 
 - **onLineAtom** for network status
+- **visibilityAtom** for page visibility (`document.visibilityState`)
 - **reatomMediaQuery** for media query binding
 - **reatomWebSocket** for websocket state
 - **rAF** for requestAnimationFrame scheduling
