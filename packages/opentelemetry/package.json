@@ -1,0 +1,80 @@
+{
+  "name": "@reatom/opentelemetry",
+  "type": "module",
+  "version": "1000.15.2",
+  "description": "OpenTelemetry tracing integration for Reatom",
+  "private": false,
+  "sideEffects": false,
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "require": "./dist/index.cjs",
+    "default": "./dist/index.js"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "browserslist": [
+    "last 1 year"
+  ],
+  "scripts": {
+    "prepublishOnly": "pnpm run build && pnpm run test",
+    "build": "tsdown",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:types": "tsc -p type-tests/tsconfig.json",
+    "test:browser": "vitest run --config vitest.browser.config.ts",
+    "test:e2e:collector": "node e2e/collector/run.mjs",
+    "test:e2e:collector:oracle": "node --test e2e/collector/*.test.mjs"
+  },
+  "tsdown": {
+    "format": [
+      "esm",
+      "cjs"
+    ],
+    "fixedExtension": false
+  },
+  "peerDependencies": {
+    "@reatom/core": "workspace:^"
+  },
+  "author": {
+    "name": "astartsky",
+    "url": "https://github.com/astartsky"
+  },
+  "maintainers": [
+    {
+      "name": "artalar",
+      "url": "https://github.com/artalar"
+    },
+    {
+      "name": "astartsky",
+      "url": "https://github.com/astartsky"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/reatom/reatom.git",
+    "directory": "packages/opentelemetry"
+  },
+  "bugs": {
+    "url": "https://github.com/reatom/reatom/issues"
+  },
+  "homepage": "https://www.reatom.dev/package/opentelemetry",
+  "keywords": [
+    "reactive",
+    "reactivity",
+    "state-manager",
+    "reatom"
+  ],
+  "files": [
+    "/dist"
+  ],
+  "devDependencies": {
+    "tsdown": "catalog:",
+    "vitest": "catalog:",
+    "@vitest/browser-playwright": "catalog:",
+    "@vitest/browser": "catalog:",
+    "playwright": "catalog:"
+  }
+}
