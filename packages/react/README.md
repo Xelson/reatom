@@ -79,7 +79,7 @@ The primary API to bind atoms and actions to a component's lifetime is `reatomCo
 - **Context Preservation:** Event handlers should be wrapped with `wrap()` (e.g., `onClick={wrap(myAction)}`) to preserve the reactive context, especially for async operations or actions updating state.
 - **No Hooks Rules for Atoms:** Call and subscribe to atoms conditionally within your render logic without violating React's rules of hooks.
 - **Automatic Cleanup:** Integrates with Reatom's abort context. Effects or async operations triggered from within the component (using `wrap` or implicitly by actions) are automatically aborted if the component unmounts before completion, preventing race conditions and memory leaks.
-- **Controlled Inputs:** Call `notify()` after updating the value of a controlled text input, otherwise the caret will jump to the end. See [Controlled inputs](#controlled-inputs).
+- **Controlled Inputs:** Call `notify()` after updating the value of a controlled text input (or use [`useWrap`](#usewrap), which does it for you), otherwise the caret will jump to the end. See [Controlled inputs](#controlled-inputs).
 
 ```tsx
 import { atom, wrap } from '@reatom/core'
@@ -442,6 +442,29 @@ export const Paging = ({ pageAtom }: { pageAtom: Atom<number> }) => {
 
 This is especially useful for event handlers that reference props or local state — you get the ergonomics of inline functions without the downsides of `useCallback`.
 
+### `useWrap`
+
+`useWrap` turns any callback into a stable event handler bound to the Reatom context. Like the inline form of `useAction`, it keeps the same function reference across re-renders, always calls the latest closure and runs the callback as an action. On top of that, it calls `notify()` after the callback, so all updates made inside it are propagated synchronously. This makes `useWrap` a good fit for input handlers, see [Controlled inputs](#controlled-inputs).
+
+```tsx
+import { atom } from '@reatom/core'
+import { reatomComponent, useWrap } from '@reatom/react'
+
+const search = atom('', 'search')
+
+export const Search = reatomComponent(() => {
+  const handleChange = useWrap((event: React.ChangeEvent<HTMLInputElement>) =>
+    search.set(event.currentTarget.value),
+  )
+
+  return <input value={search()} onChange={handleChange} />
+}, 'Search')
+```
+
+The optional second argument is a name for the underlying action, which is useful for debugging.
+
+`useWrap` is a React hook, so the rules of hooks apply even inside `reatomComponent`: don't call it conditionally or after an early return. Use `wrap` with a manual `notify()` call in such places instead.
+
 ## Controlled inputs
 
 Reatom batches updates automatically: after `someAtom.set(...)` the new state is available immediately, but subscribers — including your React components — are notified later, in a microtask. This lets many sequential updates produce a single re-render, but from React's point of view such an update is **asynchronous** relative to the event handler.
@@ -491,12 +514,17 @@ export const Search = () => {
 }
 ```
 
+You don't need to call `notify()` manually with the APIs that already do it for you:
+
+- [`useWrap`](#usewrap) calls `notify()` after the callback, so it's the most convenient way to create input handlers.
+- The setter returned from [`useAtom`](#useatom) (`const [value, setValue] = useAtom(...)`).
+- `bindField` for form fields.
+
 A few things to keep in mind:
 
 - The controlled value must be updated synchronously inside the handler, before any `await`. An update made after an `await` is asynchronous by definition, and `notify()` can't help with it.
 - Prefer calling `notify()` in the event handler, after all updates, rather than inside your model actions: it is a detail of the React integration, and the model shouldn't depend on it.
 - Controls without a caret (checkboxes, radios, selects) don't suffer from this, although calling `notify()` there is harmless too.
-- Some APIs already call `notify()` for you: the setter returned from [`useAtom`](#useatom) (`const [value, setValue] = useAtom(...)`) and `bindField` for form fields.
 
 ## Setup context
 
